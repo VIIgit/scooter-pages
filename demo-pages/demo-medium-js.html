@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scooter Pages — Medium JS Components</title>
+  <link rel="stylesheet" href="../base.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="demo-nav">
+  <span class="demo-nav-title">Scooter Pages</span>
+  <a href="demo-css-only.html">CSS-Only</a>
+  <a href="demo-light-js.html">Light JS</a>
+  <a href="demo-medium-js.html" aria-current="page">Medium JS</a>
+  <a href="demo-complex-js.html">Complex JS</a>
+  <a href="demo-patterns.html">Patterns</a>
+</nav>
+
+<!-- Toggle helper shared across all demo cards -->
+<script>
+function toggleCode(btn, cls) {
+  var card = btn.closest('.demo-card');
+  var block = card.querySelector(cls);
+  if (!block) return;
+  var expanded = btn.getAttribute('aria-expanded') === 'true' ? 'false' : 'true';
+  btn.setAttribute('aria-expanded', expanded);
+  block.dataset.visible = expanded;
+}
+</script>
+
+<main class="demo-page">
+  <h1>Medium JS Components</h1>
+  <p class="demo-subtitle">Tier 3 — Overlays, popups, and interactive widgets needing positioning, focus trapping, or portalling.</p>
+
+  <!-- ═══════════════════════ DIALOG ═══════════════════════ -->
+  <section class="demo-section" id="dialog">
+    <h2>Dialog</h2>
+    <p class="demo-desc">Modal dialog with overlay. Closes on backdrop click, Escape key, and the built-in close button. Traps focus while open.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview demo-preview--col" style="align-items:flex-start">
+        <div data-sc="dialog" id="demo-dialog">
+          <button data-slot="dialog-trigger" data-slot-also="button" data-variant="outline">Edit Profile</button>
+          <dialog data-slot="dialog-content">
+            <div data-slot="dialog-header">
+              <div data-slot="dialog-title">Edit Profile</div>
+              <div data-slot="dialog-description">Make changes to your profile here. Click save when you're done.</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:12px;padding:16px 0">
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <label data-slot="label">Name</label>
+                <input data-slot="input" value="Pedro Duarte" id="dialog-name">
+              </div>
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <label data-slot="label">Username</label>
+                <input data-slot="input" value="@peduarte" id="dialog-username">
+              </div>
+            </div>
+            <div data-slot="dialog-footer">
+              <button data-slot="button" id="dialog-save">Save Changes</button>
+            </div>
+          </dialog>
+        </div>
+        <p class="demo-hint">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Opens a centered modal with overlay — try Escape or click backdrop to close
+        </p>
+        <div class="demo-event-log" id="dialog-log" style="width:100%;height:60px">// dialog events appear here…</div>
+      </div>
+
+      <div class="demo-code-actions">
+        <button class="demo-code-toggle" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--html')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          Show HTML
+        </button>
+        <button class="demo-code-toggle demo-code-toggle--js" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--js')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          <span class="demo-code-js-badge">JS</span> Show JavaScript
+        </button>
+      </div>
+      <div class="demo-code-block demo-code-block--html"><pre><code>&lt;div data-sc="dialog"&gt;
+  &lt;button data-slot="dialog-trigger"
+          data-slot-also="button" data-variant="outline"&gt;
+    Edit Profile
+  &lt;/button&gt;
+  &lt;dialog data-slot="dialog-content"&gt;
+    &lt;div data-slot="dialog-header"&gt;
+      &lt;div data-slot="dialog-title"&gt;Edit Profile&lt;/div&gt;
+      &lt;div data-slot="dialog-description"&gt;
+        Make changes here. Click save when done.
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div style="padding:16px 0"&gt;
+      &lt;label data-slot="label"&gt;Name&lt;/label&gt;
+      &lt;input data-slot="input" value="Pedro Duarte"&gt;
+    &lt;/div&gt;
+    &lt;div data-slot="dialog-footer"&gt;
+      &lt;button data-slot="button" id="dialog-save"&gt;Save&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/dialog&gt;
+&lt;/div&gt;</code></pre></div>
+      <div class="demo-code-block demo-code-block--js"><pre><code>// Get reference
+const dialog = document.querySelector('[data-sc="dialog"]');
+
+// Programmatic open / close
+dialog._dialog.open();
+dialog._dialog.close();
+
+// Listen for open &amp; close events
+dialog.addEventListener('sc:open', () =&gt; {
+  console.log('Dialog opened');
+});
+dialog.addEventListener('sc:close', () =&gt; {
+  console.log('Dialog closed');
+});
+
+// Handle the Save button inside the dialog
+document.getElementById('dialog-save')
+  .addEventListener('click', () =&gt; {
+    const name = document.getElementById('dialog-name').value;
+    console.log('Saving name:', name);
+    dialog._dialog.close(); // close after save
+  });</code></pre></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ ALERT DIALOG ═══════════════════════ -->
+  <section class="demo-section" id="alert-dialog">
+    <h2>Alert Dialog</h2>
+    <p class="demo-desc">Confirmation dialog. Cannot be dismissed via backdrop click or Escape — the user <em>must</em> click Cancel or Confirm.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview demo-preview--col" style="align-items:flex-start">
+        <div data-sc="alert-dialog" id="demo-alert-dialog">
+          <button data-slot="alert-dialog-trigger" data-slot-also="button" data-variant="destructive">Delete Account</button>
+          <dialog data-slot="alert-dialog-content">
+            <div data-slot="alert-dialog-header">
+              <div data-slot="alert-dialog-title">Are you absolutely sure?</div>
+              <div data-slot="alert-dialog-description">This action cannot be undone. This will permanently delete your account and remove your data from our servers.</div>
+            </div>
+            <div data-slot="alert-dialog-footer">
+              <button data-slot="alert-dialog-cancel" data-slot-also="button" data-variant="outline">Cancel</button>
+              <button data-slot="alert-dialog-action" data-slot-also="button" data-variant="destructive">Yes, delete account</button>
+            </div>
+          </dialog>
+        </div>
+        <p class="demo-hint">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          No Escape / backdrop close — forces an explicit Cancel or Confirm action
+        </p>
+        <div class="demo-event-log" id="alert-dialog-log" style="width:100%;height:60px">// alert-dialog events appear here…</div>
+      </div>
+
+      <div class="demo-code-actions">
+        <button class="demo-code-toggle" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--html')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          Show HTML
+        </button>
+        <button class="demo-code-toggle demo-code-toggle--js" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--js')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          <span class="demo-code-js-badge">JS</span> Show JavaScript
+        </button>
+      </div>
+      <div class="demo-code-block demo-code-block--html"><pre><code>&lt;div data-sc="alert-dialog"&gt;
+  &lt;button data-slot="alert-dialog-trigger"
+          data-slot-also="button" data-variant="destructive"&gt;
+    Delete Account
+  &lt;/button&gt;
+  &lt;dialog data-slot="alert-dialog-content"&gt;
+    &lt;div data-slot="alert-dialog-header"&gt;
+      &lt;div data-slot="alert-dialog-title"&gt;Are you sure?&lt;/div&gt;
+      &lt;div data-slot="alert-dialog-description"&gt;
+        This action cannot be undone.
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div data-slot="alert-dialog-footer"&gt;
+      &lt;button data-slot="alert-dialog-cancel"
+              data-slot-also="button" data-variant="outline"&gt;
+        Cancel
+      &lt;/button&gt;
+      &lt;button data-slot="alert-dialog-action"
+              data-slot-also="button" data-variant="destructive"&gt;
+        Yes, delete
+      &lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/dialog&gt;
+&lt;/div&gt;</code></pre></div>
+      <div class="demo-code-block demo-code-block--js"><pre><code>const alertDialog = document.querySelector('[data-sc="alert-dialog"]');
+
+// The "action" button fires sc:action
+alertDialog.addEventListener('sc:action', () =&gt; {
+  console.log('User confirmed! Performing destructive action…');
+  // e.g. fetch('/api/account', { method: 'DELETE' });
+});
+
+// The "cancel" button fires sc:cancel
+alertDialog.addEventListener('sc:cancel', () =&gt; {
+  console.log('User cancelled — no action taken.');
+});
+
+// Programmatic open
+alertDialog._alertDialog.open();</code></pre></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ SHEET ═══════════════════════ -->
+  <section class="demo-section" id="sheet">
+    <h2>Sheet</h2>
+    <p class="demo-desc">Side panel overlay that slides in from any edge. Supports <code>data-side="right|left|top|bottom"</code>. Great for settings, filters, and detail views.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview demo-preview--col" style="gap:1rem">
+        <div style="display:flex;gap:0.5rem;flex-wrap:wrap">
+          <!-- Right (default) -->
+          <div data-sc="sheet" data-side="right" id="demo-sheet-right">
+            <button data-slot="sheet-trigger" data-slot-also="button" data-variant="outline" style="gap:6px">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+              Right
+            </button>
+            <dialog data-slot="sheet-content" data-side="right">
+              <div data-slot="sheet-header">
+                <div data-slot="sheet-title">Edit Profile</div>
+                <div data-slot="sheet-description">Make changes to your profile. Click save when you're done.</div>
+              </div>
+              <div style="padding:16px 0;display:flex;flex-direction:column;gap:12px">
+                <div style="display:flex;flex-direction:column;gap:6px">
+                  <label data-slot="label">Name</label>
+                  <input data-slot="input" value="Pedro Duarte">
+                </div>
+                <div style="display:flex;flex-direction:column;gap:6px">
+                  <label data-slot="label">Username</label>
+                  <input data-slot="input" value="@peduarte">
+                </div>
+                <div style="display:flex;flex-direction:column;gap:6px">
+                  <label data-slot="label">Email</label>
+                  <input data-slot="input" type="email" value="pedro@example.com">
+                </div>
+              </div>
+              <div data-slot="sheet-footer">
+                <button data-slot="button">Save Changes</button>
+              </div>
+            </dialog>
+          </div>
+
+          <!-- Left -->
+          <div data-sc="sheet" data-side="left">
+            <button data-slot="sheet-trigger" data-slot-also="button" data-variant="outline" style="gap:6px">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+              Left
+            </button>
+            <dialog data-slot="sheet-content" data-side="left">
+              <div data-slot="sheet-header">
+                <div data-slot="sheet-title">Navigation</div>
+                <div data-slot="sheet-description">Browse sections of the application.</div>
+              </div>
+              <div style="padding:16px 0;display:flex;flex-direction:column;gap:4px">
+                <button data-slot="button" data-variant="ghost" style="justify-content:flex-start">Dashboard</button>
+                <button data-slot="button" data-variant="ghost" style="justify-content:flex-start">Analytics</button>
+                <button data-slot="button" data-variant="ghost" style="justify-content:flex-start">Settings</button>
+                <button data-slot="button" data-variant="ghost" style="justify-content:flex-start">Help &amp; Support</button>
+              </div>
+            </dialog>
+          </div>
+
+          <!-- Top -->
+          <div data-sc="sheet" data-side="top">
+            <button data-slot="sheet-trigger" data-slot-also="button" data-variant="outline" style="gap:6px">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+              Top
+            </button>
+            <dialog data-slot="sheet-content" data-side="top">
+              <div data-slot="sheet-header">
+                <div data-slot="sheet-title">Announcement</div>
+                <div data-slot="sheet-description">Important system notification.</div>
+              </div>
+              <div style="padding:16px 0">
+                <div data-slot="alert">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                  <div data-slot="alert-title">Scheduled maintenance</div>
+                  <div data-slot="alert-description">The system will undergo maintenance on Saturday 3:00–5:00 AM UTC.</div>
+                </div>
+              </div>
+            </dialog>
+          </div>
+
+          <!-- Bottom -->
+          <div data-sc="sheet" data-side="bottom">
+            <button data-slot="sheet-trigger" data-slot-also="button" data-variant="outline" style="gap:6px">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              Bottom
+            </button>
+            <dialog data-slot="sheet-content" data-side="bottom">
+              <div data-slot="sheet-header">
+                <div data-slot="sheet-title">Cookie Preferences</div>
+                <div data-slot="sheet-description">Manage your cookie settings below.</div>
+              </div>
+              <div style="padding:16px 0;display:flex;flex-direction:column;gap:12px">
+                <div style="display:flex;align-items:center;justify-content:space-between">
+                  <div>
+                    <div style="font-weight:var(--font-weight-medium);font-size:14px">Essential Cookies</div>
+                    <p class="text-xs text-muted">Required for the site to function.</p>
+                  </div>
+                  <button data-sc="switch" data-slot="switch" aria-checked="true" disabled><span data-slot="switch-thumb"></span></button>
+                </div>
+                <div style="display:flex;align-items:center;justify-content:space-between">
+                  <div>
+                    <div style="font-weight:var(--font-weight-medium);font-size:14px">Analytics Cookies</div>
+                    <p class="text-xs text-muted">Help us improve the site.</p>
+                  </div>
+                  <button data-sc="switch" data-slot="switch" aria-checked="false"><span data-slot="switch-thumb"></span></button>
+                </div>
+              </div>
+              <div data-slot="sheet-footer">
+                <button data-slot="button">Save Preferences</button>
+              </div>
+            </dialog>
+          </div>
+        </div>
+        <p class="demo-hint">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Each button opens a Sheet from a different edge — try all four directions
+        </p>
+        <div class="demo-event-log" id="sheet-log" style="width:100%;height:60px">// sheet events appear here…</div>
+      </div>
+
+      <div class="demo-code-actions">
+        <button class="demo-code-toggle" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--html')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          Show HTML
+        </button>
+        <button class="demo-code-toggle demo-code-toggle--js" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--js')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          <span class="demo-code-js-badge">JS</span> Show JavaScript
+        </button>
+      </div>
+      <div class="demo-code-block demo-code-block--html"><pre><code>&lt;!-- data-side: "right" (default) | "left" | "top" | "bottom" --&gt;
+&lt;div data-sc="sheet" data-side="right"&gt;
+  &lt;button data-slot="sheet-trigger"
+          data-slot-also="button" data-variant="outline"&gt;
+    Open Sheet
+  &lt;/button&gt;
+  &lt;dialog data-slot="sheet-content" data-side="right"&gt;
+    &lt;div data-slot="sheet-header"&gt;
+      &lt;div data-slot="sheet-title"&gt;Edit Profile&lt;/div&gt;
+      &lt;div data-slot="sheet-description"&gt;
+        Make changes to your profile.
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div style="padding:16px 0"&gt;
+      &lt;label data-slot="label"&gt;Name&lt;/label&gt;
+      &lt;input data-slot="input" value="Pedro"&gt;
+    &lt;/div&gt;
+    &lt;div data-slot="sheet-footer"&gt;
+      &lt;button data-slot="button"&gt;Save&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/dialog&gt;
+&lt;/div&gt;</code></pre></div>
+      <div class="demo-code-block demo-code-block--js"><pre><code>const sheet = document.querySelector('[data-sc="sheet"]');
+
+// Programmatic open / close
+sheet._sheet.open();
+sheet._sheet.close();
+
+// Listen for events
+sheet.addEventListener('sc:open', () =&gt; {
+  console.log('Sheet opened');
+});
+sheet.addEventListener('sc:close', () =&gt; {
+  console.log('Sheet closed');
+});
+
+// Handle save inside the sheet
+sheet.querySelector('[data-slot="button"]')
+  .addEventListener('click', () =&gt; {
+    const name = sheet.querySelector('input').value;
+    console.log('Saved:', name);
+    sheet._sheet.close();
+  });</code></pre></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ DRAWER ═══════════════════════ -->
+  <section class="demo-section" id="drawer">
+    <h2>Drawer</h2>
+    <p class="demo-desc">Bottom sheet with a drag handle. Swipe down or click backdrop to dismiss. Touch-friendly mobile pattern.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview demo-preview--col" style="align-items:flex-start">
+        <div data-sc="drawer" id="demo-drawer">
+          <button data-slot="drawer-trigger" data-slot-also="button" data-variant="outline">Open Drawer</button>
+          <dialog data-slot="drawer-content">
+            <div data-slot="drawer-handle"></div>
+            <div data-slot="drawer-header">
+              <div data-slot="drawer-title">Move Goal</div>
+              <div data-slot="drawer-description">Set your daily activity goal.</div>
+            </div>
+            <div style="padding:24px 0;text-align:center">
+              <div id="drawer-calories" style="font-size:56px;font-weight:var(--font-weight-semibold);line-height:1;color:var(--foreground)">350</div>
+              <p class="text-sm text-muted" style="margin-top:6px">calories / day</p>
+              <div style="display:flex;gap:8px;justify-content:center;margin-top:16px">
+                <button data-slot="button" data-variant="outline" data-size="sm" onclick="var el=document.getElementById('drawer-calories');el.textContent=Math.max(100,parseInt(el.textContent)-50)">− 50</button>
+                <button data-slot="button" data-variant="outline" data-size="sm" onclick="var el=document.getElementById('drawer-calories');el.textContent=parseInt(el.textContent)+50">+ 50</button>
+              </div>
+            </div>
+            <div data-slot="drawer-footer">
+              <button data-slot="button" style="width:100%" id="drawer-submit">Submit</button>
+              <button data-slot="drawer-close" data-slot-also="button" data-variant="outline" style="width:100%">Cancel</button>
+            </div>
+          </dialog>
+        </div>
+        <p class="demo-hint">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Slides up from the bottom — drag the handle bar down to dismiss
+        </p>
+        <div class="demo-event-log" id="drawer-log" style="width:100%;height:60px">// drawer events appear here…</div>
+      </div>
+
+      <div class="demo-code-actions">
+        <button class="demo-code-toggle" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--html')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          Show HTML
+        </button>
+        <button class="demo-code-toggle demo-code-toggle--js" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--js')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          <span class="demo-code-js-badge">JS</span> Show JavaScript
+        </button>
+      </div>
+      <div class="demo-code-block demo-code-block--html"><pre><code>&lt;div data-sc="drawer"&gt;
+  &lt;button data-slot="drawer-trigger"
+          data-slot-also="button" data-variant="outline"&gt;
+    Open Drawer
+  &lt;/button&gt;
+  &lt;dialog data-slot="drawer-content"&gt;
+    &lt;div data-slot="drawer-handle"&gt;&lt;/div&gt;
+    &lt;div data-slot="drawer-header"&gt;
+      &lt;div data-slot="drawer-title"&gt;Move Goal&lt;/div&gt;
+      &lt;div data-slot="drawer-description"&gt;
+        Set your daily activity goal.
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div&gt;Body content…&lt;/div&gt;
+    &lt;div data-slot="drawer-footer"&gt;
+      &lt;button data-slot="button"&gt;Submit&lt;/button&gt;
+      &lt;button data-slot="drawer-close"
+              data-slot-also="button" data-variant="outline"&gt;
+        Cancel
+      &lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/dialog&gt;
+&lt;/div&gt;</code></pre></div>
+      <div class="demo-code-block demo-code-block--js"><pre><code>const drawer = document.querySelector('[data-sc="drawer"]');
+
+// Programmatic open / close
+drawer._drawer.open();
+drawer._drawer.close();
+
+// Events
+drawer.addEventListener('sc:open', () =&gt; {
+  console.log('Drawer opened');
+});
+drawer.addEventListener('sc:close', () =&gt; {
+  console.log('Drawer closed');
+});
+
+// Handle submit button
+document.getElementById('drawer-submit')
+  .addEventListener('click', () =&gt; {
+    const cal = document.getElementById('drawer-calories').textContent;
+    console.log('Goal set to', cal, 'calories');
+    drawer._drawer.close();
+  });</code></pre></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ DROPDOWN MENU ═══════════════════════ -->
+  <section class="demo-section" id="dropdown-menu">
+    <h2>Dropdown Menu</h2>
+    <p class="demo-desc">Rich menu with items, separators, labels, keyboard shortcuts, and sub-menus. Navigate with arrow keys. Emits <code>sc:select</code>.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview demo-preview--col" style="align-items:flex-start">
+        <div data-sc="dropdown-menu" id="demo-dropdown">
+          <button data-slot="dropdown-menu-trigger" data-slot-also="button" data-variant="outline" style="gap:6px">
+            Open Menu
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div hidden data-slot="dropdown-menu-content">
+            <div data-slot="dropdown-menu-label">My Account</div>
+            <div data-slot="dropdown-menu-separator"></div>
+            <div data-slot="dropdown-menu-item" data-value="profile">
+              Profile
+              <span data-slot="dropdown-menu-shortcut">⇧⌘P</span>
+            </div>
+            <div data-slot="dropdown-menu-item" data-value="billing">
+              Billing
+              <span data-slot="dropdown-menu-shortcut">⌘B</span>
+            </div>
+            <div data-slot="dropdown-menu-item" data-value="settings">
+              Settings
+              <span data-slot="dropdown-menu-shortcut">⌘S</span>
+            </div>
+            <div data-slot="dropdown-menu-separator"></div>
+            <div data-slot="dropdown-menu-item" data-value="team">Team</div>
+            <div data-slot="dropdown-menu-sub-trigger">
+              Invite users
+            </div>
+            <div data-slot="dropdown-menu-sub-content">
+              <div data-slot="dropdown-menu-item" data-value="invite-email">Email</div>
+              <div data-slot="dropdown-menu-item" data-value="invite-message">Message</div>
+              <div data-slot="dropdown-menu-separator"></div>
+              <div data-slot="dropdown-menu-item" data-value="invite-more">More…</div>
+            </div>
+            <div data-slot="dropdown-menu-separator"></div>
+            <div data-slot="dropdown-menu-item" data-value="logout" data-variant="destructive">
+              Log out
+              <span data-slot="dropdown-menu-shortcut">⇧⌘Q</span>
+            </div>
+          </div>
+        </div>
+        <p class="demo-hint">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Use arrow keys to navigate, Enter to select — hover "Invite users" for sub-menu
+        </p>
+        <div class="demo-event-log" id="dropdown-log" style="width:100%;height:60px">// dropdown events appear here…</div>
+      </div>
+
+      <div class="demo-code-actions">
+        <button class="demo-code-toggle" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--html')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          Show HTML
+        </button>
+        <button class="demo-code-toggle demo-code-toggle--js" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--js')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          <span class="demo-code-js-badge">JS</span> Show JavaScript
+        </button>
+      </div>
+      <div class="demo-code-block demo-code-block--html"><pre><code>&lt;div data-sc="dropdown-menu"&gt;
+  &lt;button data-slot="dropdown-menu-trigger"
+          data-slot-also="button" data-variant="outline"&gt;
+    Open Menu ▾
+  &lt;/button&gt;
+  &lt;div data-slot="dropdown-menu-content"&gt;
+    &lt;div data-slot="dropdown-menu-label"&gt;My Account&lt;/div&gt;
+    &lt;div data-slot="dropdown-menu-separator"&gt;&lt;/div&gt;
+    &lt;div data-slot="dropdown-menu-item" data-value="profile"&gt;
+      Profile
+      &lt;span data-slot="dropdown-menu-shortcut"&gt;⇧⌘P&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;!-- Sub-menu --&gt;
+    &lt;div data-slot="dropdown-menu-sub-trigger"&gt;Invite&lt;/div&gt;
+    &lt;div data-slot="dropdown-menu-sub-content"&gt;
+      &lt;div data-slot="dropdown-menu-item"
+           data-value="email"&gt;Email&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div data-slot="dropdown-menu-separator"&gt;&lt;/div&gt;
+    &lt;div data-slot="dropdown-menu-item"
+         data-value="logout" data-variant="destructive"&gt;
+      Log out
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre></div>
+      <div class="demo-code-block demo-code-block--js"><pre><code>const menu = document.querySelector('[data-sc="dropdown-menu"]');
+
+// Listen for item selection
+menu.addEventListener('sc:select', (e) =&gt; {
+  console.log('Selected:', e.detail.value);
+
+  switch (e.detail.value) {
+    case 'profile':
+      window.location.href = '/profile';
+      break;
+    case 'settings':
+      window.location.href = '/settings';
+      break;
+    case 'logout':
+      fetch('/api/logout', { method: 'POST' })
+        .then(() =&gt; window.location.href = '/login');
+      break;
+    case 'invite-email':
+      openInviteDialog('email');
+      break;
+  }
+});</code></pre></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ CONTEXT MENU ═══════════════════════ -->
+  <section class="demo-section" id="context-menu">
+    <h2>Context Menu</h2>
+    <p class="demo-desc">Right-click menu. Appears at cursor position on <code>contextmenu</code> event. Emits <code>sc:select</code>.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview demo-preview--col">
+        <div data-sc="context-menu" id="demo-context-menu" style="width:100%">
+          <div data-slot="context-menu-trigger" class="demo-context-area" style="width:100%">
+            <div>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:8px;opacity:0.5"><path d="M15 3h6v6M14 10l6.1-6.1M9 21H3v-6M10 14l-6.1 6.1"/></svg>
+              <div style="font-weight:var(--font-weight-medium)">Right-click anywhere in this area</div>
+              <div style="font-size:12px;margin-top:4px;opacity:0.7">A custom context menu will appear at your cursor position</div>
+            </div>
+          </div>
+          <div hidden data-slot="context-menu-content">
+            <div data-slot="context-menu-item" data-value="back">
+              Back
+              <span data-slot="context-menu-shortcut">⌘[</span>
+            </div>
+            <div data-slot="context-menu-item" data-value="forward" data-disabled>
+              Forward
+              <span data-slot="context-menu-shortcut">⌘]</span>
+            </div>
+            <div data-slot="context-menu-item" data-value="reload">
+              Reload
+              <span data-slot="context-menu-shortcut">⌘R</span>
+            </div>
+            <div data-slot="context-menu-separator"></div>
+            <div data-slot="context-menu-item" data-value="save-as">
+              Save As…
+              <span data-slot="context-menu-shortcut">⇧⌘S</span>
+            </div>
+            <div data-slot="context-menu-item" data-value="print">Print…</div>
+            <div data-slot="context-menu-separator"></div>
+            <div data-slot="context-menu-item" data-value="view-source">View Source</div>
+            <div data-slot="context-menu-item" data-value="inspect">Inspect</div>
+          </div>
+        </div>
+        <div class="demo-event-log" id="context-log" style="width:100%;height:60px">// context-menu events appear here…</div>
+      </div>
+
+      <div class="demo-code-actions">
+        <button class="demo-code-toggle" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--html')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          Show HTML
+        </button>
+        <button class="demo-code-toggle demo-code-toggle--js" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--js')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          <span class="demo-code-js-badge">JS</span> Show JavaScript
+        </button>
+      </div>
+      <div class="demo-code-block demo-code-block--html"><pre><code>&lt;div data-sc="context-menu"&gt;
+  &lt;div data-slot="context-menu-trigger"&gt;
+    Right-click this area
+  &lt;/div&gt;
+  &lt;div data-slot="context-menu-content"&gt;
+    &lt;div data-slot="context-menu-item" data-value="back"&gt;
+      Back &lt;span data-slot="context-menu-shortcut"&gt;⌘[&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div data-slot="context-menu-item"
+         data-value="forward" data-disabled&gt;Forward&lt;/div&gt;
+    &lt;div data-slot="context-menu-separator"&gt;&lt;/div&gt;
+    &lt;div data-slot="context-menu-item"
+         data-value="inspect"&gt;Inspect&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre></div>
+      <div class="demo-code-block demo-code-block--js"><pre><code>const ctx = document.querySelector('[data-sc="context-menu"]');
+
+// Listen for item selection
+ctx.addEventListener('sc:select', (e) =&gt; {
+  console.log('Context action:', e.detail.value);
+
+  switch (e.detail.value) {
+    case 'back':    history.back();       break;
+    case 'forward': history.forward();    break;
+    case 'reload':  location.reload();    break;
+    case 'inspect':
+      // Open dev tools or custom inspector
+      break;
+  }
+});</code></pre></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ POPOVER ═══════════════════════ -->
+  <section class="demo-section" id="popover">
+    <h2>Popover</h2>
+    <p class="demo-desc">Click-triggered popup positioned relative to its trigger element. Contains interactive content like forms.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview demo-preview--col" style="align-items:flex-start">
+        <div data-sc="popover" id="demo-popover">
+          <button data-slot="popover-trigger" data-slot-also="button" data-variant="outline">Open Popover</button>
+          <div hidden data-slot="popover-content">
+            <div style="display:flex;flex-direction:column;gap:12px;min-width:260px">
+              <div>
+                <h4 style="font-size:15px;font-weight:var(--font-weight-medium)">Dimensions</h4>
+                <p class="text-sm text-muted">Set the dimensions for the layer.</p>
+              </div>
+              <div style="display:grid;grid-template-columns:auto 1fr;gap:8px;align-items:center">
+                <label data-slot="label" style="font-size:13px">Width</label>
+                <input data-slot="input" value="100%" id="pop-width">
+                <label data-slot="label" style="font-size:13px">Height</label>
+                <input data-slot="input" value="25px" id="pop-height">
+                <label data-slot="label" style="font-size:13px">Max W</label>
+                <input data-slot="input" value="300px" id="pop-maxw">
+              </div>
+              <button data-slot="button" data-size="sm" id="pop-apply">Apply</button>
+            </div>
+          </div>
+        </div>
+        <p class="demo-hint">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Click trigger to toggle — click outside or Escape to close
+        </p>
+        <div class="demo-event-log" id="popover-log" style="width:100%;height:60px">// popover events appear here…</div>
+      </div>
+
+      <div class="demo-code-actions">
+        <button class="demo-code-toggle" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--html')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          Show HTML
+        </button>
+        <button class="demo-code-toggle demo-code-toggle--js" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--js')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          <span class="demo-code-js-badge">JS</span> Show JavaScript
+        </button>
+      </div>
+      <div class="demo-code-block demo-code-block--html"><pre><code>&lt;div data-sc="popover"&gt;
+  &lt;button data-slot="popover-trigger"
+          data-slot-also="button" data-variant="outline"&gt;
+    Open Popover
+  &lt;/button&gt;
+  &lt;div data-slot="popover-content"&gt;
+    &lt;div&gt;
+      &lt;h4&gt;Dimensions&lt;/h4&gt;
+      &lt;label&gt;Width&lt;/label&gt;
+      &lt;input data-slot="input" value="100%"&gt;
+      &lt;button data-slot="button"&gt;Apply&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre></div>
+      <div class="demo-code-block demo-code-block--js"><pre><code>const popover = document.querySelector('[data-sc="popover"]');
+
+// Programmatic control
+popover._popover.open();
+popover._popover.close();
+popover._popover.toggle();
+
+// Events
+popover.addEventListener('sc:open', () =&gt; {
+  console.log('Popover opened');
+});
+popover.addEventListener('sc:close', () =&gt; {
+  console.log('Popover closed');
+});
+
+// Handle Apply button inside popover
+document.getElementById('pop-apply')
+  .addEventListener('click', () =&gt; {
+    const w = document.getElementById('pop-width').value;
+    const h = document.getElementById('pop-height').value;
+    console.log('Apply dimensions:', w, 'x', h);
+    popover._popover.close();
+  });</code></pre></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ SELECT ═══════════════════════ -->
+  <section class="demo-section" id="select">
+    <h2>Select</h2>
+    <p class="demo-desc">Custom select dropdown with keyboard navigation, option groups, and disabled items. Emits <code>sc:change</code>.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview" style="gap:1.5rem;flex-wrap:wrap;align-items:flex-start">
+        <!-- Standard select with groups -->
+        <div style="display:flex;flex-direction:column;gap:6px;min-width:200px">
+          <label data-slot="label">Food Category</label>
+          <div data-sc="select" data-placeholder="Select a food…" id="demo-select-1">
+            <button data-slot="select-trigger">
+              <span data-slot="select-value" data-placeholder>Select a food…</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div hidden data-slot="select-content">
+              <div data-slot="select-label">Fruits</div>
+              <div data-slot="select-item" data-value="apple">Apple</div>
+              <div data-slot="select-item" data-value="banana">Banana</div>
+              <div data-slot="select-item" data-value="cherry">Cherry</div>
+              <div data-slot="select-separator"></div>
+              <div data-slot="select-label">Vegetables</div>
+              <div data-slot="select-item" data-value="carrot">Carrot</div>
+              <div data-slot="select-item" data-value="pepper">Pepper</div>
+              <div data-slot="select-item" data-value="spinach" data-disabled>Spinach (sold out)</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pre-selected -->
+        <div style="display:flex;flex-direction:column;gap:6px;min-width:200px">
+          <label data-slot="label">Pre-selected</label>
+          <div data-sc="select" data-value="banana" id="demo-select-2">
+            <button data-slot="select-trigger">
+              <span data-slot="select-value">Banana</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div hidden data-slot="select-content">
+              <div data-slot="select-item" data-value="apple">Apple</div>
+              <div data-slot="select-item" data-value="banana">Banana</div>
+              <div data-slot="select-item" data-value="cherry">Cherry</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="width:100%">
+          <div class="demo-event-log" id="select-log" style="width:100%;height:60px">// select events appear here…</div>
+        </div>
+      </div>
+
+      <div class="demo-code-actions">
+        <button class="demo-code-toggle" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--html')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          Show HTML
+        </button>
+        <button class="demo-code-toggle demo-code-toggle--js" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--js')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          <span class="demo-code-js-badge">JS</span> Show JavaScript
+        </button>
+      </div>
+      <div class="demo-code-block demo-code-block--html"><pre><code>&lt;div data-sc="select" data-placeholder="Pick one…"&gt;
+  &lt;button data-slot="select-trigger"&gt;
+    &lt;span data-slot="select-value" data-placeholder&gt;
+      Pick one…
+    &lt;/span&gt;
+    &lt;svg …&gt;&lt;!-- chevron-down --&gt;&lt;/svg&gt;
+  &lt;/button&gt;
+  &lt;div data-slot="select-content"&gt;
+    &lt;div data-slot="select-label"&gt;Fruits&lt;/div&gt;
+    &lt;div data-slot="select-item" data-value="apple"&gt;Apple&lt;/div&gt;
+    &lt;div data-slot="select-item" data-value="banana"&gt;Banana&lt;/div&gt;
+    &lt;div data-slot="select-separator"&gt;&lt;/div&gt;
+    &lt;div data-slot="select-label"&gt;Vegetables&lt;/div&gt;
+    &lt;div data-slot="select-item"
+         data-value="spinach" data-disabled&gt;Spinach&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Pre-selected: add data-value="banana" on root --&gt;</code></pre></div>
+      <div class="demo-code-block demo-code-block--js"><pre><code>const select = document.querySelector('[data-sc="select"]');
+
+// Listen for value changes
+select.addEventListener('sc:change', (e) =&gt; {
+  console.log('Selected:', e.detail.value);
+  // e.detail.value → "apple", "banana", etc.
+});
+
+// Get current value programmatically
+const currentValue = select._select.getValue();
+console.log('Current value:', currentValue);
+
+// Set value programmatically
+select._select.setValue('cherry');
+
+// Use in forms: read the value on submit
+document.querySelector('form').addEventListener('submit', (e) =&gt; {
+  e.preventDefault();
+  const food = select._select.getValue();
+  console.log('Form submitted with:', food);
+});</code></pre></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ SLIDER ═══════════════════════ -->
+  <section class="demo-section" id="slider">
+    <h2>Slider</h2>
+    <p class="demo-desc">Range slider with thumb, track, and filled range. Drag or use arrow keys. Emits <code>sc:change</code> on every movement.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview demo-preview--col" style="max-width:400px;gap:2rem">
+        <!-- Default slider -->
+        <div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px">
+            <label data-slot="label">Volume</label>
+            <span style="font-size:22px;font-weight:var(--font-weight-semibold);color:var(--primary)" id="slider-val-1">50</span>
+          </div>
+          <div data-sc="slider" data-slot="slider" data-min="0" data-max="100" data-value="50" data-step="1" id="demo-slider-1">
+            <div data-slot="slider-track">
+              <div data-slot="slider-range"></div>
+            </div>
+            <div data-slot="slider-thumb" tabindex="0" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-label="Volume"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted-foreground);margin-top:6px">
+            <span>0</span><span>25</span><span>50</span><span>75</span><span>100</span>
+          </div>
+        </div>
+
+        <!-- Step slider -->
+        <div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px">
+            <label data-slot="label">Quality (step: 25)</label>
+            <span style="font-size:22px;font-weight:var(--font-weight-semibold);color:var(--primary)" id="slider-val-2">25</span>
+          </div>
+          <div data-sc="slider" data-slot="slider" data-min="0" data-max="100" data-value="25" data-step="25" id="demo-slider-2">
+            <div data-slot="slider-track">
+              <div data-slot="slider-range"></div>
+            </div>
+            <div data-slot="slider-thumb" tabindex="0" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="25" aria-label="Quality"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted-foreground);margin-top:6px">
+            <span>0</span><span>25</span><span>50</span><span>75</span><span>100</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-code-actions">
+        <button class="demo-code-toggle" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--html')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          Show HTML
+        </button>
+        <button class="demo-code-toggle demo-code-toggle--js" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--js')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          <span class="demo-code-js-badge">JS</span> Show JavaScript
+        </button>
+      </div>
+      <div class="demo-code-block demo-code-block--html"><pre><code>&lt;div data-sc="slider" data-slot="slider"
+     data-min="0" data-max="100"
+     data-value="50" data-step="1"&gt;
+  &lt;div data-slot="slider-track"&gt;
+    &lt;div data-slot="slider-range"&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div data-slot="slider-thumb" tabindex="0"
+       role="slider"
+       aria-valuemin="0" aria-valuemax="100"
+       aria-valuenow="50"&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Step constraint: add data-step="25" --&gt;</code></pre></div>
+      <div class="demo-code-block demo-code-block--js"><pre><code>const slider = document.querySelector('[data-sc="slider"]');
+
+// Listen for continuous changes (fires on every drag movement)
+slider.addEventListener('sc:change', (e) =&gt; {
+  const value = e.detail.value;
+  console.log('Slider value:', value);
+  document.getElementById('output').textContent = value + '%';
+});
+
+// Get / set value programmatically
+const current = slider._slider.getValue(); // e.g. 50
+slider._slider.setValue(75); // jumps to 75
+
+// Example: connect slider to audio volume
+slider.addEventListener('sc:change', (e) =&gt; {
+  audioElement.volume = e.detail.value / 100;
+});</code></pre></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ NAVIGATION MENU ═══════════════════════ -->
+  <section class="demo-section" id="navigation-menu">
+    <h2>Navigation Menu</h2>
+    <p class="demo-desc">Horizontal navigation with dropdown content panels on hover/click. Desktop navigation pattern.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview demo-preview--col">
+        <nav data-sc="navigation-menu" data-slot="navigation-menu" id="demo-nav-menu">
+          <ul data-slot="navigation-menu-list">
+            <li data-slot="navigation-menu-item">
+              <button data-slot="navigation-menu-trigger" style="gap:4px">
+                Getting Started
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div data-slot="navigation-menu-content" style="display:none;min-width:340px">
+                <a data-slot="navigation-menu-link" href="#" data-value="intro" style="display:block;padding:10px;border-radius:var(--radius)">
+                  <div style="font-weight:var(--font-weight-medium);margin-bottom:2px">Introduction</div>
+                  <p class="text-sm text-muted" style="margin:0">Re-usable components built with vanilla HTML, CSS &amp; JS.</p>
+                </a>
+                <a data-slot="navigation-menu-link" href="#" data-value="install" style="display:block;padding:10px;border-radius:var(--radius)">
+                  <div style="font-weight:var(--font-weight-medium);margin-bottom:2px">Installation</div>
+                  <p class="text-sm text-muted" style="margin:0">How to install dependencies and structure your project.</p>
+                </a>
+                <a data-slot="navigation-menu-link" href="#" data-value="typography" style="display:block;padding:10px;border-radius:var(--radius)">
+                  <div style="font-weight:var(--font-weight-medium);margin-bottom:2px">Typography</div>
+                  <p class="text-sm text-muted" style="margin:0">Styles for headings, paragraphs, lists and more.</p>
+                </a>
+              </div>
+            </li>
+            <li data-slot="navigation-menu-item">
+              <button data-slot="navigation-menu-trigger" style="gap:4px">
+                Components
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div data-slot="navigation-menu-content" style="display:none;min-width:280px">
+                <a data-slot="navigation-menu-link" href="#" data-value="button" style="display:block;padding:8px 10px;border-radius:var(--radius)">Button</a>
+                <a data-slot="navigation-menu-link" href="#" data-value="card" style="display:block;padding:8px 10px;border-radius:var(--radius)">Card</a>
+                <a data-slot="navigation-menu-link" href="#" data-value="dialog" style="display:block;padding:8px 10px;border-radius:var(--radius)">Dialog</a>
+                <a data-slot="navigation-menu-link" href="#" data-value="tabs" style="display:block;padding:8px 10px;border-radius:var(--radius)">Tabs</a>
+                <a data-slot="navigation-menu-link" href="#" data-value="select" style="display:block;padding:8px 10px;border-radius:var(--radius)">Select</a>
+              </div>
+            </li>
+            <li data-slot="navigation-menu-item">
+              <a data-slot="navigation-menu-link" href="#" data-value="docs" style="padding:8px 12px;font-size:14px;font-weight:var(--font-weight-medium)">Documentation</a>
+            </li>
+          </ul>
+        </nav>
+        <p class="demo-hint">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Hover or click triggers to reveal dropdown panels with links
+        </p>
+        <div class="demo-event-log" id="nav-log" style="width:100%;height:60px">// nav-menu events appear here…</div>
+      </div>
+
+      <div class="demo-code-actions">
+        <button class="demo-code-toggle" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--html')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          Show HTML
+        </button>
+        <button class="demo-code-toggle demo-code-toggle--js" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--js')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          <span class="demo-code-js-badge">JS</span> Show JavaScript
+        </button>
+      </div>
+      <div class="demo-code-block demo-code-block--html"><pre><code>&lt;nav data-sc="navigation-menu" data-slot="navigation-menu"&gt;
+  &lt;ul data-slot="navigation-menu-list"&gt;
+    &lt;li data-slot="navigation-menu-item"&gt;
+      &lt;button data-slot="navigation-menu-trigger"&gt;
+        Getting Started ▾
+      &lt;/button&gt;
+      &lt;div data-slot="navigation-menu-content"
+           style="display:none;min-width:300px"&gt;
+        &lt;a data-slot="navigation-menu-link" href="/intro"&gt;
+          &lt;div&gt;Introduction&lt;/div&gt;
+          &lt;p&gt;Re-usable components with HTML &amp;amp; CSS.&lt;/p&gt;
+        &lt;/a&gt;
+      &lt;/div&gt;
+    &lt;/li&gt;
+    &lt;li data-slot="navigation-menu-item"&gt;
+      &lt;a data-slot="navigation-menu-link"
+         href="/docs"&gt;Documentation&lt;/a&gt;
+    &lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/nav&gt;</code></pre></div>
+      <div class="demo-code-block demo-code-block--js"><pre><code>const nav = document.querySelector('[data-sc="navigation-menu"]');
+
+// Intercept link clicks for SPA navigation
+nav.addEventListener('click', (e) =&gt; {
+  const link = e.target.closest('[data-slot="navigation-menu-link"]');
+  if (link) {
+    e.preventDefault();
+    const route = link.getAttribute('data-value') || link.href;
+    console.log('Navigate to:', route);
+    // SPA router example:
+    // router.push(route);
+  }
+});
+
+// Example: highlight active link
+function setActiveLink(value) {
+  nav.querySelectorAll('[data-slot="navigation-menu-link"]')
+    .forEach(link =&gt; {
+      link.classList.toggle('active',
+        link.getAttribute('data-value') === value);
+    });
+}
+setActiveLink('intro');</code></pre></div>
+    </div>
+  </section>
+
+</main>
+
+<!-- Scripts: core + Tier 3 components -->
+<script src="../components/scooter-core.js"></script>
+<script src="../components/dialog.js"></script>
+<script src="../components/alert-dialog.js"></script>
+<script src="../components/sheet.js"></script>
+<script src="../components/drawer.js"></script>
+<script src="../components/dropdown-menu.js"></script>
+<script src="../components/context-menu.js"></script>
+<script src="../components/popover.js"></script>
+<script src="../components/select.js"></script>
+<script src="../components/slider.js"></script>
+<script src="../components/navigation-menu.js"></script>
+<!-- Extra: switch used inside Sheet bottom demo -->
+<script src="../components/switch.js"></script>
+
+<!-- Live event loggers -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+  function logTo(logId, type, detail) {
+    const el = document.getElementById(logId);
+    if (!el) return;
+    const time = new Date().toLocaleTimeString('en-US', { hour12: false });
+    const d = detail ? JSON.stringify(detail) : '{}';
+    const line = document.createElement('div');
+    line.innerHTML = '<span style="color:var(--gray-500)">[' + time + ']</span> <span style="color:#34c759">' + type + '</span> ' + d;
+    el.appendChild(line);
+    el.scrollTop = el.scrollHeight;
+  }
+
+  // Dialog
+  const dialogEl = document.getElementById('demo-dialog');
+  if (dialogEl) {
+    dialogEl.addEventListener('sc:open',  () => logTo('dialog-log', 'sc:open', { component: 'dialog' }));
+    dialogEl.addEventListener('sc:close', () => logTo('dialog-log', 'sc:close', { component: 'dialog' }));
+  }
+
+  // Alert Dialog
+  const alertEl = document.getElementById('demo-alert-dialog');
+  if (alertEl) {
+    alertEl.addEventListener('sc:action', () => logTo('alert-dialog-log', 'sc:action', { confirmed: true }));
+    alertEl.addEventListener('sc:cancel', () => logTo('alert-dialog-log', 'sc:cancel', { confirmed: false }));
+    alertEl.addEventListener('sc:open',   () => logTo('alert-dialog-log', 'sc:open', {}));
+    alertEl.addEventListener('sc:close',  () => logTo('alert-dialog-log', 'sc:close', {}));
+  }
+
+  // Sheet
+  document.querySelectorAll('#sheet [data-sc="sheet"]').forEach(s => {
+    const side = s.getAttribute('data-side') || 'right';
+    s.addEventListener('sc:open',  () => logTo('sheet-log', 'sc:open', { side }));
+    s.addEventListener('sc:close', () => logTo('sheet-log', 'sc:close', { side }));
+  });
+
+  // Drawer
+  const drawerEl = document.getElementById('demo-drawer');
+  if (drawerEl) {
+    drawerEl.addEventListener('sc:open',  () => logTo('drawer-log', 'sc:open', {}));
+    drawerEl.addEventListener('sc:close', () => logTo('drawer-log', 'sc:close', {}));
+  }
+
+  // Dropdown Menu
+  const dropdownEl = document.getElementById('demo-dropdown');
+  if (dropdownEl) {
+    dropdownEl.addEventListener('sc:select', (e) => logTo('dropdown-log', 'sc:select', e.detail));
+    dropdownEl.addEventListener('sc:open',   () => logTo('dropdown-log', 'sc:open', {}));
+    dropdownEl.addEventListener('sc:close',  () => logTo('dropdown-log', 'sc:close', {}));
+  }
+
+  // Context Menu
+  const ctxEl = document.getElementById('demo-context-menu');
+  if (ctxEl) {
+    ctxEl.addEventListener('sc:select', (e) => logTo('context-log', 'sc:select', e.detail));
+  }
+
+  // Popover
+  const popEl = document.getElementById('demo-popover');
+  if (popEl) {
+    popEl.addEventListener('sc:open',  () => logTo('popover-log', 'sc:open', {}));
+    popEl.addEventListener('sc:close', () => logTo('popover-log', 'sc:close', {}));
+  }
+
+  // Select
+  const selEl1 = document.getElementById('demo-select-1');
+  const selEl2 = document.getElementById('demo-select-2');
+  if (selEl1) selEl1.addEventListener('sc:change', (e) => logTo('select-log', 'sc:change', { id: 'select-1', value: e.detail.value }));
+  if (selEl2) selEl2.addEventListener('sc:change', (e) => logTo('select-log', 'sc:change', { id: 'select-2', value: e.detail.value }));
+
+  // Slider
+  const s1 = document.getElementById('demo-slider-1');
+  const s2 = document.getElementById('demo-slider-2');
+  if (s1) s1.addEventListener('sc:change', e => {
+    document.getElementById('slider-val-1').textContent = e.detail.value;
+  });
+  if (s2) s2.addEventListener('sc:change', e => {
+    document.getElementById('slider-val-2').textContent = e.detail.value;
+  });
+
+  // Navigation Menu
+  const navEl = document.getElementById('demo-nav-menu');
+  if (navEl) {
+    navEl.addEventListener('click', (e) => {
+      const link = e.target.closest('[data-slot="navigation-menu-link"]');
+      if (link) {
+        e.preventDefault();
+        const val = link.getAttribute('data-value') || link.textContent.trim();
+        logTo('nav-log', 'click', { link: val });
+      }
+    });
+  }
+
+});
+</script>
+</body>
+</html>

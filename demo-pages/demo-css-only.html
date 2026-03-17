@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scooter Pages — CSS-Only Components</title>
+  <link rel="stylesheet" href="../base.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<!-- Navigation bar                                                         -->
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<nav class="demo-nav">
+  <span class="demo-nav-title">Scooter Pages</span>
+  <a href="demo-css-only.html" aria-current="page">CSS-Only</a>
+  <a href="demo-light-js.html">Light JS</a>
+  <a href="demo-medium-js.html">Medium JS</a>
+  <a href="demo-complex-js.html">Complex JS</a>
+  <a href="demo-patterns.html">Patterns</a>
+</nav>
+
+<main class="demo-page">
+  <h1>CSS-Only Components</h1>
+  <p class="demo-subtitle">Tier 1 — These components require zero JavaScript. Pure HTML + CSS.</p>
+
+  <!-- ═══════════════════════ BUTTON ═══════════════════════ -->
+  <section class="demo-section" id="button">
+    <h2>Button</h2>
+    <p class="demo-desc">Six variants × three sizes. Uses <code>data-slot="button"</code>, <code>data-variant</code>, <code>data-size</code>.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview demo-preview--col">
+        <span class="demo-variant-label">Variants</span>
+        <div class="demo-variant-grid">
+          <button data-slot="button">Default</button>
+          <button data-slot="button" data-variant="secondary">Secondary</button>
+          <button data-slot="button" data-variant="destructive">Destructive</button>
+          <button data-slot="button" data-variant="outline">Outline</button>
+          <button data-slot="button" data-variant="ghost">Ghost</button>
+          <button data-slot="button" data-variant="link">Link</button>
+        </div>
+
+        <span class="demo-variant-label">Sizes</span>
+        <div class="demo-variant-grid">
+          <button data-slot="button" data-size="sm">Small</button>
+          <button data-slot="button">Default</button>
+          <button data-slot="button" data-size="lg">Large</button>
+          <button data-slot="button" data-size="icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+          </button>
+        </div>
+
+        <span class="demo-variant-label">States</span>
+        <div class="demo-variant-grid">
+          <button data-slot="button" disabled>Disabled</button>
+          <button data-slot="button" data-variant="outline" disabled>Disabled Outline</button>
+        </div>
+      </div>
+
+      <button class="demo-code-toggle" aria-expanded="false" onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true'); this.nextElementSibling.dataset.visible = this.getAttribute('aria-expanded')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        Show Code
+      </button>
+      <div class="demo-code-block"><pre><code>&lt;button data-slot="button"&gt;Default&lt;/button&gt;
+&lt;button data-slot="button" data-variant="secondary"&gt;Secondary&lt;/button&gt;
+&lt;button data-slot="button" data-variant="destructive"&gt;Destructive&lt;/button&gt;
+&lt;button data-slot="button" data-variant="outline"&gt;Outline&lt;/button&gt;
+&lt;button data-slot="button" data-variant="ghost"&gt;Ghost&lt;/button&gt;
+&lt;button data-slot="button" data-variant="link"&gt;Link&lt;/button&gt;
+
+&lt;!-- Sizes --&gt;
+&lt;button data-slot="button" data-size="sm"&gt;Small&lt;/button&gt;
+&lt;button data-slot="button"&gt;Default&lt;/button&gt;
+&lt;button data-slot="button" data-size="lg"&gt;Large&lt;/button&gt;
+&lt;button data-slot="button" data-size="icon"&gt;…&lt;/button&gt;
+
+&lt;!-- Disabled --&gt;
+&lt;button data-slot="button" disabled&gt;Disabled&lt;/button&gt;</code></pre></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ CARD ═══════════════════════ -->
+  <section class="demo-section" id="card">
+    <h2>Card</h2>
+    <p class="demo-desc">Container with header, content, footer. Supports <code>data-variant="gradient"</code>.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview demo-preview--col" style="gap:1.5rem">
+        <!-- Standard card -->
+        <div data-slot="card" style="margin-bottom:0">
+          <div data-slot="card-header">
+            <div data-slot="card-title">Card Title</div>
+            <div data-slot="card-description">A short description of the card's purpose.</div>
+          </div>
+          <div data-slot="card-content">
+            <p style="font-size:14px;color:var(--muted-foreground)">Card body content goes here. This could be anything — text, forms, images.</p>
+          </div>
+          <div data-slot="card-footer">
+            <button data-slot="button" data-variant="outline">Cancel</button>
+            <button data-slot="button">Confirm</button>
+          </div>
+        </div>
+
+        <!-- Gradient card -->
+        <div data-slot="card" data-variant="gradient" style="margin-bottom:0">
+          <div data-slot="card-header">
+            <div data-slot="card-title">Gradient Card</div>
+            <div data-slot="card-description" style="color:rgba(255,255,255,0.8)">White text on primary gradient background.</div>
+          </div>
+          <div data-slot="card-content">
+            <p>Used for hero-level highlight sections.</p>
+          </div>
+        </div>
+      </div>
+
+      <button class="demo-code-toggle" aria-expanded="false" onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true'); this.nextElementSibling.dataset.visible = this.getAttribute('aria-expanded')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        Show Code
+      </button>
+      <div class="demo-code-block"><pre><code>&lt;div data-slot="card"&gt;
+  &lt;div data-slot="card-header"&gt;
+    &lt;div data-slot="card-title"&gt;Card Title&lt;/div&gt;
+    &lt;div data-slot="card-description"&gt;Description text&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div data-slot="card-content"&gt;…&lt;/div&gt;
+  &lt;div data-slot="card-footer"&gt;
+    &lt;button data-slot="button" data-variant="outline"&gt;Cancel&lt;/button&gt;
+    &lt;button data-slot="button"&gt;Confirm&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Gradient variant --&gt;
+&lt;div data-slot="card" data-variant="gradient"&gt;…&lt;/div&gt;</code></pre></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ BADGE ═══════════════════════ -->
+  <section class="demo-section" id="badge">
+    <h2>Badge</h2>
+    <p class="demo-desc">Inline status/label chips. Five variants via <code>data-variant</code>.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview">
+        <span data-slot="badge">Default</span>
+        <span data-slot="badge" data-variant="secondary">Secondary</span>
+        <span data-slot="badge" data-variant="destructive">Destructive</span>
+        <span data-slot="badge" data-variant="outline">Outline</span>
+        <span data-slot="badge" data-variant="success">Success</span>
+      </div>
+
+      <button class="demo-code-toggle" aria-expanded="false" onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true'); this.nextElementSibling.dataset.visible = this.getAttribute('aria-expanded')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        Show Code
+      </button>
+      <div class="demo-code-block"><pre><code>&lt;span data-slot="badge"&gt;Default&lt;/span&gt;
+&lt;span data-slot="badge" data-variant="secondary"&gt;Secondary&lt;/span&gt;
+&lt;span data-slot="badge" data-variant="destructive"&gt;Destructive&lt;/span&gt;
+&lt;span data-slot="badge" data-variant="outline"&gt;Outline&lt;/span&gt;
+&lt;span data-slot="badge" data-variant="success"&gt;Success&lt;/span&gt;</code></pre></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ INPUT ═══════════════════════ -->
+  <section class="demo-section" id="input">
+    <h2>Input</h2>
+    <p class="demo-desc">Text input with focus ring. Supports placeholder, disabled, and invalid states.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview demo-preview--col" style="max-width:360px">
+        <input data-slot="input" type="text" placeholder="Default input…">
+        <input data-slot="input" type="email" placeholder="Email" value="hello@example.com">
+        <input data-slot="input" type="text" placeholder="Disabled" disabled>
+        <input data-slot="input" type="text" placeholder="Invalid" aria-invalid="true">
+      </div>
+
+      <button class="demo-code-toggle" aria-expanded="false" onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true'); this.nextElementSibling.dataset.visible = this.getAttribute('aria-expanded')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        Show Code
+      </button>
+      <div class="demo-code-block"><pre><code>&lt;input data-slot="input" type="text" placeholder="Default input…"&gt;
+&lt;input data-slot="input" type="email" value="hello@example.com"&gt;
+&lt;input data-slot="input" disabled placeholder="Disabled"&gt;
+&lt;input data-slot="input" aria-invalid="true" placeholder="Invalid"&gt;</code></pre></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ TEXTAREA ═══════════════════════ -->
+  <section class="demo-section" id="textarea">
+    <h2>Textarea</h2>
+    <p class="demo-desc">Multi-line text input. Same styling tokens as Input.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview demo-preview--col" style="max-width:360px">
+        <textarea data-slot="textarea" placeholder="Write something…" rows="3"></textarea>
+        <textarea data-slot="textarea" disabled placeholder="Disabled textarea" rows="3"></textarea>
+      </div>
+
+      <button class="demo-code-toggle" aria-expanded="false" onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true'); this.nextElementSibling.dataset.visible = this.getAttribute('aria-expanded')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        Show Code
+      </button>
+      <div class="demo-code-block"><pre><code>&lt;textarea data-slot="textarea" placeholder="Write something…" rows="3"&gt;&lt;/textarea&gt;
+&lt;textarea data-slot="textarea" disabled rows="3"&gt;&lt;/textarea&gt;</code></pre></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ LABEL ═══════════════════════ -->
+  <section class="demo-section" id="label">
+    <h2>Label</h2>
+    <p class="demo-desc">Accessible form label. Pairs with inputs via <code>for</code> attribute.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview demo-preview--col" style="max-width:360px; gap:1rem">
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <label data-slot="label" for="demo-name">Full Name</label>
+          <input data-slot="input" type="text" id="demo-name" placeholder="Jane Doe">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <label data-slot="label" data-disabled="true">Disabled Label</label>
+          <input data-slot="input" type="text" placeholder="Disabled" disabled>
+        </div>
+      </div>
+
+      <button class="demo-code-toggle" aria-expanded="false" onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true'); this.nextElementSibling.dataset.visible = this.getAttribute('aria-expanded')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        Show Code
+      </button>
+      <div class="demo-code-block"><pre><code>&lt;label data-slot="label" for="my-input"&gt;Full Name&lt;/label&gt;
+&lt;input data-slot="input" type="text" id="my-input"&gt;
+
+&lt;!-- Disabled --&gt;
+&lt;label data-slot="label" data-disabled="true"&gt;Disabled Label&lt;/label&gt;</code></pre></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ SEPARATOR ═══════════════════════ -->
+  <section class="demo-section" id="separator">
+    <h2>Separator</h2>
+    <p class="demo-desc">Horizontal or vertical visual divider.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview demo-preview--col" style="gap:1.5rem">
+        <div>
+          <p style="font-size:14px;color:var(--foreground)">Content above</p>
+          <div data-slot="separator" style="margin:12px 0"></div>
+          <p style="font-size:14px;color:var(--foreground)">Content below</p>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;height:24px">
+          <span style="font-size:14px">Left</span>
+          <div data-slot="separator" data-orientation="vertical" style="align-self:stretch"></div>
+          <span style="font-size:14px">Center</span>
+          <div data-slot="separator" data-orientation="vertical" style="align-self:stretch"></div>
+          <span style="font-size:14px">Right</span>
+        </div>
+      </div>
+
+      <button class="demo-code-toggle" aria-expanded="false" onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true'); this.nextElementSibling.dataset.visible = this.getAttribute('aria-expanded')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        Show Code
+      </button>
+      <div class="demo-code-block"><pre><code>&lt;!-- Horizontal (default) --&gt;
+&lt;div data-slot="separator"&gt;&lt;/div&gt;
+
+&lt;!-- Vertical --&gt;
+&lt;div data-slot="separator" data-orientation="vertical"&gt;&lt;/div&gt;</code></pre></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ SKELETON ═══════════════════════ -->
+  <section class="demo-section" id="skeleton">
+    <h2>Skeleton</h2>
+    <p class="demo-desc">Animated placeholder while content loads. Shape via inline styles.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview">
+        <div style="display:flex;align-items:center;gap:16px;width:100%">
+          <div data-slot="skeleton" style="width:48px;height:48px;border-radius:9999px"></div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:8px">
+            <div data-slot="skeleton" style="width:60%;height:16px"></div>
+            <div data-slot="skeleton" style="width:40%;height:12px"></div>
+          </div>
+        </div>
+      </div>
+
+      <button class="demo-code-toggle" aria-expanded="false" onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true'); this.nextElementSibling.dataset.visible = this.getAttribute('aria-expanded')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        Show Code
+      </button>
+      <div class="demo-code-block"><pre><code>&lt;!-- Circle skeleton --&gt;
+&lt;div data-slot="skeleton" style="width:48px;height:48px;border-radius:9999px"&gt;&lt;/div&gt;
+
+&lt;!-- Line skeletons --&gt;
+&lt;div data-slot="skeleton" style="width:60%;height:16px"&gt;&lt;/div&gt;
+&lt;div data-slot="skeleton" style="width:40%;height:12px"&gt;&lt;/div&gt;</code></pre></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ TABLE ═══════════════════════ -->
+  <section class="demo-section" id="table">
+    <h2>Table</h2>
+    <p class="demo-desc">Data table with header, body, footer. Hover row highlighting.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview" style="overflow-x:auto">
+        <table data-slot="table">
+          <caption data-slot="table-caption">A list of recent invoices.</caption>
+          <thead data-slot="table-header">
+            <tr>
+              <th data-slot="table-head">Invoice</th>
+              <th data-slot="table-head">Status</th>
+              <th data-slot="table-head">Method</th>
+              <th data-slot="table-head" style="text-align:right">Amount</th>
+            </tr>
+          </thead>
+          <tbody data-slot="table-body">
+            <tr data-slot="table-row">
+              <td data-slot="table-cell" style="font-weight:var(--font-weight-medium)">INV-001</td>
+              <td data-slot="table-cell"><span data-slot="badge" data-variant="success">Paid</span></td>
+              <td data-slot="table-cell">Credit Card</td>
+              <td data-slot="table-cell" style="text-align:right">$250.00</td>
+            </tr>
+            <tr data-slot="table-row">
+              <td data-slot="table-cell" style="font-weight:var(--font-weight-medium)">INV-002</td>
+              <td data-slot="table-cell"><span data-slot="badge" data-variant="outline">Pending</span></td>
+              <td data-slot="table-cell">PayPal</td>
+              <td data-slot="table-cell" style="text-align:right">$150.00</td>
+            </tr>
+            <tr data-slot="table-row">
+              <td data-slot="table-cell" style="font-weight:var(--font-weight-medium)">INV-003</td>
+              <td data-slot="table-cell"><span data-slot="badge" data-variant="destructive">Overdue</span></td>
+              <td data-slot="table-cell">Bank Transfer</td>
+              <td data-slot="table-cell" style="text-align:right">$350.00</td>
+            </tr>
+            <tr data-slot="table-row" data-state="selected">
+              <td data-slot="table-cell" style="font-weight:var(--font-weight-medium)">INV-004</td>
+              <td data-slot="table-cell"><span data-slot="badge" data-variant="success">Paid</span></td>
+              <td data-slot="table-cell">Credit Card</td>
+              <td data-slot="table-cell" style="text-align:right">$450.00</td>
+            </tr>
+          </tbody>
+          <tfoot data-slot="table-footer">
+            <tr>
+              <td data-slot="table-cell" colspan="3">Total</td>
+              <td data-slot="table-cell" style="text-align:right">$1,200.00</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <button class="demo-code-toggle" aria-expanded="false" onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true'); this.nextElementSibling.dataset.visible = this.getAttribute('aria-expanded')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        Show Code
+      </button>
+      <div class="demo-code-block"><pre><code>&lt;table data-slot="table"&gt;
+  &lt;caption data-slot="table-caption"&gt;A list of recent invoices.&lt;/caption&gt;
+  &lt;thead data-slot="table-header"&gt;
+    &lt;tr&gt;
+      &lt;th data-slot="table-head"&gt;Invoice&lt;/th&gt;
+      &lt;th data-slot="table-head"&gt;Status&lt;/th&gt;
+      &lt;th data-slot="table-head"&gt;Amount&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody data-slot="table-body"&gt;
+    &lt;tr data-slot="table-row"&gt;
+      &lt;td data-slot="table-cell"&gt;INV-001&lt;/td&gt;
+      &lt;td data-slot="table-cell"&gt;…&lt;/td&gt;
+      &lt;td data-slot="table-cell"&gt;$250.00&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+  &lt;tfoot data-slot="table-footer"&gt;
+    &lt;tr&gt;&lt;td colspan="2"&gt;Total&lt;/td&gt;&lt;td&gt;$250.00&lt;/td&gt;&lt;/tr&gt;
+  &lt;/tfoot&gt;
+&lt;/table&gt;
+
+&lt;!-- Selected row --&gt;
+&lt;tr data-slot="table-row" data-state="selected"&gt;…&lt;/tr&gt;</code></pre></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ BREADCRUMB ═══════════════════════ -->
+  <section class="demo-section" id="breadcrumb">
+    <h2>Breadcrumb</h2>
+    <p class="demo-desc">Navigation breadcrumbs with separator chevrons.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview">
+        <nav data-slot="breadcrumb" aria-label="Breadcrumb">
+          <ol data-slot="breadcrumb-list">
+            <li data-slot="breadcrumb-item">
+              <a data-slot="breadcrumb-link" href="#">Home</a>
+              <span data-slot="breadcrumb-separator">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+              </span>
+            </li>
+            <li data-slot="breadcrumb-item">
+              <a data-slot="breadcrumb-link" href="#">Components</a>
+              <span data-slot="breadcrumb-separator">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+              </span>
+            </li>
+            <li data-slot="breadcrumb-item">
+              <span data-slot="breadcrumb-page">Breadcrumb</span>
+            </li>
+          </ol>
+        </nav>
+      </div>
+
+      <button class="demo-code-toggle" aria-expanded="false" onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true'); this.nextElementSibling.dataset.visible = this.getAttribute('aria-expanded')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        Show Code
+      </button>
+      <div class="demo-code-block"><pre><code>&lt;nav data-slot="breadcrumb" aria-label="Breadcrumb"&gt;
+  &lt;ol data-slot="breadcrumb-list"&gt;
+    &lt;li data-slot="breadcrumb-item"&gt;
+      &lt;a data-slot="breadcrumb-link" href="#"&gt;Home&lt;/a&gt;
+      &lt;span data-slot="breadcrumb-separator"&gt;
+        &lt;svg …&gt;&lt;!-- chevronRight --&gt;&lt;/svg&gt;
+      &lt;/span&gt;
+    &lt;/li&gt;
+    &lt;li data-slot="breadcrumb-item"&gt;
+      &lt;span data-slot="breadcrumb-page"&gt;Current Page&lt;/span&gt;
+    &lt;/li&gt;
+  &lt;/ol&gt;
+&lt;/nav&gt;</code></pre></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ PAGINATION ═══════════════════════ -->
+  <section class="demo-section" id="pagination">
+    <h2>Pagination</h2>
+    <p class="demo-desc">Page navigation with previous/next and numbered links.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview demo-preview--center">
+        <nav data-slot="pagination" aria-label="Pagination">
+          <ul data-slot="pagination-content">
+            <li data-slot="pagination-item">
+              <a data-slot="pagination-link" href="#" aria-label="Previous page">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+              </a>
+            </li>
+            <li data-slot="pagination-item"><a data-slot="pagination-link" href="#">1</a></li>
+            <li data-slot="pagination-item"><a data-slot="pagination-link" href="#" data-active="true" aria-current="page">2</a></li>
+            <li data-slot="pagination-item"><a data-slot="pagination-link" href="#">3</a></li>
+            <li data-slot="pagination-item"><span data-slot="pagination-ellipsis">…</span></li>
+            <li data-slot="pagination-item"><a data-slot="pagination-link" href="#">10</a></li>
+            <li data-slot="pagination-item">
+              <a data-slot="pagination-link" href="#" aria-label="Next page">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+
+      <button class="demo-code-toggle" aria-expanded="false" onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true'); this.nextElementSibling.dataset.visible = this.getAttribute('aria-expanded')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        Show Code
+      </button>
+      <div class="demo-code-block"><pre><code>&lt;nav data-slot="pagination" aria-label="Pagination"&gt;
+  &lt;ul data-slot="pagination-content"&gt;
+    &lt;li data-slot="pagination-item"&gt;
+      &lt;a data-slot="pagination-link" href="#"&gt;← Prev&lt;/a&gt;
+    &lt;/li&gt;
+    &lt;li data-slot="pagination-item"&gt;
+      &lt;a data-slot="pagination-link" href="#"&gt;1&lt;/a&gt;
+    &lt;/li&gt;
+    &lt;li data-slot="pagination-item"&gt;
+      &lt;a data-slot="pagination-link" data-active="true" aria-current="page"&gt;2&lt;/a&gt;
+    &lt;/li&gt;
+    &lt;li data-slot="pagination-item"&gt;
+      &lt;span data-slot="pagination-ellipsis"&gt;…&lt;/span&gt;
+    &lt;/li&gt;
+    &lt;li data-slot="pagination-item"&gt;
+      &lt;a data-slot="pagination-link" href="#"&gt;Next →&lt;/a&gt;
+    &lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/nav&gt;</code></pre></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ ALERT ═══════════════════════ -->
+  <section class="demo-section" id="alert">
+    <h2>Alert</h2>
+    <p class="demo-desc">Callout messages. Default and destructive variants. Optional icon slot.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview demo-preview--col" style="gap:1rem">
+        <!-- Default alert -->
+        <div data-slot="alert">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+          <div data-slot="alert-title">Heads up!</div>
+          <div data-slot="alert-description">You can add components to your app using the CLI.</div>
+        </div>
+
+        <!-- Destructive alert -->
+        <div data-slot="alert" data-variant="destructive">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+          <div data-slot="alert-title">Error</div>
+          <div data-slot="alert-description">Your session has expired. Please log in again.</div>
+        </div>
+
+        <!-- Alert without icon -->
+        <div data-slot="alert">
+          <div data-slot="alert-title">Note</div>
+          <div data-slot="alert-description">Alerts work fine without an icon too.</div>
+        </div>
+      </div>
+
+      <button class="demo-code-toggle" aria-expanded="false" onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true'); this.nextElementSibling.dataset.visible = this.getAttribute('aria-expanded')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        Show Code
+      </button>
+      <div class="demo-code-block"><pre><code>&lt;div data-slot="alert"&gt;
+  &lt;svg …&gt;&lt;!-- optional icon --&gt;&lt;/svg&gt;
+  &lt;div data-slot="alert-title"&gt;Heads up!&lt;/div&gt;
+  &lt;div data-slot="alert-description"&gt;Description text.&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Destructive --&gt;
+&lt;div data-slot="alert" data-variant="destructive"&gt;
+  &lt;svg …&gt;&lt;/svg&gt;
+  &lt;div data-slot="alert-title"&gt;Error&lt;/div&gt;
+  &lt;div data-slot="alert-description"&gt;Something went wrong.&lt;/div&gt;
+&lt;/div&gt;</code></pre></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ PROGRESS ═══════════════════════ -->
+  <section class="demo-section" id="progress">
+    <h2>Progress</h2>
+    <p class="demo-desc">Progress bar. Set width on the indicator via inline style or JS.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview demo-preview--col" style="gap:1rem">
+        <div>
+          <p style="font-size:13px;color:var(--muted-foreground);margin-bottom:6px">25%</p>
+          <div data-slot="progress" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+            <div data-slot="progress-indicator" style="width:25%"></div>
+          </div>
+        </div>
+        <div>
+          <p style="font-size:13px;color:var(--muted-foreground);margin-bottom:6px">66%</p>
+          <div data-slot="progress" role="progressbar" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100">
+            <div data-slot="progress-indicator" style="width:66%"></div>
+          </div>
+        </div>
+        <div>
+          <p style="font-size:13px;color:var(--muted-foreground);margin-bottom:6px">100%</p>
+          <div data-slot="progress" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+            <div data-slot="progress-indicator" style="width:100%"></div>
+          </div>
+        </div>
+      </div>
+
+      <button class="demo-code-toggle" aria-expanded="false" onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true'); this.nextElementSibling.dataset.visible = this.getAttribute('aria-expanded')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        Show Code
+      </button>
+      <div class="demo-code-block"><pre><code>&lt;div data-slot="progress" role="progressbar"
+     aria-valuenow="66" aria-valuemin="0" aria-valuemax="100"&gt;
+  &lt;div data-slot="progress-indicator" style="width:66%"&gt;&lt;/div&gt;
+&lt;/div&gt;</code></pre></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ ASPECT RATIO ═══════════════════════ -->
+  <section class="demo-section" id="aspect-ratio">
+    <h2>Aspect Ratio</h2>
+    <p class="demo-desc">Responsive aspect-ratio container. Set <code>--aspect-ratio</code> CSS variable.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview demo-preview--col" style="max-width:400px;gap:1.5rem">
+        <div>
+          <p style="font-size:13px;color:var(--muted-foreground);margin-bottom:6px">16:9 (default)</p>
+          <div data-slot="aspect-ratio" style="--aspect-ratio:1.7778; border-radius:var(--radius);overflow:hidden;background:var(--muted)">
+            <img src="https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=800&h=450&fit=crop" alt="Placeholder" style="object-fit:cover">
+          </div>
+        </div>
+        <div>
+          <p style="font-size:13px;color:var(--muted-foreground);margin-bottom:6px">1:1 (square)</p>
+          <div data-slot="aspect-ratio" style="--aspect-ratio:1; border-radius:var(--radius);overflow:hidden;background:var(--muted);max-width:200px">
+            <div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:14px;color:var(--muted-foreground)">1:1</div>
+          </div>
+        </div>
+      </div>
+
+      <button class="demo-code-toggle" aria-expanded="false" onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true'); this.nextElementSibling.dataset.visible = this.getAttribute('aria-expanded')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        Show Code
+      </button>
+      <div class="demo-code-block"><pre><code>&lt;!-- 16:9 with image --&gt;
+&lt;div data-slot="aspect-ratio" style="--aspect-ratio:1.7778"&gt;
+  &lt;img src="photo.jpg" alt="…"&gt;
+&lt;/div&gt;
+
+&lt;!-- 1:1 square --&gt;
+&lt;div data-slot="aspect-ratio" style="--aspect-ratio:1"&gt;
+  &lt;div&gt;Content&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- 4:3 --&gt;
+&lt;div data-slot="aspect-ratio" style="--aspect-ratio:1.3333"&gt;…&lt;/div&gt;</code></pre></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ TYPOGRAPHY ═══════════════════════ -->
+  <section class="demo-section" id="typography">
+    <h2>Typography & Utility Classes</h2>
+    <p class="demo-desc">Heading levels and text helper classes from base.css.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview demo-preview--col" style="gap:0.75rem">
+        <h1 style="margin:0">Heading 1 — 48px</h1>
+        <h2 style="margin:0">Heading 2 — 28px</h2>
+        <h3 style="margin:0">Heading 3 — 24px</h3>
+        <h4 style="margin:0">Heading 4 — 21px</h4>
+        <h5 style="margin:0">Heading 5 — 17px</h5>
+        <h6 style="margin:0">Heading 6 — 15px</h6>
+        <div data-slot="separator" style="margin:8px 0"></div>
+        <span class="text-xs">text-xs (12px)</span>
+        <span class="text-sm">text-sm (14px)</span>
+        <span class="text-base">text-base (16px)</span>
+        <span class="text-lg">text-lg (17px)</span>
+        <span class="text-xl">text-xl (21px)</span>
+        <div data-slot="separator" style="margin:8px 0"></div>
+        <span class="text-muted">text-muted</span>
+        <span class="text-primary">text-primary</span>
+        <span class="text-destructive">text-destructive</span>
+        <span class="text-success">text-success</span>
+        <div data-slot="separator" style="margin:8px 0"></div>
+        <span class="font-normal">font-normal (400)</span>
+        <span class="font-medium">font-medium (500)</span>
+        <span class="font-semibold">font-semibold (600)</span>
+      </div>
+
+      <button class="demo-code-toggle" aria-expanded="false" onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true'); this.nextElementSibling.dataset.visible = this.getAttribute('aria-expanded')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        Show Code
+      </button>
+      <div class="demo-code-block"><pre><code>&lt;h1&gt;Heading 1&lt;/h1&gt;  &lt;!-- through &lt;h6&gt; --&gt;
+
+&lt;span class="text-xs"&gt;12px&lt;/span&gt;
+&lt;span class="text-sm"&gt;14px&lt;/span&gt;
+&lt;span class="text-base"&gt;16px&lt;/span&gt;
+&lt;span class="text-lg"&gt;17px&lt;/span&gt;
+&lt;span class="text-xl"&gt;21px&lt;/span&gt;
+
+&lt;span class="text-muted"&gt;Muted text&lt;/span&gt;
+&lt;span class="text-primary"&gt;Primary text&lt;/span&gt;
+&lt;span class="font-semibold"&gt;Semibold&lt;/span&gt;
+&lt;span class="sr-only"&gt;Screen reader only&lt;/span&gt;</code></pre></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ ANIMATIONS ═══════════════════════ -->
+  <section class="demo-section" id="animations">
+    <h2>Animation Classes</h2>
+    <p class="demo-desc">Utility animation classes from base.css. Click to replay.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview demo-preview--grid" style="grid-template-columns:repeat(auto-fill,minmax(120px,1fr))">
+        <div style="text-align:center">
+          <div class="animate-pulse" style="width:48px;height:48px;background:var(--primary);border-radius:var(--radius);margin:0 auto 8px"></div>
+          <span class="text-xs text-muted">animate-pulse</span>
+        </div>
+        <div style="text-align:center">
+          <div class="animate-spin" style="width:48px;height:48px;border:3px solid var(--border);border-top-color:var(--primary);border-radius:50%;margin:0 auto 8px"></div>
+          <span class="text-xs text-muted">animate-spin</span>
+        </div>
+      </div>
+
+      <button class="demo-code-toggle" aria-expanded="false" onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true'); this.nextElementSibling.dataset.visible = this.getAttribute('aria-expanded')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        Show Code
+      </button>
+      <div class="demo-code-block"><pre><code>&lt;div class="animate-pulse"&gt;…&lt;/div&gt;
+&lt;div class="animate-spin"&gt;…&lt;/div&gt;
+&lt;div class="fade-in"&gt;…&lt;/div&gt;
+&lt;div class="slide-down"&gt;…&lt;/div&gt;
+&lt;div class="zoom-in"&gt;…&lt;/div&gt;</code></pre></div>
+    </div>
+  </section>
+
+</main>
+
+</body>
+</html>

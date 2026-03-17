@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scooter Pages — Light JS Components</title>
+  <link rel="stylesheet" href="../base.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="demo-nav">
+  <span class="demo-nav-title">Scooter Pages</span>
+  <a href="demo-css-only.html">CSS-Only</a>
+  <a href="demo-light-js.html" aria-current="page">Light JS</a>
+  <a href="demo-medium-js.html">Medium JS</a>
+  <a href="demo-complex-js.html">Complex JS</a>
+  <a href="demo-patterns.html">Patterns</a>
+</nav>
+
+<!-- Toggle helper shared across all demo cards -->
+<script>
+function toggleCode(btn, cls) {
+  var card = btn.closest('.demo-card');
+  var block = card.querySelector(cls);
+  if (!block) return;
+  var expanded = btn.getAttribute('aria-expanded') === 'true' ? 'false' : 'true';
+  btn.setAttribute('aria-expanded', expanded);
+  block.dataset.visible = expanded;
+}
+</script>
+
+<main class="demo-page">
+  <h1>Light JS Components</h1>
+  <p class="demo-subtitle">Tier 2 — Minimal JavaScript for state toggling, visibility, keyboard nav.</p>
+
+  <!-- ═══════════════════════ ACCORDION ═══════════════════════ -->
+  <section class="demo-section" id="accordion">
+    <h2>Accordion</h2>
+    <p class="demo-desc">Expandable sections. Supports <code>data-type="single|multiple"</code> and <code>data-collapsible</code>.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview demo-preview--col" style="max-width:480px">
+        <div data-sc="accordion" data-type="single" data-collapsible id="demo-accordion">
+          <div data-slot="accordion-item" data-value="item-1">
+            <button data-slot="accordion-trigger" aria-expanded="false">
+              Is it accessible?
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div data-slot="accordion-content" data-state="closed">
+              <div data-slot="accordion-content-inner">
+                Yes. It adheres to the WAI-ARIA design pattern for accordions.
+              </div>
+            </div>
+          </div>
+          <div data-slot="accordion-item" data-value="item-2">
+            <button data-slot="accordion-trigger" aria-expanded="false">
+              Is it styled?
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div data-slot="accordion-content" data-state="closed">
+              <div data-slot="accordion-content-inner">
+                Yes. It ships with default styles from base.css that match the other components.
+              </div>
+            </div>
+          </div>
+          <div data-slot="accordion-item" data-value="item-3">
+            <button data-slot="accordion-trigger" aria-expanded="false">
+              Is it animated?
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div data-slot="accordion-content" data-state="closed">
+              <div data-slot="accordion-content-inner">
+                Yes. It uses CSS height transitions with measured content height for smooth open/close.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-code-actions">
+        <button class="demo-code-toggle" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--html')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          Show HTML
+        </button>
+        <button class="demo-code-toggle demo-code-toggle--js" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--js')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          <span class="demo-code-js-badge">JS</span> Show JavaScript
+        </button>
+      </div>
+      <div class="demo-code-block demo-code-block--html"><pre><code>&lt;div data-sc="accordion" data-type="single" data-collapsible&gt;
+  &lt;div data-slot="accordion-item" data-value="item-1"&gt;
+    &lt;button data-slot="accordion-trigger" aria-expanded="false"&gt;
+      Question text
+      &lt;svg …&gt;&lt;!-- chevronDown --&gt;&lt;/svg&gt;
+    &lt;/button&gt;
+    &lt;div data-slot="accordion-content" data-state="closed"&gt;
+      &lt;div data-slot="accordion-content-inner"&gt;
+        Answer text
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- data-type="multiple" allows multiple open at once --&gt;</code></pre></div>
+      <div class="demo-code-block demo-code-block--js"><pre><code>const accordion = document.querySelector('[data-sc="accordion"]');
+
+// Listen for item open/close
+accordion.addEventListener('sc:change', (e) =&gt; {
+  console.log('Active item:', e.detail.value);
+  // e.detail.value → "item-1", "item-2", …
+});
+
+// Programmatic control
+accordion._accordion.open('item-2');  // expand a specific item
+accordion._accordion.closeAll();      // collapse everything</code></pre></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ COLLAPSIBLE ═══════════════════════ -->
+  <section class="demo-section" id="collapsible">
+    <h2>Collapsible</h2>
+    <p class="demo-desc">Toggle visibility of a content block. Uses <code>data-sc="collapsible"</code>.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview demo-preview--col" style="max-width:360px">
+        <div data-sc="collapsible" id="demo-collapsible">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:16px">
+            <h4 style="font-size:14px;font-weight:var(--font-weight-medium)">@peduarte starred 3 repositories</h4>
+            <button data-slot="collapsible-trigger" data-slot-also="button" data-variant="ghost" data-size="sm"
+                    style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;padding:0;border-radius:var(--radius-sm);cursor:pointer">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+          </div>
+          <div style="border:1px solid var(--border);border-radius:var(--radius-md);padding:8px 12px;font-size:14px;margin-top:8px">
+            @radix-ui/primitives
+          </div>
+          <div data-slot="collapsible-content" data-state="closed">
+            <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
+              <div style="border:1px solid var(--border);border-radius:var(--radius-md);padding:8px 12px;font-size:14px">@radix-ui/colors</div>
+              <div style="border:1px solid var(--border);border-radius:var(--radius-md);padding:8px 12px;font-size:14px">@stitches/react</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-code-actions">
+        <button class="demo-code-toggle" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--html')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          Show HTML
+        </button>
+        <button class="demo-code-toggle demo-code-toggle--js" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--js')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          <span class="demo-code-js-badge">JS</span> Show JavaScript
+        </button>
+      </div>
+      <div class="demo-code-block demo-code-block--html"><pre><code>&lt;div data-sc="collapsible"&gt;
+  &lt;button data-slot="collapsible-trigger"&gt;Toggle&lt;/button&gt;
+  &lt;div&gt;Always visible content&lt;/div&gt;
+  &lt;div data-slot="collapsible-content" data-state="closed"&gt;
+    Hidden until toggled
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre></div>
+      <div class="demo-code-block demo-code-block--js"><pre><code>const collapsible = document.querySelector('[data-sc="collapsible"]');
+
+// Listen for open / close
+collapsible.addEventListener('sc:open', () =&gt; {
+  console.log('Content expanded');
+});
+collapsible.addEventListener('sc:close', () =&gt; {
+  console.log('Content collapsed');
+});
+
+// Programmatic control
+collapsible._collapsible.toggle();
+collapsible._collapsible.open();
+collapsible._collapsible.close();</code></pre></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ TABS ═══════════════════════ -->
+  <section class="demo-section" id="tabs">
+    <h2>Tabs</h2>
+    <p class="demo-desc">Tab navigation. Set <code>data-default-value</code> for initial tab.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview demo-preview--col" style="max-width:480px">
+        <div data-sc="tabs" data-default-value="account" id="demo-tabs">
+          <div data-slot="tabs-list">
+            <button data-slot="tabs-trigger" data-value="account">Account</button>
+            <button data-slot="tabs-trigger" data-value="password">Password</button>
+            <button data-slot="tabs-trigger" data-value="settings">Settings</button>
+          </div>
+          <div data-slot="tabs-content" data-value="account">
+            <div style="padding:16px 0">
+              <h3 style="font-size:16px;margin-bottom:4px">Account</h3>
+              <p class="text-sm text-muted">Make changes to your account here.</p>
+              <div style="display:flex;flex-direction:column;gap:8px;margin-top:12px;max-width:300px">
+                <label data-slot="label" for="tab-name">Name</label>
+                <input data-slot="input" id="tab-name" value="Pedro Duarte">
+              </div>
+            </div>
+          </div>
+          <div data-slot="tabs-content" data-value="password">
+            <div style="padding:16px 0">
+              <h3 style="font-size:16px;margin-bottom:4px">Password</h3>
+              <p class="text-sm text-muted">Change your password here.</p>
+              <div style="display:flex;flex-direction:column;gap:8px;margin-top:12px;max-width:300px">
+                <label data-slot="label" for="tab-pw">New password</label>
+                <input data-slot="input" id="tab-pw" type="password" placeholder="••••••••">
+              </div>
+            </div>
+          </div>
+          <div data-slot="tabs-content" data-value="settings">
+            <div style="padding:16px 0">
+              <h3 style="font-size:16px;margin-bottom:4px">Settings</h3>
+              <p class="text-sm text-muted">Manage your preferences.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-code-actions">
+        <button class="demo-code-toggle" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--html')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          Show HTML
+        </button>
+        <button class="demo-code-toggle demo-code-toggle--js" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--js')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          <span class="demo-code-js-badge">JS</span> Show JavaScript
+        </button>
+      </div>
+      <div class="demo-code-block demo-code-block--html"><pre><code>&lt;div data-sc="tabs" data-default-value="account"&gt;
+  &lt;div data-slot="tabs-list"&gt;
+    &lt;button data-slot="tabs-trigger" data-value="account"&gt;Account&lt;/button&gt;
+    &lt;button data-slot="tabs-trigger" data-value="password"&gt;Password&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;div data-slot="tabs-content" data-value="account"&gt;
+    Account panel content
+  &lt;/div&gt;
+  &lt;div data-slot="tabs-content" data-value="password"&gt;
+    Password panel content
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre></div>
+      <div class="demo-code-block demo-code-block--js"><pre><code>const tabs = document.querySelector('[data-sc="tabs"]');
+
+// Listen for tab changes
+tabs.addEventListener('sc:change', (e) =&gt; {
+  console.log('Active tab:', e.detail.value);
+  // e.detail.value → "account", "password", "settings"
+});
+
+// Switch tab programmatically
+tabs._tabs.select('password');
+
+// Get current active tab
+const current = tabs._tabs.getValue();
+
+// Example: lazy-load content when a tab is first activated
+const loaded = new Set();
+tabs.addEventListener('sc:change', (e) =&gt; {
+  if (!loaded.has(e.detail.value)) {
+    loaded.add(e.detail.value);
+    fetch('/api/tab/' + e.detail.value)
+      .then(r =&gt; r.text())
+      .then(html =&gt; { /* inject into panel */ });
+  }
+});</code></pre></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ TOGGLE ═══════════════════════ -->
+  <section class="demo-section" id="toggle">
+    <h2>Toggle</h2>
+    <p class="demo-desc">Pressable toggle button. Supports variants and sizes.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview">
+        <button data-sc="toggle" data-slot="toggle" aria-pressed="false" aria-label="Toggle bold" id="demo-toggle-bold">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/><path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/></svg>
+        </button>
+        <button data-sc="toggle" data-slot="toggle" data-variant="outline" aria-pressed="false" aria-label="Toggle italic">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="4" x2="10" y2="4"/><line x1="14" y1="20" x2="5" y2="20"/><line x1="15" y1="4" x2="9" y2="20"/></svg>
+        </button>
+        <button data-sc="toggle" data-slot="toggle" aria-pressed="true" aria-label="Toggle underline (pressed)">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4v6a6 6 0 0 0 12 0V4"/><line x1="4" y1="20" x2="20" y2="20"/></svg>
+        </button>
+        <button data-sc="toggle" data-slot="toggle" disabled aria-pressed="false" aria-label="Disabled toggle">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4v6a6 6 0 0 0 12 0V4"/><line x1="4" y1="20" x2="20" y2="20"/></svg>
+        </button>
+      </div>
+
+      <div class="demo-code-actions">
+        <button class="demo-code-toggle" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--html')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          Show HTML
+        </button>
+        <button class="demo-code-toggle demo-code-toggle--js" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--js')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          <span class="demo-code-js-badge">JS</span> Show JavaScript
+        </button>
+      </div>
+      <div class="demo-code-block demo-code-block--html"><pre><code>&lt;button data-sc="toggle" data-slot="toggle" aria-pressed="false"&gt;
+  &lt;svg …&gt;&lt;!-- icon --&gt;&lt;/svg&gt;
+&lt;/button&gt;
+
+&lt;!-- Outline variant --&gt;
+&lt;button data-sc="toggle" data-slot="toggle" data-variant="outline"&gt;…&lt;/button&gt;
+
+&lt;!-- Pre-pressed --&gt;
+&lt;button data-sc="toggle" data-slot="toggle" aria-pressed="true"&gt;…&lt;/button&gt;</code></pre></div>
+      <div class="demo-code-block demo-code-block--js"><pre><code>const toggle = document.querySelector('[data-sc="toggle"]');
+
+// Listen for press changes
+toggle.addEventListener('sc:change', (e) =&gt; {
+  console.log('Pressed:', e.detail.pressed);
+  // Example: toggle bold formatting in an editor
+  editor.toggleBold(e.detail.pressed);
+});
+
+// Read state
+const isPressed = toggle.getAttribute('aria-pressed') === 'true';</code></pre></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ TOGGLE GROUP ═══════════════════════ -->
+  <section class="demo-section" id="toggle-group">
+    <h2>Toggle Group</h2>
+    <p class="demo-desc">Group of exclusive or multiple toggles. <code>data-type="single|multiple"</code>.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview demo-preview--col" style="gap:1rem">
+        <div>
+          <p class="text-xs text-muted" style="margin-bottom:6px">Single (default)</p>
+          <div data-sc="toggle-group" data-slot="toggle-group" data-type="single" id="demo-toggle-group">
+            <button data-slot="toggle-group-item" data-value="left" aria-label="Align left">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="17" y1="10" x2="3" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="17" y1="18" x2="3" y2="18"/></svg>
+            </button>
+            <button data-slot="toggle-group-item" data-value="center" aria-label="Align center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="10" x2="6" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="18" y1="18" x2="6" y2="18"/></svg>
+            </button>
+            <button data-slot="toggle-group-item" data-value="right" aria-label="Align right">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="21" y1="10" x2="7" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="21" y1="18" x2="7" y2="18"/></svg>
+            </button>
+          </div>
+        </div>
+        <div>
+          <p class="text-xs text-muted" style="margin-bottom:6px">Outline variant</p>
+          <div data-sc="toggle-group" data-slot="toggle-group" data-type="single" data-variant="outline">
+            <button data-slot="toggle-group-item" data-value="a">A</button>
+            <button data-slot="toggle-group-item" data-value="b">B</button>
+            <button data-slot="toggle-group-item" data-value="c">C</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-code-actions">
+        <button class="demo-code-toggle" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--html')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          Show HTML
+        </button>
+        <button class="demo-code-toggle demo-code-toggle--js" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--js')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          <span class="demo-code-js-badge">JS</span> Show JavaScript
+        </button>
+      </div>
+      <div class="demo-code-block demo-code-block--html"><pre><code>&lt;div data-sc="toggle-group" data-slot="toggle-group" data-type="single"&gt;
+  &lt;button data-slot="toggle-group-item" data-value="left"&gt;Left&lt;/button&gt;
+  &lt;button data-slot="toggle-group-item" data-value="center"&gt;Center&lt;/button&gt;
+  &lt;button data-slot="toggle-group-item" data-value="right"&gt;Right&lt;/button&gt;
+&lt;/div&gt;
+
+&lt;!-- Outline variant --&gt;
+&lt;div data-sc="toggle-group" data-slot="toggle-group" data-variant="outline"&gt;…&lt;/div&gt;
+
+&lt;!-- Multiple selection --&gt;
+&lt;div data-sc="toggle-group" data-slot="toggle-group" data-type="multiple"&gt;…&lt;/div&gt;</code></pre></div>
+      <div class="demo-code-block demo-code-block--js"><pre><code>const group = document.querySelector('[data-sc="toggle-group"]');
+
+// Listen for selection changes
+group.addEventListener('sc:change', (e) =&gt; {
+  console.log('Selected:', e.detail.value);
+  // single → "left" | "center" | "right"
+  // multiple → ["left", "right"]
+  document.body.style.textAlign = e.detail.value;
+});
+
+// Get current value
+const current = group._toggleGroup.getValue();</code></pre></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ CHECKBOX ═══════════════════════ -->
+  <section class="demo-section" id="checkbox">
+    <h2>Checkbox</h2>
+    <p class="demo-desc">Toggle a checked state. Emits <code>sc:change</code> with <code>detail.checked</code>.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview demo-preview--col" style="gap:12px">
+        <div style="display:flex;align-items:center;gap:8px">
+          <button data-sc="checkbox" data-slot="checkbox" aria-checked="false" role="checkbox" id="cb1">
+            <span data-slot="checkbox-indicator">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
+          </button>
+          <label data-slot="label" for="cb1">Accept terms and conditions</label>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <button data-sc="checkbox" data-slot="checkbox" aria-checked="true" role="checkbox" id="cb2">
+            <span data-slot="checkbox-indicator">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
+          </button>
+          <label data-slot="label" for="cb2">Pre-checked option</label>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <button data-sc="checkbox" data-slot="checkbox" aria-checked="false" role="checkbox" disabled id="cb3">
+            <span data-slot="checkbox-indicator">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
+          </button>
+          <label data-slot="label" data-disabled="true" for="cb3">Disabled checkbox</label>
+        </div>
+      </div>
+
+      <div class="demo-code-actions">
+        <button class="demo-code-toggle" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--html')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          Show HTML
+        </button>
+        <button class="demo-code-toggle demo-code-toggle--js" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--js')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          <span class="demo-code-js-badge">JS</span> Show JavaScript
+        </button>
+      </div>
+      <div class="demo-code-block demo-code-block--html"><pre><code>&lt;div style="display:flex;align-items:center;gap:8px"&gt;
+  &lt;button data-sc="checkbox" data-slot="checkbox"
+          aria-checked="false" role="checkbox" id="cb1"&gt;
+    &lt;span data-slot="checkbox-indicator"&gt;
+      &lt;svg …&gt;&lt;!-- check icon --&gt;&lt;/svg&gt;
+    &lt;/span&gt;
+  &lt;/button&gt;
+  &lt;label data-slot="label" for="cb1"&gt;Label text&lt;/label&gt;
+&lt;/div&gt;
+
+&lt;!-- Pre-checked: aria-checked="true" --&gt;
+&lt;!-- Disabled:    add disabled attribute --&gt;</code></pre></div>
+      <div class="demo-code-block demo-code-block--js"><pre><code>const checkbox = document.querySelector('[data-sc="checkbox"]');
+
+// Listen for changes
+checkbox.addEventListener('sc:change', (e) =&gt; {
+  console.log('Checked:', e.detail.checked);
+  // Example: enable/disable a submit button
+  submitBtn.disabled = !e.detail.checked;
+});
+
+// Read state programmatically
+const isChecked = checkbox.getAttribute('aria-checked') === 'true';
+
+// Example: "select all" pattern
+document.getElementById('selectAll')
+  .addEventListener('sc:change', (e) =&gt; {
+    document.querySelectorAll('.item-checkbox')
+      .forEach(cb =&gt; cb._checkbox.setChecked(e.detail.checked));
+  });</code></pre></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ RADIO GROUP ═══════════════════════ -->
+  <section class="demo-section" id="radio-group">
+    <h2>Radio Group</h2>
+    <p class="demo-desc">Exclusive selection groups. Emits <code>sc:change</code> with <code>detail.value</code>.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview" style="max-width:300px">
+        <div data-sc="radio-group" data-slot="radio-group" data-default-value="comfortable" role="radiogroup" id="demo-radio-group">
+          <div style="display:flex;align-items:center;gap:8px">
+            <button data-slot="radio-group-item" data-value="default" role="radio" aria-checked="false">
+              <span data-slot="radio-group-indicator"></span>
+            </button>
+            <label data-slot="label">Default</label>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <button data-slot="radio-group-item" data-value="comfortable" role="radio" aria-checked="true">
+              <span data-slot="radio-group-indicator"></span>
+            </button>
+            <label data-slot="label">Comfortable</label>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <button data-slot="radio-group-item" data-value="compact" role="radio" aria-checked="false">
+              <span data-slot="radio-group-indicator"></span>
+            </button>
+            <label data-slot="label">Compact</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-code-actions">
+        <button class="demo-code-toggle" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--html')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          Show HTML
+        </button>
+        <button class="demo-code-toggle demo-code-toggle--js" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--js')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          <span class="demo-code-js-badge">JS</span> Show JavaScript
+        </button>
+      </div>
+      <div class="demo-code-block demo-code-block--html"><pre><code>&lt;div data-sc="radio-group" data-slot="radio-group"
+     data-default-value="comfortable" role="radiogroup"&gt;
+  &lt;div style="display:flex;align-items:center;gap:8px"&gt;
+    &lt;button data-slot="radio-group-item" data-value="default" role="radio"&gt;
+      &lt;span data-slot="radio-group-indicator"&gt;&lt;/span&gt;
+    &lt;/button&gt;
+    &lt;label data-slot="label"&gt;Default&lt;/label&gt;
+  &lt;/div&gt;
+  &lt;!-- more items… --&gt;
+&lt;/div&gt;</code></pre></div>
+      <div class="demo-code-block demo-code-block--js"><pre><code>const radioGroup = document.querySelector('[data-sc="radio-group"]');
+
+// Listen for selection changes
+radioGroup.addEventListener('sc:change', (e) =&gt; {
+  console.log('Selected:', e.detail.value);
+  // e.detail.value → "default", "comfortable", "compact"
+  document.body.dataset.density = e.detail.value;
+});
+
+// Get current value
+const current = radioGroup._radioGroup.getValue();
+
+// Example: show/hide settings based on selection
+radioGroup.addEventListener('sc:change', (e) =&gt; {
+  document.querySelectorAll('.density-preview').forEach(el =&gt; {
+    el.hidden = el.dataset.density !== e.detail.value;
+  });
+});</code></pre></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ SWITCH ═══════════════════════ -->
+  <section class="demo-section" id="switch">
+    <h2>Switch</h2>
+    <p class="demo-desc">Binary toggle switch. Emits <code>sc:change</code> with <code>detail.checked</code>.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview demo-preview--col" style="gap:12px">
+        <div style="display:flex;align-items:center;gap:8px">
+          <button data-sc="switch" data-slot="switch" role="switch" aria-checked="false" id="demo-switch">
+            <span data-slot="switch-thumb"></span>
+          </button>
+          <label data-slot="label">Airplane Mode</label>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <button data-sc="switch" data-slot="switch" role="switch" aria-checked="true">
+            <span data-slot="switch-thumb"></span>
+          </button>
+          <label data-slot="label">Enabled by default</label>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <button data-sc="switch" data-slot="switch" role="switch" aria-checked="false" disabled>
+            <span data-slot="switch-thumb"></span>
+          </button>
+          <label data-slot="label" data-disabled="true">Disabled</label>
+        </div>
+      </div>
+
+      <div class="demo-code-actions">
+        <button class="demo-code-toggle" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--html')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          Show HTML
+        </button>
+        <button class="demo-code-toggle demo-code-toggle--js" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--js')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          <span class="demo-code-js-badge">JS</span> Show JavaScript
+        </button>
+      </div>
+      <div class="demo-code-block demo-code-block--html"><pre><code>&lt;button data-sc="switch" data-slot="switch"
+        role="switch" aria-checked="false"&gt;
+  &lt;span data-slot="switch-thumb"&gt;&lt;/span&gt;
+&lt;/button&gt;
+
+&lt;!-- Pre-enabled: aria-checked="true" --&gt;
+&lt;!-- Disabled:    add disabled attribute --&gt;</code></pre></div>
+      <div class="demo-code-block demo-code-block--js"><pre><code>const sw = document.querySelector('[data-sc="switch"]');
+
+// Listen for toggle
+sw.addEventListener('sc:change', (e) =&gt; {
+  console.log('Enabled:', e.detail.checked);
+  // Example: toggle airplane mode
+  setAirplaneMode(e.detail.checked);
+});
+
+// Read state programmatically
+const isOn = sw.getAttribute('aria-checked') === 'true';
+
+// Example: settings form with multiple switches
+document.querySelectorAll('[data-sc="switch"]').forEach(s =&gt; {
+  s.addEventListener('sc:change', (e) =&gt; {
+    const setting = s.closest('[data-setting]').dataset.setting;
+    savePreference(setting, e.detail.checked);
+  });
+});</code></pre></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ TOOLTIP ═══════════════════════ -->
+  <section class="demo-section" id="tooltip">
+    <h2>Tooltip</h2>
+    <p class="demo-desc">Hover tooltip. Set <code>data-tooltip</code> on any element, or use <code>data-sc="tooltip"</code> with content slot. No custom JS needed.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview" style="gap:1.5rem">
+        <button data-sc="tooltip" data-slot="button" data-variant="outline"
+                data-tooltip="This is a tooltip" data-tooltip-side="top">
+          Hover me (top)
+        </button>
+        <button data-sc="tooltip" data-slot="button" data-variant="outline"
+                data-tooltip="Bottom tooltip" data-tooltip-side="bottom">
+          Bottom
+        </button>
+        <button data-sc="tooltip" data-slot="button" data-variant="outline"
+                data-tooltip="Left tooltip" data-tooltip-side="left">
+          Left
+        </button>
+        <button data-sc="tooltip" data-slot="button" data-variant="outline"
+                data-tooltip="Right tooltip" data-tooltip-side="right">
+          Right
+        </button>
+      </div>
+
+      <button class="demo-code-toggle" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        Show Code
+      </button>
+      <div class="demo-code-block"><pre><code>&lt;button data-sc="tooltip" data-tooltip="Tooltip text" data-tooltip-side="top"&gt;
+  Hover me
+&lt;/button&gt;
+
+&lt;!-- Sides: top (default), bottom, left, right --&gt;</code></pre></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ HOVER CARD ═══════════════════════ -->
+  <section class="demo-section" id="hover-card">
+    <h2>Hover Card</h2>
+    <p class="demo-desc">Rich content popup on hover. Uses <code>data-sc="hover-card"</code> with a content template. No custom JS needed.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview">
+        <span data-sc="hover-card">
+          <a data-slot="hover-card-trigger" href="#" style="font-weight:var(--font-weight-medium);text-decoration:underline;text-underline-offset:4px">@nextjs</a>
+          <template data-slot="hover-card-content">
+            <div style="display:flex;gap:12px">
+              <div data-slot="avatar" style="width:40px;height:40px;flex-shrink:0;background:var(--muted);border-radius:9999px;display:flex;align-items:center;justify-content:center">
+                <span data-slot="avatar-fallback" style="font-size:14px;color:var(--muted-foreground)">N</span>
+              </div>
+              <div>
+                <p style="font-size:14px;font-weight:var(--font-weight-semibold)">@nextjs</p>
+                <p style="font-size:13px;color:var(--muted-foreground);margin-top:4px">The React Framework — created and maintained by @vercel.</p>
+                <p style="font-size:12px;color:var(--muted-foreground);margin-top:8px">Joined December 2021</p>
+              </div>
+            </div>
+          </template>
+        </span>
+      </div>
+
+      <button class="demo-code-toggle" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        Show Code
+      </button>
+      <div class="demo-code-block"><pre><code>&lt;span data-sc="hover-card"&gt;
+  &lt;a data-slot="hover-card-trigger" href="#"&gt;@nextjs&lt;/a&gt;
+  &lt;template data-slot="hover-card-content"&gt;
+    &lt;div&gt;Rich hover card content here…&lt;/div&gt;
+  &lt;/template&gt;
+&lt;/span&gt;</code></pre></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ AVATAR ═══════════════════════ -->
+  <section class="demo-section" id="avatar">
+    <h2>Avatar</h2>
+    <p class="demo-desc">User avatar with image + fallback. Uses <code>data-sc="avatar"</code>. No custom JS needed.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview" style="gap:1rem">
+        <!-- With image -->
+        <div data-sc="avatar" data-slot="avatar">
+          <img data-slot="avatar-image" src="https://github.com/shadcn.png" alt="@shadcn">
+          <span data-slot="avatar-fallback">CN</span>
+        </div>
+        <!-- Fallback only -->
+        <div data-sc="avatar" data-slot="avatar">
+          <img data-slot="avatar-image" src="https://broken-link.invalid/photo.jpg" alt="User">
+          <span data-slot="avatar-fallback">JD</span>
+        </div>
+        <!-- No image at all -->
+        <div data-sc="avatar" data-slot="avatar">
+          <span data-slot="avatar-fallback">AB</span>
+        </div>
+      </div>
+
+      <button class="demo-code-toggle" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        Show Code
+      </button>
+      <div class="demo-code-block"><pre><code>&lt;div data-sc="avatar" data-slot="avatar"&gt;
+  &lt;img data-slot="avatar-image" src="photo.jpg" alt="Name"&gt;
+  &lt;span data-slot="avatar-fallback"&gt;JD&lt;/span&gt;
+&lt;/div&gt;
+
+&lt;!-- Fallback shows when img fails or is missing --&gt;</code></pre></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ IMAGE WITH FALLBACK ═══════════════════════ -->
+  <section class="demo-section" id="image-with-fallback">
+    <h2>Image With Fallback</h2>
+    <p class="demo-desc">Image that shows a fallback on error. <code>data-sc="image-with-fallback"</code>. No custom JS needed.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview" style="gap:1.5rem">
+        <!-- Working image -->
+        <div data-sc="image-with-fallback" style="width:200px;height:150px;border-radius:var(--radius);overflow:hidden">
+          <img data-slot="fallback-image" src="https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=400&h=300&fit=crop" alt="Photo" style="width:100%;height:100%;object-fit:cover">
+          <div data-slot="fallback-content" style="display:none;width:100%;height:100%;background:var(--muted);display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--muted-foreground)">
+            No image
+          </div>
+        </div>
+        <!-- Broken image — fallback shows -->
+        <div data-sc="image-with-fallback" style="width:200px;height:150px;border-radius:var(--radius);overflow:hidden">
+          <img data-slot="fallback-image" src="https://broken.invalid/img.jpg" alt="Broken" style="width:100%;height:100%;object-fit:cover">
+          <div data-slot="fallback-content" style="width:100%;height:100%;background:var(--muted);align-items:center;justify-content:center;font-size:14px;color:var(--muted-foreground)">
+            Fallback Content
+          </div>
+        </div>
+      </div>
+
+      <button class="demo-code-toggle" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        Show Code
+      </button>
+      <div class="demo-code-block"><pre><code>&lt;div data-sc="image-with-fallback"&gt;
+  &lt;img data-slot="fallback-image" src="photo.jpg" alt="…"&gt;
+  &lt;div data-slot="fallback-content"&gt;Fallback shown on error&lt;/div&gt;
+&lt;/div&gt;</code></pre></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ BUTTON PATTERNS ═══════════════════════ -->
+  <section class="demo-section" id="button-patterns">
+    <h2>Button Patterns</h2>
+    <p class="demo-desc">Advanced button configurations: grouped selection, icons, loading state, and as-link usage.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview demo-preview--col">
+
+        <!-- Button Group (select 1 of N) -->
+        <span class="demo-variant-label">Button Group (single select)</span>
+        <div data-slot="button-group" id="demo-button-group">
+          <button data-slot="button" data-variant="outline" aria-pressed="true" data-value="day">Day</button>
+          <button data-slot="button" data-variant="outline" aria-pressed="false" data-value="week">Week</button>
+          <button data-slot="button" data-variant="outline" aria-pressed="false" data-value="month">Month</button>
+          <button data-slot="button" data-variant="outline" aria-pressed="false" data-value="year">Year</button>
+        </div>
+
+        <!-- Button with icon on the left -->
+        <span class="demo-variant-label">Icon + Text</span>
+        <div class="demo-variant-grid">
+          <button data-slot="button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+            Download
+          </button>
+          <button data-slot="button" data-variant="outline">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            Send Email
+          </button>
+          <button data-slot="button" data-variant="secondary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" x2="16.65" y1="21" y2="16.65"/></svg>
+            Search
+          </button>
+        </div>
+
+        <!-- Loading state -->
+        <span class="demo-variant-label">Loading State</span>
+        <div class="demo-variant-grid">
+          <button data-slot="button" data-loading>
+            <span class="button-spinner"></span>
+            Saving…
+          </button>
+          <button data-slot="button" data-variant="outline" data-loading>
+            <span class="button-spinner"></span>
+            Loading
+          </button>
+        </div>
+
+        <!-- As link -->
+        <span class="demo-variant-label">Button as Link</span>
+        <div class="demo-variant-grid">
+          <a data-slot="button" href="#">Link as Button</a>
+          <a data-slot="button" data-variant="outline" href="#">Outline Link</a>
+          <a data-slot="button" data-variant="ghost" href="#">Ghost Link</a>
+        </div>
+
+        <!-- Full width -->
+        <span class="demo-variant-label">Full Width</span>
+        <button data-slot="button" style="width:100%">Full Width Button</button>
+
+      </div>
+
+      <div class="demo-code-actions">
+        <button class="demo-code-toggle" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--html')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          Show HTML
+        </button>
+        <button class="demo-code-toggle demo-code-toggle--js" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--js')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          <span class="demo-code-js-badge">JS</span> Show JavaScript
+        </button>
+      </div>
+      <div class="demo-code-block demo-code-block--html"><pre><code>&lt;!-- Button Group (single select) --&gt;
+&lt;div data-slot="button-group"&gt;
+  &lt;button data-slot="button" data-variant="outline" aria-pressed="true" data-value="day"&gt;Day&lt;/button&gt;
+  &lt;button data-slot="button" data-variant="outline" aria-pressed="false" data-value="week"&gt;Week&lt;/button&gt;
+  &lt;button data-slot="button" data-variant="outline" aria-pressed="false" data-value="month"&gt;Month&lt;/button&gt;
+&lt;/div&gt;
+
+&lt;!-- Icon + Text --&gt;
+&lt;button data-slot="button"&gt;
+  &lt;svg …&gt;&lt;!-- download icon --&gt;&lt;/svg&gt;
+  Download
+&lt;/button&gt;
+
+&lt;!-- Loading state --&gt;
+&lt;button data-slot="button" data-loading&gt;
+  &lt;span class="button-spinner"&gt;&lt;/span&gt;
+  Saving…
+&lt;/button&gt;
+
+&lt;!-- As link --&gt;
+&lt;a data-slot="button" href="/path"&gt;Link styled as Button&lt;/a&gt;
+
+&lt;!-- Full width --&gt;
+&lt;button data-slot="button" style="width:100%"&gt;Full Width&lt;/button&gt;</code></pre></div>
+      <div class="demo-code-block demo-code-block--js"><pre><code>// Button Group — single select behavior
+const group = document.querySelector('[data-slot="button-group"]');
+group.addEventListener('click', (e) =&gt; {
+  const btn = e.target.closest('[data-slot="button"]');
+  if (!btn) return;
+  // Deselect all, select clicked
+  group.querySelectorAll('[data-slot="button"]').forEach(b =&gt; {
+    b.setAttribute('aria-pressed', 'false');
+  });
+  btn.setAttribute('aria-pressed', 'true');
+  console.log('Selected:', btn.dataset.value);
+});
+
+// Toggle loading state programmatically
+function setLoading(btn, loading) {
+  if (loading) {
+    btn.setAttribute('data-loading', '');
+    btn.innerHTML = '&lt;span class="button-spinner"&gt;&lt;/span&gt; Saving…';
+  } else {
+    btn.removeAttribute('data-loading');
+    btn.innerHTML = 'Save';
+  }
+}</code></pre></div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+// Button group single-select behavior
+document.getElementById('demo-button-group').addEventListener('click', function(e) {
+  var btn = e.target.closest('[data-slot="button"]');
+  if (!btn) return;
+  this.querySelectorAll('[data-slot="button"]').forEach(function(b) {
+    b.setAttribute('aria-pressed', 'false');
+  });
+  btn.setAttribute('aria-pressed', 'true');
+});
+</script>
+
+<!-- Scripts: core + all Tier 2 components used -->
+<script src="../components/scooter-core.js"></script>
+<script src="../components/accordion.js"></script>
+<script src="../components/collapsible.js"></script>
+<script src="../components/tabs.js"></script>
+<script src="../components/toggle.js"></script>
+<script src="../components/toggle-group.js"></script>
+<script src="../components/checkbox.js"></script>
+<script src="../components/radio-group.js"></script>
+<script src="../components/switch.js"></script>
+<script src="../components/tooltip.js"></script>
+<script src="../components/hover-card.js"></script>
+<script src="../components/avatar.js"></script>
+<script src="../components/image-with-fallback.js"></script>
+</body>
+</html>

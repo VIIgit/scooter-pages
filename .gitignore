@@ -1,0 +1,10 @@
+.vscode/
+.DS_Store
+node_modules/
+dist/
+coverage/
+.env
+*.log
+
+# Keep editor workspace settings out
+.vscode/settings.json

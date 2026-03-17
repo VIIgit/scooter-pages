@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page Title — Scooter Pages</title>
+  <link rel="stylesheet" href="../../base.css" />
+  <style>
+    /* Page-specific styles go here */
+  </style>
+</head>
+<body>
+
+<!--
+  ┌─────────────────────────────────────────────────────────┐
+  │  IMPORTANT: The sidebar-dynamic page extracts content   │
+  │  via  doc.querySelector('main.scooter-page')            │
+  │  Keep the <main class="scooter-page"> wrapper intact.   │
+  └─────────────────────────────────────────────────────────┘
+-->
+<main class="scooter-page">
+  <h1>Page Title</h1>
+  <p>Short description of this page.</p>
+
+  <section id="example-section">
+    <h2>Section Title</h2>
+    <!-- Component / page content goes here -->
+  </section>
+
+</main>
+
+<!-- Scripts: scooter-core FIRST, then only the component scripts this page uses -->
+<script src="../../components/scooter-core.js"></script>
+<!-- <script src="../../components/accordion.js"></script> -->
+</body>
+</html>

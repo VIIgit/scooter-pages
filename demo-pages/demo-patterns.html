@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scooter Pages — Patterns &amp; Combos</title>
+  <link rel="stylesheet" href="../base.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="demo-nav">
+  <span class="demo-nav-title">Scooter Pages</span>
+  <a href="demo-css-only.html">CSS-Only</a>
+  <a href="demo-light-js.html">Light JS</a>
+  <a href="demo-medium-js.html">Medium JS</a>
+  <a href="demo-complex-js.html">Complex JS</a>
+  <a href="demo-patterns.html" aria-current="page">Patterns</a>
+</nav>
+
+<main class="demo-page">
+  <h1>Patterns &amp; Combos</h1>
+  <p class="demo-subtitle">Integration patterns: combining multiple components, design token gallery, responsive layouts, and real-world scenarios.</p>
+
+  <!-- ═══════════════════════ DESIGN TOKEN GALLERY ═══════════════════════ -->
+  <section class="demo-section" id="design-tokens">
+    <h2>Design Token Gallery</h2>
+    <p class="demo-desc">The foundational CSS custom properties that power Scooter Pages.</p>
+
+    <div class="demo-card">
+      <h3 style="padding:16px 20px 0;font-size:15px;font-weight:var(--font-weight-semibold)">Core Colors</h3>
+      <div class="demo-preview">
+        <div class="demo-swatch-grid">
+          <div class="demo-swatch" style="--swatch:var(--primary)"><span>--primary</span></div>
+          <div class="demo-swatch" style="--swatch:var(--primary-foreground)"><span>--primary-fg</span></div>
+          <div class="demo-swatch" style="--swatch:var(--secondary)"><span>--secondary</span></div>
+          <div class="demo-swatch" style="--swatch:var(--secondary-foreground)"><span>--secondary-fg</span></div>
+          <div class="demo-swatch" style="--swatch:var(--destructive)"><span>--destructive</span></div>
+          <div class="demo-swatch" style="--swatch:var(--destructive-foreground)"><span>--destructive-fg</span></div>
+          <div class="demo-swatch" style="--swatch:var(--accent)"><span>--accent</span></div>
+          <div class="demo-swatch" style="--swatch:var(--accent-foreground)"><span>--accent-fg</span></div>
+          <div class="demo-swatch" style="--swatch:var(--muted)"><span>--muted</span></div>
+          <div class="demo-swatch" style="--swatch:var(--muted-foreground)"><span>--muted-fg</span></div>
+          <div class="demo-swatch" style="--swatch:var(--foreground)"><span>--foreground</span></div>
+          <div class="demo-swatch" style="--swatch:var(--background)"><span>--background</span></div>
+        </div>
+      </div>
+
+      <h3 style="padding:16px 20px 0;font-size:15px;font-weight:var(--font-weight-semibold)">Gray Scale</h3>
+      <div class="demo-preview">
+        <div class="demo-swatch-grid">
+          <div class="demo-swatch" style="--swatch:var(--gray-50)"><span>--gray-50</span></div>
+          <div class="demo-swatch" style="--swatch:var(--gray-100)"><span>--gray-100</span></div>
+          <div class="demo-swatch" style="--swatch:var(--gray-200)"><span>--gray-200</span></div>
+          <div class="demo-swatch" style="--swatch:var(--gray-300)"><span>--gray-300</span></div>
+          <div class="demo-swatch" style="--swatch:var(--gray-400)"><span>--gray-400</span></div>
+          <div class="demo-swatch" style="--swatch:var(--gray-500)"><span>--gray-500</span></div>
+          <div class="demo-swatch" style="--swatch:var(--gray-600)"><span>--gray-600</span></div>
+          <div class="demo-swatch" style="--swatch:var(--gray-700)"><span>--gray-700</span></div>
+          <div class="demo-swatch" style="--swatch:var(--gray-800)"><span>--gray-800</span></div>
+          <div class="demo-swatch" style="--swatch:var(--gray-900)"><span>--gray-900</span></div>
+        </div>
+      </div>
+
+      <h3 style="padding:16px 20px 0;font-size:15px;font-weight:var(--font-weight-semibold)">Shadows</h3>
+      <div class="demo-preview">
+        <div class="demo-shadow-grid">
+          <div class="demo-shadow-box" style="box-shadow:var(--shadow-sm)">--shadow-sm</div>
+          <div class="demo-shadow-box" style="box-shadow:var(--shadow-md)">--shadow-md</div>
+          <div class="demo-shadow-box" style="box-shadow:var(--shadow-lg)">--shadow-lg</div>
+          <div class="demo-shadow-box" style="box-shadow:var(--shadow-xl)">--shadow-xl</div>
+        </div>
+      </div>
+
+      <h3 style="padding:16px 20px 0;font-size:15px;font-weight:var(--font-weight-semibold)">Border Radii</h3>
+      <div class="demo-preview" style="gap:1rem">
+        <div style="width:60px;height:60px;background:var(--primary);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;color:var(--primary-foreground);font-size:10px">sm</div>
+        <div style="width:60px;height:60px;background:var(--primary);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;color:var(--primary-foreground);font-size:10px">default</div>
+        <div style="width:60px;height:60px;background:var(--primary);border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;color:var(--primary-foreground);font-size:10px">md</div>
+        <div style="width:60px;height:60px;background:var(--primary);border-radius:var(--radius-lg);display:flex;align-items:center;justify-content:center;color:var(--primary-foreground);font-size:10px">lg</div>
+        <div style="width:60px;height:60px;background:var(--primary);border-radius:var(--radius-xl);display:flex;align-items:center;justify-content:center;color:var(--primary-foreground);font-size:10px">xl</div>
+        <div style="width:60px;height:60px;background:var(--primary);border-radius:var(--radius-full);display:flex;align-items:center;justify-content:center;color:var(--primary-foreground);font-size:10px">full</div>
+      </div>
+
+      <button class="demo-code-toggle" aria-expanded="false" onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true'); this.nextElementSibling.dataset.visible = this.getAttribute('aria-expanded')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        Show Code
+      </button>
+      <div class="demo-code-block"><pre><code>&lt;!-- All tokens are CSS custom properties on :root --&gt;
+:root {
+  --primary: #007aff;
+  --destructive: #d4183d;
+  --foreground: #1d1d1f;
+  --background: #ffffff;
+  --border: #d5d9d9;
+  --radius: 0.625rem;
+  --shadow-sm: 0 1px 2px …;
+  --shadow-md: 0 4px 6px …;
+  --gray-50 … --gray-900: …;
+}
+
+&lt;!-- Use in your components: --&gt;
+.my-component {
+  color: var(--foreground);
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}</code></pre></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ FULL FORM ═══════════════════════ -->
+  <section class="demo-section" id="full-form">
+    <h2>Full Registration Form</h2>
+    <p class="demo-desc">Combining Form, Input, Select, Checkbox, Radio, Switch, and Slider in a real-world signup flow.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview demo-preview--col" style="max-width:500px;padding:2rem">
+        <form data-sc="form" id="registration-form" style="display:flex;flex-direction:column;gap:20px">
+
+          <!-- Name row -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+            <div data-slot="form-item">
+              <label data-slot="form-label">First Name</label>
+              <div data-slot="form-control">
+                <input data-slot="input" name="firstName" required placeholder="John">
+              </div>
+              <p data-slot="form-message"></p>
+            </div>
+            <div data-slot="form-item">
+              <label data-slot="form-label">Last Name</label>
+              <div data-slot="form-control">
+                <input data-slot="input" name="lastName" required placeholder="Doe">
+              </div>
+              <p data-slot="form-message"></p>
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div data-slot="form-item">
+            <label data-slot="form-label">Email</label>
+            <div data-slot="form-control">
+              <input data-slot="input" name="email" type="email" required placeholder="john@example.com">
+            </div>
+            <p data-slot="form-description">We'll never share your email.</p>
+            <p data-slot="form-message"></p>
+          </div>
+
+          <!-- Role (select) -->
+          <div data-slot="form-item">
+            <label data-slot="form-label">Role</label>
+            <div data-slot="form-control">
+              <div data-sc="select" name="role">
+                <button data-slot="select-trigger" style="width:100%">
+                  <span data-slot="select-value" data-placeholder="Select a role">Select a role</span>
+                </button>
+                <template data-slot="select-content">
+                  <div data-slot="select-item" data-value="developer">Developer</div>
+                  <div data-slot="select-item" data-value="designer">Designer</div>
+                  <div data-slot="select-item" data-value="manager">Manager</div>
+                  <div data-slot="select-item" data-value="other">Other</div>
+                </template>
+              </div>
+            </div>
+            <p data-slot="form-message"></p>
+          </div>
+
+          <!-- Experience slider -->
+          <div data-slot="form-item">
+            <label data-slot="form-label">Years of Experience: <span id="exp-value">5</span></label>
+            <div data-slot="form-control">
+              <div data-sc="slider" data-slot="slider" data-value="5" data-min="0" data-max="20" name="experience">
+                <div data-slot="slider-track">
+                  <div data-slot="slider-range"></div>
+                </div>
+                <div data-slot="slider-thumb" tabindex="0"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contact preference (radio) -->
+          <div data-slot="form-item">
+            <label data-slot="form-label">Contact Preference</label>
+            <div data-slot="form-control">
+              <div data-sc="radio-group" data-slot="radio-group" name="contact" style="display:flex;gap:16px">
+                <label style="display:flex;align-items:center;gap:6px;font-size:14px;cursor:pointer">
+                  <button data-slot="radio-group-item" data-value="email" aria-checked="true" role="radio"></button>
+                  Email
+                </label>
+                <label style="display:flex;align-items:center;gap:6px;font-size:14px;cursor:pointer">
+                  <button data-slot="radio-group-item" data-value="phone" role="radio"></button>
+                  Phone
+                </label>
+                <label style="display:flex;align-items:center;gap:6px;font-size:14px;cursor:pointer">
+                  <button data-slot="radio-group-item" data-value="sms" role="radio"></button>
+                  SMS
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Newsletter switch -->
+          <div style="display:flex;align-items:center;gap:12px">
+            <button data-sc="switch" data-slot="switch" id="newsletter-switch" aria-checked="true">
+              <span data-slot="switch-thumb"></span>
+            </button>
+            <label for="newsletter-switch" style="font-size:14px;cursor:pointer">Subscribe to newsletter</label>
+          </div>
+
+          <!-- Terms checkbox -->
+          <div style="display:flex;align-items:flex-start;gap:10px">
+            <button data-sc="checkbox" data-slot="checkbox" name="terms" role="checkbox" aria-checked="false" style="margin-top:2px"></button>
+            <label style="font-size:14px;line-height:1.5;cursor:pointer">
+              I agree to the <a href="#" style="color:var(--primary);text-decoration:underline">Terms of Service</a> and <a href="#" style="color:var(--primary);text-decoration:underline">Privacy Policy</a>
+            </label>
+          </div>
+
+          <button data-slot="button" type="submit" style="align-self:flex-start">Create Account</button>
+        </form>
+      </div>
+
+      <button class="demo-code-toggle" aria-expanded="false" onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true'); this.nextElementSibling.dataset.visible = this.getAttribute('aria-expanded')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        Show Code
+      </button>
+      <div class="demo-code-block"><pre><code>&lt;form data-sc="form"&gt;
+  &lt;!-- Input + Form validation --&gt;
+  &lt;div data-slot="form-item"&gt;
+    &lt;label data-slot="form-label"&gt;Email&lt;/label&gt;
+    &lt;div data-slot="form-control"&gt;
+      &lt;input data-slot="input" type="email" required&gt;
+    &lt;/div&gt;
+    &lt;p data-slot="form-message"&gt;&lt;/p&gt;
+  &lt;/div&gt;
+
+  &lt;!-- Select inside Form --&gt;
+  &lt;div data-sc="select" name="role"&gt;…&lt;/div&gt;
+
+  &lt;!-- Radio Group --&gt;
+  &lt;div data-sc="radio-group" name="contact"&gt;…&lt;/div&gt;
+
+  &lt;!-- Switch --&gt;
+  &lt;button data-sc="switch" aria-checked="true"&gt;…&lt;/button&gt;
+
+  &lt;!-- Checkbox --&gt;
+  &lt;button data-sc="checkbox" name="terms"&gt;&lt;/button&gt;
+  &lt;button type="submit"&gt;Submit&lt;/button&gt;
+&lt;/form&gt;</code></pre></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ DIALOG + COMMAND (Cmd+K) ═══════════════════════ -->
+  <section class="demo-section" id="cmd-k">
+    <h2>Dialog + Command (Cmd+K Pattern)</h2>
+    <p class="demo-desc">Command palette inside a dialog. Press <kbd>⌘K</kbd> / <kbd>Ctrl+K</kbd> or click the button.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview demo-preview--center">
+        <button data-slot="button" data-variant="outline" id="cmd-k-trigger" style="gap:8px">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          Search commands…
+          <kbd style="pointer-events:none;display:inline-flex;height:20px;align-items:center;gap:1px;border-radius:4px;border:1px solid var(--border);background:var(--muted);padding:0 4px;font-family:inherit;font-size:11px;color:var(--muted-foreground)">⌘K</kbd>
+        </button>
+
+        <!-- Hidden dialog with command inside -->
+        <div data-sc="dialog" id="cmd-k-dialog" data-slot="dialog" hidden>
+          <div data-slot="dialog-overlay"></div>
+          <div data-slot="dialog-content" style="padding:0;max-width:500px">
+            <div data-sc="command" data-slot="command">
+              <div data-slot="command-input-wrapper">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input data-slot="command-input" placeholder="Type a command or search…">
+              </div>
+              <div data-slot="command-list">
+                <div data-slot="command-empty">No results found.</div>
+                <div data-slot="command-group" data-heading="Navigation">
+                  <div data-slot="command-group-heading">Navigation</div>
+                  <div data-slot="command-item" data-value="Go Home">Home</div>
+                  <div data-slot="command-item" data-value="Go Dashboard">Dashboard</div>
+                  <div data-slot="command-item" data-value="Go Settings">Settings</div>
+                </div>
+                <div data-slot="command-separator"></div>
+                <div data-slot="command-group" data-heading="Actions">
+                  <div data-slot="command-group-heading">Actions</div>
+                  <div data-slot="command-item" data-value="New File">New File <span data-slot="command-shortcut">⌘N</span></div>
+                  <div data-slot="command-item" data-value="New Folder">New Folder <span data-slot="command-shortcut">⇧⌘N</span></div>
+                  <div data-slot="command-item" data-value="Toggle Theme">Toggle Theme</div>
+                </div>
+                <div data-slot="command-separator"></div>
+                <div data-slot="command-group" data-heading="Account">
+                  <div data-slot="command-group-heading">Account</div>
+                  <div data-slot="command-item" data-value="Profile">Profile</div>
+                  <div data-slot="command-item" data-value="Log Out">Log Out</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button class="demo-code-toggle" aria-expanded="false" onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true'); this.nextElementSibling.dataset.visible = this.getAttribute('aria-expanded')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        Show Code
+      </button>
+      <div class="demo-code-block"><pre><code>&lt;!-- Dialog wrapping Command --&gt;
+&lt;div data-sc="dialog" id="cmd-k-dialog" hidden&gt;
+  &lt;div data-slot="dialog-overlay"&gt;&lt;/div&gt;
+  &lt;div data-slot="dialog-content" style="padding:0"&gt;
+    &lt;div data-sc="command" data-slot="command"&gt;
+      &lt;input data-slot="command-input" placeholder="Search…"&gt;
+      &lt;div data-slot="command-list"&gt;…&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+  // Open dialog on ⌘K
+  document.addEventListener('keydown', e =&gt; {
+    if ((e.metaKey || e.ctrlKey) &amp;&amp; e.key === 'k') {
+      e.preventDefault();
+      document.querySelector('#cmd-k-dialog')._dialog.open();
+    }
+  });
+&lt;/script&gt;</code></pre></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ CARD GRID WITH TOOLTIPS + DROPDOWNS ═══════════════════════ -->
+  <section class="demo-section" id="card-grid">
+    <h2>Card Grid with Actions</h2>
+    <p class="demo-desc">Card + Badge + Tooltip + Dropdown Menu composed together in a responsive grid.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview demo-preview--grid" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+
+        <!-- Card 1 -->
+        <div data-slot="card">
+          <div data-slot="card-header" style="display:flex;align-items:center;justify-content:space-between">
+            <div>
+              <div data-slot="card-title">Analytics</div>
+              <div data-slot="card-description" style="margin-top:4px">Real-time dashboard</div>
+            </div>
+            <span data-slot="badge" data-variant="success">Active</span>
+          </div>
+          <div data-slot="card-content">
+            <p class="text-sm text-muted">Track user engagement, page views, and conversion funnels in real time.</p>
+          </div>
+          <div data-slot="card-footer" style="justify-content:space-between;align-items:center">
+            <div data-sc="tooltip">
+              <button data-slot="tooltip-trigger" data-slot-also="button" data-variant="ghost" data-size="sm">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                View
+              </button>
+              <div data-slot="tooltip-content">Open dashboard</div>
+            </div>
+            <div data-sc="dropdown-menu">
+              <button data-slot="dropdown-menu-trigger" data-slot-also="button" data-variant="ghost" data-size="icon">⋯</button>
+              <template data-slot="dropdown-menu-content">
+                <div data-slot="dropdown-menu-item">Edit</div>
+                <div data-slot="dropdown-menu-item">Duplicate</div>
+                <div data-slot="dropdown-menu-separator"></div>
+                <div data-slot="dropdown-menu-item" data-variant="destructive">Delete</div>
+              </template>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div data-slot="card">
+          <div data-slot="card-header" style="display:flex;align-items:center;justify-content:space-between">
+            <div>
+              <div data-slot="card-title">Payments</div>
+              <div data-slot="card-description" style="margin-top:4px">Billing & invoices</div>
+            </div>
+            <span data-slot="badge" data-variant="warning">Beta</span>
+          </div>
+          <div data-slot="card-content">
+            <p class="text-sm text-muted">Manage subscriptions, generate invoices, and process refunds.</p>
+          </div>
+          <div data-slot="card-footer" style="justify-content:space-between;align-items:center">
+            <div data-sc="tooltip">
+              <button data-slot="tooltip-trigger" data-slot-also="button" data-variant="ghost" data-size="sm">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                View
+              </button>
+              <div data-slot="tooltip-content">Open billing</div>
+            </div>
+            <div data-sc="dropdown-menu">
+              <button data-slot="dropdown-menu-trigger" data-slot-also="button" data-variant="ghost" data-size="icon">⋯</button>
+              <template data-slot="dropdown-menu-content">
+                <div data-slot="dropdown-menu-item">Edit</div>
+                <div data-slot="dropdown-menu-item">Duplicate</div>
+                <div data-slot="dropdown-menu-separator"></div>
+                <div data-slot="dropdown-menu-item" data-variant="destructive">Delete</div>
+              </template>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div data-slot="card">
+          <div data-slot="card-header" style="display:flex;align-items:center;justify-content:space-between">
+            <div>
+              <div data-slot="card-title">Notifications</div>
+              <div data-slot="card-description" style="margin-top:4px">Push & email alerts</div>
+            </div>
+            <span data-slot="badge" data-variant="destructive">Paused</span>
+          </div>
+          <div data-slot="card-content">
+            <p class="text-sm text-muted">Configure push notifications, email digests, and in-app alerts.</p>
+          </div>
+          <div data-slot="card-footer" style="justify-content:space-between;align-items:center">
+            <div data-sc="tooltip">
+              <button data-slot="tooltip-trigger" data-slot-also="button" data-variant="ghost" data-size="sm">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                View
+              </button>
+              <div data-slot="tooltip-content">Open notifications</div>
+            </div>
+            <div data-sc="dropdown-menu">
+              <button data-slot="dropdown-menu-trigger" data-slot-also="button" data-variant="ghost" data-size="icon">⋯</button>
+              <template data-slot="dropdown-menu-content">
+                <div data-slot="dropdown-menu-item">Edit</div>
+                <div data-slot="dropdown-menu-item">Duplicate</div>
+                <div data-slot="dropdown-menu-separator"></div>
+                <div data-slot="dropdown-menu-item" data-variant="destructive">Delete</div>
+              </template>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <button class="demo-code-toggle" aria-expanded="false" onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true'); this.nextElementSibling.dataset.visible = this.getAttribute('aria-expanded')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        Show Code
+      </button>
+      <div class="demo-code-block"><pre><code>&lt;div data-slot="card"&gt;
+  &lt;div data-slot="card-header"&gt;
+    &lt;div data-slot="card-title"&gt;Title&lt;/div&gt;
+    &lt;span data-slot="badge" data-variant="success"&gt;Active&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div data-slot="card-content"&gt;Description&lt;/div&gt;
+  &lt;div data-slot="card-footer"&gt;
+    &lt;!-- Tooltip wrapping a button --&gt;
+    &lt;div data-sc="tooltip"&gt;
+      &lt;button data-slot="tooltip-trigger"
+              data-slot-also="button" data-variant="ghost"&gt;View&lt;/button&gt;
+      &lt;div data-slot="tooltip-content"&gt;Open&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;!-- Dropdown menu --&gt;
+    &lt;div data-sc="dropdown-menu"&gt;
+      &lt;button data-slot="dropdown-menu-trigger"
+              data-slot-also="button" data-variant="ghost"&gt;⋯&lt;/button&gt;
+      &lt;template data-slot="dropdown-menu-content"&gt;
+        &lt;div data-slot="dropdown-menu-item"&gt;Edit&lt;/div&gt;
+        &lt;div data-slot="dropdown-menu-item" data-variant="destructive"&gt;Delete&lt;/div&gt;
+      &lt;/template&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ SIDEBAR + TABS LAYOUT ═══════════════════════ -->
+  <section class="demo-section" id="sidebar-tabs">
+    <h2>Sidebar + Tabs Layout</h2>
+    <p class="demo-desc">Application shell: sidebar navigation with tab-based content switching.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview" style="padding:0;overflow:hidden">
+        <div style="display:flex;height:350px;width:100%;border-radius:inherit;overflow:hidden">
+          <!-- Mini sidebar -->
+          <div style="width:200px;border-right:1px solid var(--border);background:var(--sidebar-background, var(--gray-50));padding:16px;display:flex;flex-direction:column;gap:2px;flex-shrink:0">
+            <div style="font-weight:var(--font-weight-semibold);font-size:14px;padding:8px 12px;margin-bottom:8px">MyApp</div>
+            <button data-slot="button" data-variant="ghost" data-size="sm" style="justify-content:flex-start;width:100%;text-align:left;background:var(--accent);color:var(--accent-foreground)">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+              Dashboard
+            </button>
+            <button data-slot="button" data-variant="ghost" data-size="sm" style="justify-content:flex-start;width:100%;text-align:left">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v2"/><circle cx="9" cy="7" r="4"/></svg>
+              Users
+            </button>
+            <button data-slot="button" data-variant="ghost" data-size="sm" style="justify-content:flex-start;width:100%;text-align:left">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09a1.65 1.65 0 00-1-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09a1.65 1.65 0 001.51-1 1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+              Settings
+            </button>
+          </div>
+          <!-- Main area with tabs -->
+          <div style="flex:1;padding:20px;overflow-y:auto">
+            <h3 style="font-size:18px;font-weight:var(--font-weight-semibold);margin-bottom:16px">Dashboard</h3>
+            <div data-sc="tabs" data-slot="tabs" data-value="overview">
+              <div data-slot="tabs-list">
+                <button data-slot="tabs-trigger" data-value="overview">Overview</button>
+                <button data-slot="tabs-trigger" data-value="analytics">Analytics</button>
+                <button data-slot="tabs-trigger" data-value="reports">Reports</button>
+              </div>
+              <div data-slot="tabs-content" data-value="overview" style="padding:16px 0">
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+                  <div data-slot="card" style="padding:16px">
+                    <p class="text-xs text-muted">Revenue</p>
+                    <p style="font-size:24px;font-weight:var(--font-weight-bold)">$45,231</p>
+                    <p class="text-xs" style="color:var(--success)">+20.1%</p>
+                  </div>
+                  <div data-slot="card" style="padding:16px">
+                    <p class="text-xs text-muted">Users</p>
+                    <p style="font-size:24px;font-weight:var(--font-weight-bold)">2,350</p>
+                    <p class="text-xs" style="color:var(--success)">+180.1%</p>
+                  </div>
+                  <div data-slot="card" style="padding:16px">
+                    <p class="text-xs text-muted">Active</p>
+                    <p style="font-size:24px;font-weight:var(--font-weight-bold)">573</p>
+                    <p class="text-xs" style="color:var(--destructive)">-2.5%</p>
+                  </div>
+                </div>
+              </div>
+              <div data-slot="tabs-content" data-value="analytics" style="padding:16px 0">
+                <p class="text-sm text-muted">Analytics charts and data visualizations would go here.</p>
+              </div>
+              <div data-slot="tabs-content" data-value="reports" style="padding:16px 0">
+                <p class="text-sm text-muted">Downloadable reports and export options.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button class="demo-code-toggle" aria-expanded="false" onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true'); this.nextElementSibling.dataset.visible = this.getAttribute('aria-expanded')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        Show Code
+      </button>
+      <div class="demo-code-block"><pre><code>&lt;div style="display:flex;height:100vh"&gt;
+  &lt;!-- Sidebar --&gt;
+  &lt;div data-sc="sidebar" data-slot="sidebar"&gt;
+    &lt;div data-slot="sidebar-content"&gt;
+      &lt;ul data-slot="sidebar-menu"&gt;
+        &lt;li&gt;&lt;button data-slot="sidebar-menu-button"
+                    data-active="true"&gt;Dashboard&lt;/button&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- Main content --&gt;
+  &lt;main style="flex:1;padding:20px"&gt;
+    &lt;div data-sc="tabs" data-value="overview"&gt;
+      &lt;div data-slot="tabs-list"&gt;
+        &lt;button data-slot="tabs-trigger" data-value="overview"&gt;Overview&lt;/button&gt;
+      &lt;/div&gt;
+      &lt;div data-slot="tabs-content" data-value="overview"&gt;…&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/main&gt;
+&lt;/div&gt;</code></pre></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ TABLE WITH ACTIONS ═══════════════════════ -->
+  <section class="demo-section" id="data-table">
+    <h2>Data Table with Actions</h2>
+    <p class="demo-desc">Table + Badge + Dropdown Menu + Checkbox — a common data management pattern.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview demo-preview--col" style="padding:0">
+        <div style="padding:16px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border)">
+          <input data-slot="input" placeholder="Filter emails…" style="max-width:260px">
+          <div data-sc="dropdown-menu">
+            <button data-slot="dropdown-menu-trigger" data-slot-also="button" data-variant="outline" data-size="sm">Columns</button>
+            <template data-slot="dropdown-menu-content">
+              <div data-slot="dropdown-menu-label">Toggle columns</div>
+              <div data-slot="dropdown-menu-separator"></div>
+              <div data-slot="dropdown-menu-item">Status</div>
+              <div data-slot="dropdown-menu-item">Email</div>
+              <div data-slot="dropdown-menu-item">Amount</div>
+            </template>
+          </div>
+        </div>
+
+        <table data-slot="table" style="width:100%">
+          <thead>
+            <tr data-slot="table-row">
+              <th data-slot="table-head" style="width:40px;padding-left:16px">
+                <button data-sc="checkbox" data-slot="checkbox" role="checkbox" aria-checked="false" aria-label="Select all"></button>
+              </th>
+              <th data-slot="table-head">Status</th>
+              <th data-slot="table-head">Email</th>
+              <th data-slot="table-head" style="text-align:right">Amount</th>
+              <th data-slot="table-head" style="width:60px"></th>
+            </tr>
+          </thead>
+          <tbody data-slot="table-body">
+            <tr data-slot="table-row">
+              <td data-slot="table-cell" style="padding-left:16px">
+                <button data-sc="checkbox" data-slot="checkbox" role="checkbox" aria-checked="false"></button>
+              </td>
+              <td data-slot="table-cell"><span data-slot="badge" data-variant="success">Success</span></td>
+              <td data-slot="table-cell">ken99@yahoo.com</td>
+              <td data-slot="table-cell" style="text-align:right;font-weight:var(--font-weight-medium)">$316.00</td>
+              <td data-slot="table-cell">
+                <div data-sc="dropdown-menu">
+                  <button data-slot="dropdown-menu-trigger" data-slot-also="button" data-variant="ghost" data-size="icon" style="width:32px;height:32px">⋯</button>
+                  <template data-slot="dropdown-menu-content">
+                    <div data-slot="dropdown-menu-item">Copy ID</div>
+                    <div data-slot="dropdown-menu-item">View details</div>
+                    <div data-slot="dropdown-menu-separator"></div>
+                    <div data-slot="dropdown-menu-item" data-variant="destructive">Delete</div>
+                  </template>
+                </div>
+              </td>
+            </tr>
+            <tr data-slot="table-row">
+              <td data-slot="table-cell" style="padding-left:16px">
+                <button data-sc="checkbox" data-slot="checkbox" role="checkbox" aria-checked="false"></button>
+              </td>
+              <td data-slot="table-cell"><span data-slot="badge" data-variant="warning">Processing</span></td>
+              <td data-slot="table-cell">abe45@gmail.com</td>
+              <td data-slot="table-cell" style="text-align:right;font-weight:var(--font-weight-medium)">$242.00</td>
+              <td data-slot="table-cell">
+                <div data-sc="dropdown-menu">
+                  <button data-slot="dropdown-menu-trigger" data-slot-also="button" data-variant="ghost" data-size="icon" style="width:32px;height:32px">⋯</button>
+                  <template data-slot="dropdown-menu-content">
+                    <div data-slot="dropdown-menu-item">Copy ID</div>
+                    <div data-slot="dropdown-menu-item">View details</div>
+                    <div data-slot="dropdown-menu-separator"></div>
+                    <div data-slot="dropdown-menu-item" data-variant="destructive">Delete</div>
+                  </template>
+                </div>
+              </td>
+            </tr>
+            <tr data-slot="table-row">
+              <td data-slot="table-cell" style="padding-left:16px">
+                <button data-sc="checkbox" data-slot="checkbox" role="checkbox" aria-checked="false"></button>
+              </td>
+              <td data-slot="table-cell"><span data-slot="badge" data-variant="destructive">Failed</span></td>
+              <td data-slot="table-cell">monserrat44@hotmail.com</td>
+              <td data-slot="table-cell" style="text-align:right;font-weight:var(--font-weight-medium)">$837.00</td>
+              <td data-slot="table-cell">
+                <div data-sc="dropdown-menu">
+                  <button data-slot="dropdown-menu-trigger" data-slot-also="button" data-variant="ghost" data-size="icon" style="width:32px;height:32px">⋯</button>
+                  <template data-slot="dropdown-menu-content">
+                    <div data-slot="dropdown-menu-item">Copy ID</div>
+                    <div data-slot="dropdown-menu-item">View details</div>
+                    <div data-slot="dropdown-menu-separator"></div>
+                    <div data-slot="dropdown-menu-item" data-variant="destructive">Delete</div>
+                  </template>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div style="padding:12px 20px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border)">
+          <p class="text-sm text-muted">0 of 3 row(s) selected.</p>
+          <div style="display:flex;gap:8px">
+            <button data-slot="button" data-variant="outline" data-size="sm" disabled>Previous</button>
+            <button data-slot="button" data-variant="outline" data-size="sm">Next</button>
+          </div>
+        </div>
+      </div>
+
+      <button class="demo-code-toggle" aria-expanded="false" onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true'); this.nextElementSibling.dataset.visible = this.getAttribute('aria-expanded')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        Show Code
+      </button>
+      <div class="demo-code-block"><pre><code>&lt;table data-slot="table"&gt;
+  &lt;thead&gt;
+    &lt;tr data-slot="table-row"&gt;
+      &lt;th&gt;&lt;button data-sc="checkbox"&gt;&lt;/button&gt;&lt;/th&gt;
+      &lt;th&gt;Status&lt;/th&gt;
+      &lt;th&gt;Email&lt;/th&gt;
+      &lt;th&gt;Amount&lt;/th&gt;
+      &lt;th&gt;&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr data-slot="table-row"&gt;
+      &lt;td&gt;&lt;button data-sc="checkbox"&gt;&lt;/button&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;span data-slot="badge" data-variant="success"&gt;Success&lt;/span&gt;&lt;/td&gt;
+      &lt;td&gt;email@example.com&lt;/td&gt;
+      &lt;td&gt;$316.00&lt;/td&gt;
+      &lt;td&gt;
+        &lt;div data-sc="dropdown-menu"&gt;
+          &lt;button data-slot="dropdown-menu-trigger"&gt;⋯&lt;/button&gt;
+          &lt;template data-slot="dropdown-menu-content"&gt;…&lt;/template&gt;
+        &lt;/div&gt;
+      &lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;</code></pre></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ ANIMATION SHOWCASE ═══════════════════════ -->
+  <section class="demo-section" id="animations">
+    <h2>Animation Showcase</h2>
+    <p class="demo-desc">CSS animation utility classes and component transitions.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview" style="gap:2rem;flex-wrap:wrap;justify-content:center">
+        <div style="text-align:center">
+          <div class="animate-pulse" style="width:60px;height:60px;background:var(--primary);border-radius:var(--radius);margin:0 auto 8px"></div>
+          <span class="text-xs text-muted">.animate-pulse</span>
+        </div>
+        <div style="text-align:center">
+          <div class="animate-spin" style="width:60px;height:60px;border:3px solid var(--border);border-top-color:var(--primary);border-radius:var(--radius-full);margin:0 auto 8px"></div>
+          <span class="text-xs text-muted">.animate-spin</span>
+        </div>
+        <div style="text-align:center">
+          <div class="animate-bounce" style="width:60px;height:60px;background:var(--destructive);border-radius:var(--radius-full);margin:0 auto 8px"></div>
+          <span class="text-xs text-muted">.animate-bounce</span>
+        </div>
+        <div style="text-align:center">
+          <div style="width:60px;height:60px;background:var(--success);border-radius:var(--radius);margin:0 auto 8px;animation:sc-fade-in 1.5s ease infinite"></div>
+          <span class="text-xs text-muted">sc-fade-in</span>
+        </div>
+      </div>
+
+      <button class="demo-code-toggle" aria-expanded="false" onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true'); this.nextElementSibling.dataset.visible = this.getAttribute('aria-expanded')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        Show Code
+      </button>
+      <div class="demo-code-block"><pre><code>&lt;!-- Utility classes --&gt;
+&lt;div class="animate-pulse"&gt;…&lt;/div&gt;
+&lt;div class="animate-spin"&gt;…&lt;/div&gt;
+&lt;div class="animate-bounce"&gt;…&lt;/div&gt;
+
+&lt;!-- Keyframe animations (used internally by components) --&gt;
+/* sc-fade-in, sc-fade-out, sc-slide-in-from-top/right/bottom/left,
+   sc-zoom-in, sc-zoom-out, sc-accordion-down/up */</code></pre></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ EVENT LOGGER ═══════════════════════ -->
+  <section class="demo-section" id="event-logger">
+    <h2>Event Logger</h2>
+    <p class="demo-desc">Interact with any component below to see Scooter events in the console. Demonstrates the <code>sc:*</code> event system.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview demo-preview--col" style="gap:1rem">
+        <div style="display:flex;gap:0.75rem;flex-wrap:wrap;align-items:center">
+          <button data-sc="toggle" data-slot="toggle" data-variant="outline" aria-pressed="false">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            Toggle
+          </button>
+
+          <button data-sc="checkbox" data-slot="checkbox" role="checkbox" aria-checked="false"></button>
+
+          <button data-sc="switch" data-slot="switch" aria-checked="false"><span data-slot="switch-thumb"></span></button>
+
+          <div data-sc="select" data-name="logger-select" style="width:140px">
+            <button data-slot="select-trigger">
+              <span data-slot="select-value" data-placeholder="Pick one">Pick one</span>
+            </button>
+            <template data-slot="select-content">
+              <div data-slot="select-item" data-value="alpha">Alpha</div>
+              <div data-slot="select-item" data-value="beta">Beta</div>
+              <div data-slot="select-item" data-value="gamma">Gamma</div>
+            </template>
+          </div>
+
+          <button data-slot="button" data-variant="outline" onclick="Scooter.toast('Event Logger', { description: 'Toast from event logger!' })">Fire Toast</button>
+        </div>
+        <div class="demo-event-log" id="event-log" style="height:160px;overflow-y:auto">
+          <div style="color:var(--gray-500)">// Interact with the controls above…</div>
+        </div>
+      </div>
+
+      <button class="demo-code-toggle" aria-expanded="false" onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true'); this.nextElementSibling.dataset.visible = this.getAttribute('aria-expanded')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        Show Code
+      </button>
+      <div class="demo-code-block"><pre><code>&lt;!-- Listen for all sc:* events --&gt;
+&lt;script&gt;
+  const log = document.getElementById('event-log');
+  ['sc:change','sc:toggle','sc:select','sc:slide',
+   'sc:open','sc:close','sc:action','sc:complete'
+  ].forEach(type =&gt; {
+    document.addEventListener(type, e =&gt; {
+      const line = document.createElement('div');
+      line.textContent = \`[\${type}] \${JSON.stringify(e.detail)}\`;
+      log.appendChild(line);
+      log.scrollTop = log.scrollHeight;
+    });
+  });
+&lt;/script&gt;</code></pre></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ RESPONSIVE TEST ═══════════════════════ -->
+  <section class="demo-section" id="responsive">
+    <h2>Responsive Behavior</h2>
+    <p class="demo-desc">Resize your browser to see components adapt. Dialog → Sheet on mobile, sidebar collapse, etc.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview demo-preview--col" style="gap:1.5rem">
+        <div data-slot="alert">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <div data-slot="alert-title">Responsive Design</div>
+          <div data-slot="alert-description">
+            Scooter Pages uses responsive CSS at 768px and 480px breakpoints. Components like Dialog become bottom Sheets on mobile. Resize this window to test.
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px">
+          <div data-slot="card" style="padding:16px;text-align:center">
+            <p class="text-xs text-muted">Viewport Width</p>
+            <p style="font-size:22px;font-weight:var(--font-weight-bold)" id="viewport-width">—</p>
+          </div>
+          <div data-slot="card" style="padding:16px;text-align:center">
+            <p class="text-xs text-muted">Breakpoint</p>
+            <p style="font-size:22px;font-weight:var(--font-weight-bold)" id="viewport-bp">—</p>
+          </div>
+          <div data-slot="card" style="padding:16px;text-align:center">
+            <p class="text-xs text-muted">Device Pixel Ratio</p>
+            <p style="font-size:22px;font-weight:var(--font-weight-bold)" id="viewport-dpr">—</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- Scripts: core + all components needed for patterns -->
+<script src="../components/scooter-core.js"></script>
+<!-- Tier 2 (used in patterns) -->
+<script src="../components/accordion.js"></script>
+<script src="../components/tabs.js"></script>
+<script src="../components/toggle.js"></script>
+<script src="../components/toggle-group.js"></script>
+<script src="../components/checkbox.js"></script>
+<script src="../components/radio-group.js"></script>
+<script src="../components/switch.js"></script>
+<script src="../components/tooltip.js"></script>
+<script src="../components/hover-card.js"></script>
+<!-- Tier 3 (used in patterns) -->
+<script src="../components/dialog.js"></script>
+<script src="../components/dropdown-menu.js"></script>
+<script src="../components/select.js"></script>
+<script src="../components/slider.js"></script>
+<!-- Tier 4 (used in patterns) -->
+<script src="../components/command.js"></script>
+<script src="../components/form.js"></script>
+<script src="../components/toast.js"></script>
+<script src="../components/sidebar.js"></script>
+
+<!-- Pattern scripts -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+  // ── Cmd+K dialog ────────────────────────────
+  const cmdKDialog = document.getElementById('cmd-k-dialog');
+  const cmdKTrigger = document.getElementById('cmd-k-trigger');
+
+  if (cmdKTrigger && cmdKDialog) {
+    cmdKTrigger.addEventListener('click', () => {
+      if (cmdKDialog._dialog) cmdKDialog._dialog.open();
+    });
+  }
+
+  document.addEventListener('keydown', e => {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      e.preventDefault();
+      if (cmdKDialog && cmdKDialog._dialog) cmdKDialog._dialog.open();
+    }
+  });
+
+  // Close dialog on command select
+  if (cmdKDialog) {
+    cmdKDialog.addEventListener('sc:select', e => {
+      if (cmdKDialog._dialog) cmdKDialog._dialog.close();
+      if (typeof Scooter !== 'undefined' && Scooter.toast) {
+        Scooter.toast('Command', { description: 'Selected: ' + e.detail.value });
+      }
+    });
+  }
+
+  // ── Slider value display ────────────────────
+  const expSlider = document.querySelector('#registration-form [data-sc="slider"]');
+  const expValue = document.getElementById('exp-value');
+  if (expSlider && expValue) {
+    expSlider.addEventListener('sc:change', e => {
+      expValue.textContent = e.detail.value;
+    });
+  }
+
+  // ── Form submit ─────────────────────────────
+  const regForm = document.getElementById('registration-form');
+  if (regForm) {
+    regForm.addEventListener('sc:action', e => {
+      if (typeof Scooter !== 'undefined' && Scooter.toast) {
+        Scooter.toast('Registration Complete', {
+          description: 'Welcome, ' + (e.detail.data.get?.('firstName') || 'User') + '!',
+          variant: 'success'
+        });
+      }
+    });
+  }
+
+  // ── Event Logger ────────────────────────────
+  const logEl = document.getElementById('event-log');
+  if (logEl) {
+    const scEvents = [
+      'sc:change','sc:toggle','sc:select','sc:slide',
+      'sc:open','sc:close','sc:action','sc:complete',
+      'sc:press','sc:resize'
+    ];
+    scEvents.forEach(type => {
+      document.addEventListener(type, e => {
+        const time = new Date().toLocaleTimeString('en-US', { hour12: false });
+        const detail = e.detail ? JSON.stringify(e.detail) : '{}';
+        const line = document.createElement('div');
+        line.innerHTML = `<span style="color:var(--gray-500)">[${time}]</span> <span style="color:var(--primary)">${type}</span> ${detail}`;
+        logEl.appendChild(line);
+        logEl.scrollTop = logEl.scrollHeight;
+      });
+    });
+  }
+
+  // ── Viewport info ───────────────────────────
+  const vw = document.getElementById('viewport-width');
+  const bp = document.getElementById('viewport-bp');
+  const dpr = document.getElementById('viewport-dpr');
+
+  function updateViewport() {
+    if (vw) vw.textContent = window.innerWidth + 'px';
+    if (bp) {
+      const w = window.innerWidth;
+      bp.textContent = w <= 480 ? 'Mobile' : w <= 768 ? 'Tablet' : 'Desktop';
+    }
+    if (dpr) dpr.textContent = window.devicePixelRatio + 'x';
+  }
+
+  updateViewport();
+  window.addEventListener('resize', updateViewport);
+
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scooter Pages — Sidebar Dynamic Loading</title>
+  <link rel="stylesheet" href="../base.css" />
+  <link rel="stylesheet" href="demo.css" />
+  <style>
+    /* Full-viewport sidebar layout */
+    html, body { margin: 0; height: 100%; overflow: hidden; }
+
+    [data-sc="sidebar"] {
+      display: flex;
+      height: 100vh;
+    }
+
+    [data-slot="sidebar-panel"] {
+      width: 240px;
+      min-width: 240px;
+      background: var(--secondary);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+
+    [data-sc="sidebar"][data-state="collapsed"] [data-slot="sidebar-panel"] {
+      width: 0;
+      min-width: 0;
+      overflow: hidden;
+      border-right: none;
+    }
+
+    [data-slot="sidebar-header"] {
+      padding: 16px 20px;
+      font-weight: 600;
+      font-size: var(--text-title2);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    [data-slot="sidebar-group-label"] {
+      padding: 12px 20px 4px;
+      font-size: var(--text-caption);
+      font-weight: 600;
+      color: var(--muted-foreground);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    [data-slot="sidebar-group-content"] {
+      list-style: none;
+      margin: 0;
+      padding: 4px 8px;
+    }
+
+    [data-slot="sidebar-menu-button"] {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      padding: 8px 12px;
+      border: none;
+      background: none;
+      border-radius: var(--radius-sm);
+      font-size: var(--text-callout);
+      color: var(--foreground);
+      cursor: pointer;
+      text-decoration: none;
+      transition: background var(--transition-fast);
+    }
+    [data-slot="sidebar-menu-button"]:hover {
+      background: var(--accent);
+    }
+    [data-slot="sidebar-menu-button"][data-active="true"] {
+      background: var(--primary);
+      color: var(--primary-foreground);
+    }
+
+    [data-slot="sidebar-footer"] {
+      margin-top: auto;
+      padding: 12px 20px;
+      font-size: var(--text-footnote);
+      color: var(--muted-foreground);
+      border-top: 1px solid var(--border);
+    }
+
+    [data-slot="sidebar-inset"] {
+      flex: 1;
+      overflow-y: auto;
+      background: var(--background);
+      padding: 10px;
+    }
+
+    .sidebar-trigger-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: var(--radius-sm);
+      color: var(--muted-foreground);
+    }
+    .sidebar-trigger-btn:hover {
+      background: var(--accent);
+      color: var(--foreground);
+    }
+
+    /* Show panel collapse button only when sidebar is open */
+    [data-sc="sidebar"][data-state="collapsed"] .sidebar-header-toggle { display: none; }
+    /* Show inset toggle button only when sidebar is collapsed */
+    [data-sc="sidebar"][data-state="expanded"] .inset-header-toggle { display: none; }
+
+    /* Inset header bar with toggle */
+    .inset-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 16px;
+      border-bottom: 1px solid var(--border);
+      background: var(--background);
+      position: sticky;
+      top: 0;
+      z-index: var(--z-sticky);
+    }
+    .inset-header h1 {
+      font-size: var(--text-body);
+      font-weight: 600;
+      margin: 0;
+    }
+
+    /* Sticky h1 inside loaded content */
+    #inset-body > h1,
+    #inset-body > .header {
+      position: sticky;
+      top: 0;
+      background: var(--background);
+      z-index: 4;
+      padding-top: 12px;
+      padding-bottom: 8px;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Sticky h2 section headers below h1 */
+    #inset-body .demo-section > h2 {
+      position: sticky;
+      top: 48px;
+      background: var(--background);
+      z-index: 3;
+      padding-top: 8px;
+      padding-bottom: 4px;
+    }
+
+    /* Shadow appears only when stuck */
+    #inset-body > h1,
+    #inset-body > .header,
+    #inset-body .demo-section > h2 {
+      transition: box-shadow 200ms;
+      box-shadow: none;
+    }
+    #inset-body .is-stuck {
+      box-shadow: 0 3px 12px rgba(0,0,0,.15);
+    }
+
+    /* Loading indicator */
+    .loading-placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 200px;
+      color: var(--muted-foreground);
+      font-size: var(--text-body);
+    }
+
+    /* ── Dashboard styles (for dynamically loaded dashboard page) ── */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .chart-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    @media (max-width: 768px) {
+      .chart-row { grid-template-columns: 1fr; }
+    }
+    .chart-row-3 {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    @media (max-width: 768px) {
+      .chart-row-3 { grid-template-columns: 1fr; }
+    }
+    .stat-value {
+      font-size: var(--text-title1);
+      font-weight: 700;
+      color: var(--foreground);
+      margin: 4px 0;
+    }
+    .stat-change {
+      font-size: var(--text-footnote);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .stat-change.positive { color: var(--success); }
+    .stat-change.negative { color: var(--destructive); }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .period-toggle {
+      display: inline-flex;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--muted);
+    }
+    .period-toggle button {
+      padding: 6px 14px;
+      font-size: 13px;
+      font-weight: 500;
+      border: none;
+      background: transparent;
+      color: var(--muted-foreground);
+      cursor: pointer;
+      transition: background 150ms, color 150ms;
+    }
+    .period-toggle button[aria-pressed="true"] {
+      background: var(--background);
+      color: var(--foreground);
+      box-shadow: 0 1px 2px rgba(0,0,0,.06);
+    }
+    .period-toggle button:hover:not([aria-pressed="true"]) {
+      color: var(--foreground);
+    }
+    [data-sc="chart"] { width: 100%; }
+
+    /* Welcome state */
+    .welcome-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      gap: 12px;
+      color: var(--muted-foreground);
+    }
+    .welcome-state h2 {
+      color: var(--foreground);
+      font-size: var(--text-title1);
+    }
+  </style>
+</head>
+<body>
+
+<div data-sc="sidebar" data-side="left" data-collapsible="offcanvas" data-default-open="true">
+
+  <!-- ── Sidebar Panel ── -->
+  <aside data-slot="sidebar-panel">
+    <div data-slot="sidebar-header">
+      <span>Scooter Pages</span>
+      <button class="sidebar-trigger-btn sidebar-header-toggle" aria-label="Collapse sidebar" onclick="document.querySelector('[data-sc=sidebar]')._sidebar.toggle()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/></svg>
+      </button>
+    </div>
+
+    <nav data-slot="sidebar-content">
+      <div data-slot="sidebar-group">
+        <div data-slot="sidebar-group-label">Demo Pages</div>
+        <ul data-slot="sidebar-group-content">
+          <li data-slot="sidebar-menu-item">
+            <a data-slot="sidebar-menu-button" href="#" data-page="demo-light-js.html">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+              Light JS Components
+            </a>
+          </li>
+
+          <li data-slot="sidebar-menu-item">
+            <a data-slot="sidebar-menu-button" href="#" data-page="demo-css-only.html">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+              CSS-Only
+            </a>
+          </li>
+          <li data-slot="sidebar-menu-item">
+            <a data-slot="sidebar-menu-button" href="#" data-page="demo-patterns.html">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/></svg>
+              Patterns &amp; Combos
+            </a>
+          </li>
+
+          <li data-slot="sidebar-menu-item">
+            <a data-slot="sidebar-menu-button" href="#" data-page="demo-dashboard.html">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/></svg>
+              Dashboard examples
+            </a>
+          </li>
+          
+        </ul>
+      </div>
+    </nav>
+
+    <div data-slot="sidebar-footer">Scooter v1.0</div>
+  </aside>
+
+  <!-- Trigger outside the panel — sidebar.js binds to this -->
+  <button data-slot="sidebar-trigger" style="display:none"></button>
+
+  <!-- ── Main Content Area ── -->
+  <main data-slot="sidebar-inset" id="main-content">
+    <div class="inset-header">
+      <button class="sidebar-trigger-btn inset-header-toggle" aria-label="Expand sidebar" onclick="document.querySelector('[data-sc=sidebar]')._sidebar.toggle()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/></svg>
+      </button>
+      <h1 id="inset-title">Scooter Pages</h1>
+    </div>
+    <div id="inset-body">
+    <div class="welcome-state">
+      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--muted-foreground)"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/><path d="m14 9 3 3-3 3"/></svg>
+      <h2>Select a page</h2>
+      <p>Choose a demo page from the sidebar to load its content here.</p>
+    </div>
+    </div>
+  </main>
+
+</div>
+
+<!-- Scripts: core + all component scripts (superset for both pages) -->
+<script src="../components/accordion.js"></script>
+<script src="../components/avatar.js"></script>
+<script src="../components/chart.js"></script>
+<script src="../components/checkbox.js"></script>
+<script src="../components/collapsible.js"></script>
+<script src="../components/command.js"></script>
+<script src="../components/dialog.js"></script>
+<script src="../components/dropdown-menu.js"></script>
+<script src="../components/form.js"></script>
+<script src="../components/hover-card.js"></script>
+<script src="../components/image-with-fallback.js"></script>
+<script src="../components/radio-group.js"></script>>
+<script src="../components/scooter-core.js"></script>
+<script src="../components/select.js"></script>
+<script src="../components/sidebar.js"></script>
+<script src="../components/slider.js"></script>
+<script src="../components/switch.js"></script>
+<script src="../components/tabs.js"></script>
+<script src="../components/toast.js"></script>
+<script src="../components/toggle-group.js"></script>
+<script src="../components/toggle.js"></script>
+<script src="../components/tooltip.js"></script>
+
+<!-- Toggle helper used by dynamically loaded demo pages (Show HTML / Show JS buttons) -->
+<script>
+function toggleCode(btn, cls) {
+  var card = btn.closest('.demo-card');
+  var block = card.querySelector(cls);
+  if (!block) return;
+  var expanded = btn.getAttribute('aria-expanded') === 'true' ? 'false' : 'true';
+  btn.setAttribute('aria-expanded', expanded);
+  block.dataset.visible = expanded;
+}
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const insetBody = document.getElementById('inset-body');
+  const insetTitle = document.getElementById('inset-title');
+  const navButtons = document.querySelectorAll('[data-slot="sidebar-menu-button"][data-page]');
+  let currentPage = null;
+
+  // Start observing DOM for auto-init of new Scooter components
+  Scooter.observe();
+
+  const scrollContainer = document.getElementById('main-content');
+
+  function initStickyObservers() {
+    // Insert 1px sentinel elements before each sticky heading.
+    // When a sentinel scrolls out of view, its heading is stuck.
+    const stickyEls = insetBody.querySelectorAll(':scope > h1, :scope > .header, .demo-section > h2');
+    stickyEls.forEach(el => {
+      const sentinel = document.createElement('div');
+      sentinel.className = 'sticky-sentinel';
+      sentinel.style.cssText = 'height:1px;margin:0;padding:0;visibility:hidden;pointer-events:none;';
+      el.parentNode.insertBefore(sentinel, el);
+
+      const observer = new IntersectionObserver(
+        ([entry]) => { el.classList.toggle('is-stuck', !entry.isIntersecting); },
+        { root: scrollContainer, threshold: 0 }
+      );
+      observer.observe(sentinel);
+    });
+  }
+
+  navButtons.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const page = btn.getAttribute('data-page');
+      if (page === currentPage) return;
+
+      // Update active state
+      navButtons.forEach(b => b.removeAttribute('data-active'));
+      btn.setAttribute('data-active', 'true');
+
+      loadPage(page, btn.textContent.trim());
+    });
+  });
+
+  function loadPage(page, title) {
+    currentPage = page;
+    if (insetTitle) insetTitle.textContent = title || 'Scooter Pages';
+    insetBody.innerHTML = '<div class="loading-placeholder">Loading…</div>';
+
+    fetch(page)
+      .then(r => {
+        if (!r.ok) throw new Error('Failed to load ' + page);
+        return r.text();
+      })
+      .then(html => {
+        // Parse the fetched HTML and extract the <main> content
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const pageMain = doc.querySelector('main.scooter-page, main.demo-page');
+
+        if (pageMain) {
+          insetBody.innerHTML = pageMain.innerHTML;
+        } else {
+          insetBody.innerHTML = '<div class="loading-placeholder">No content found.</div>';
+          return;
+        }
+
+        // Re-initialize all Scooter components in the newly loaded content
+        Scooter.init(insetBody);
+
+        // Run page-specific setup
+        if (page === 'demo-patterns.html') {
+          initPatternScripts();
+        }
+        if (page === 'demo-dashboard.html') {
+          initDashboardScripts();
+        }
+
+        initStickyObservers();
+      })
+      .catch(err => {
+        insetBody.innerHTML =
+          '<div class="loading-placeholder" style="color:var(--destructive)">' +
+            'Error: ' + err.message +
+          '</div>';
+      });
+  }
+
+  function initPatternScripts() {
+    // Cmd+K dialog
+    const cmdKDialog = document.getElementById('cmd-k-dialog');
+    const cmdKTrigger = document.getElementById('cmd-k-trigger');
+
+    if (cmdKTrigger && cmdKDialog) {
+      cmdKTrigger.addEventListener('click', () => {
+        if (cmdKDialog._dialog) cmdKDialog._dialog.open();
+      });
+    }
+
+    if (cmdKDialog) {
+      cmdKDialog.addEventListener('sc:select', e => {
+        if (cmdKDialog._dialog) cmdKDialog._dialog.close();
+        if (typeof Scooter !== 'undefined' && Scooter.toast) {
+          Scooter.toast('Command', { description: 'Selected: ' + e.detail.value });
+        }
+      });
+    }
+
+    // Slider value display
+    const expSlider = insetBody.querySelector('#registration-form [data-sc="slider"]');
+    const expValue = document.getElementById('exp-value');
+    if (expSlider && expValue) {
+      expSlider.addEventListener('sc:change', e => {
+        expValue.textContent = e.detail.value;
+      });
+    }
+
+    // Form submit
+    const regForm = document.getElementById('registration-form');
+    if (regForm) {
+      regForm.addEventListener('sc:action', e => {
+        if (typeof Scooter !== 'undefined' && Scooter.toast) {
+          Scooter.toast('Registration Complete', {
+            description: 'Welcome, ' + (e.detail.data.get?.('firstName') || 'User') + '!',
+            variant: 'success'
+          });
+        }
+      });
+    }
+
+    // Event Logger
+    const logEl = document.getElementById('event-log');
+    if (logEl) {
+      const scEvents = [
+        'sc:change','sc:toggle','sc:select','sc:slide',
+        'sc:open','sc:close','sc:action','sc:complete',
+        'sc:press','sc:resize'
+      ];
+      scEvents.forEach(type => {
+        document.addEventListener(type, e => {
+          const time = new Date().toLocaleTimeString('en-US', { hour12: false });
+          const detail = e.detail ? JSON.stringify(e.detail) : '{}';
+          const line = document.createElement('div');
+          line.innerHTML =
+            '<span style="color:var(--gray-500)">[' + time + ']</span> ' +
+            '<span style="color:var(--primary)">' + type + '</span> ' + detail;
+          logEl.appendChild(line);
+          logEl.scrollTop = logEl.scrollHeight;
+        });
+      });
+    }
+
+    // Viewport info
+    const vw = document.getElementById('viewport-width');
+    const bp = document.getElementById('viewport-bp');
+    const dpr = document.getElementById('viewport-dpr');
+
+    function updateViewport() {
+      if (vw) vw.textContent = window.innerWidth + 'px';
+      if (bp) {
+        const w = window.innerWidth;
+        bp.textContent = w <= 480 ? 'Mobile' : w <= 768 ? 'Tablet' : 'Desktop';
+      }
+      if (dpr) dpr.textContent = window.devicePixelRatio + 'x';
+    }
+    updateViewport();
+    window.addEventListener('resize', updateViewport);
+  }
+
+  function initDashboardScripts() {
+    var chartKeys = ['revenue', 'users', 'traffic', 'plan', 'perf', 'browser', 'api'];
+    var arrowUp = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>';
+    var arrowDown = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>';
+
+    var periods = {
+      current: {
+        kpis: [
+          { value: '$45,231', change: '+20.1% from last month', dir: 'positive' },
+          { value: '+2,350', change: '+12.5% from last month', dir: 'positive' },
+          { value: '1,429',  change: '-3.2% from last month',  dir: 'negative' },
+          { value: '3.24%',  change: '+0.8% from last month',  dir: 'positive' }
+        ],
+        charts: {
+          revenue: { labels:['Jan','Feb','Mar','Apr','May','Jun'], datasets:[{label:'Revenue',values:[4200,6500,5100,8000,6200,9100]},{label:'Expenses',values:[3100,4200,3500,5000,4500,5500]}] },
+          users:   { labels:['Jan','Feb','Mar','Apr','May','Jun'], datasets:[{label:'Users',values:[820,932,1100,1250,1340,1429]}] },
+          traffic: { labels:['Jan','Feb','Mar','Apr','May','Jun'], datasets:[{label:'Organic',values:[1200,1300,1400,1600,1500,1800]},{label:'Direct',values:[800,900,700,1000,950,1100]},{label:'Referral',values:[400,500,600,550,700,650]}] },
+          plan:    { labels:['Enterprise','Pro','Starter','Free'], datasets:[{label:'Revenue',values:[22000,14000,6500,2731]}] },
+          perf:    { labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'], datasets:[{label:'Load Time (ms)',values:[320,280,310,290,350,260,240]},{label:'Error Rate',values:[12,8,15,10,18,6,5]}] },
+          browser: { labels:['Chrome','Safari','Firefox','Edge','Other'], datasets:[{label:'Users',values:[62,19,8,7,4]}] },
+          api:     { labels:['/api/users','/api/orders','/api/products','/api/auth','/api/search'], datasets:[{label:'Avg Response (ms)',values:[45,120,85,32,210]}] }
+        }
+      },
+      previous: {
+        kpis: [
+          { value: '$37,642', change: '+11.4% from prior month', dir: 'positive' },
+          { value: '+2,090', change: '+8.3% from prior month',  dir: 'positive' },
+          { value: '1,476',  change: '+5.1% from prior month',  dir: 'positive' },
+          { value: '2.44%',  change: '-0.3% from prior month',  dir: 'negative' }
+        ],
+        charts: {
+          revenue: { labels:['Jul','Aug','Sep','Oct','Nov','Dec'], datasets:[{label:'Revenue',values:[3800,4100,4600,5200,5800,6000]},{label:'Expenses',values:[2900,3200,3100,3800,4100,4300]}] },
+          users:   { labels:['Jul','Aug','Sep','Oct','Nov','Dec'], datasets:[{label:'Users',values:[620,680,740,780,800,820]}] },
+          traffic: { labels:['Jul','Aug','Sep','Oct','Nov','Dec'], datasets:[{label:'Organic',values:[900,980,1050,1100,1150,1200]},{label:'Direct',values:[600,650,620,700,750,800]},{label:'Referral',values:[250,300,320,350,380,400]}] },
+          plan:    { labels:['Enterprise','Pro','Starter','Free'], datasets:[{label:'Revenue',values:[18000,11500,5200,2942]}] },
+          perf:    { labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'], datasets:[{label:'Load Time (ms)',values:[380,340,360,330,410,300,290]},{label:'Error Rate',values:[16,12,19,14,22,9,7]}] },
+          browser: { labels:['Chrome','Safari','Firefox','Edge','Other'], datasets:[{label:'Users',values:[58,21,10,7,4]}] },
+          api:     { labels:['/api/users','/api/orders','/api/products','/api/auth','/api/search'], datasets:[{label:'Avg Response (ms)',values:[52,145,98,38,240]}] }
+        }
+      }
+    };
+
+    function applyPeriod(key) {
+      var p = periods[key];
+      var cards = insetBody.querySelectorAll('.dashboard-grid [data-slot="card"]');
+      cards.forEach(function (card, i) {
+        var kpi = p.kpis[i];
+        if (!kpi) return;
+        card.querySelector('.stat-value').textContent = kpi.value;
+        var span = card.querySelector('.stat-change');
+        span.className = 'stat-change ' + kpi.dir;
+        span.innerHTML = (kpi.dir === 'positive' ? arrowUp : arrowDown) + ' ' + kpi.change;
+      });
+      var allCharts = insetBody.querySelectorAll('[data-sc="chart"]');
+      allCharts.forEach(function (el, i) {
+        var chartKey = chartKeys[i];
+        if (chartKey && p.charts[chartKey] && el._chart) {
+          el._chart.setData(p.charts[chartKey]);
+        }
+      });
+    }
+
+    var btnCurrent = insetBody.querySelector('#btn-current');
+    var btnPrevious = insetBody.querySelector('#btn-previous');
+    if (btnCurrent && btnPrevious) {
+      btnCurrent.addEventListener('click', function () {
+        btnCurrent.setAttribute('aria-pressed', 'true');
+        btnPrevious.setAttribute('aria-pressed', 'false');
+        applyPeriod('current');
+      });
+      btnPrevious.addEventListener('click', function () {
+        btnPrevious.setAttribute('aria-pressed', 'true');
+        btnCurrent.setAttribute('aria-pressed', 'false');
+        applyPeriod('previous');
+      });
+    }
+  }
+});
+</script>
+
+</body>
+</html>

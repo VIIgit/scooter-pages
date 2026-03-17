@@ -1,0 +1,381 @@
+/* ============================================================================
+   SCOOTER PAGES — Demo Stylesheet
+   Shared styles for all demo/showcase pages.
+   ============================================================================ */
+
+/* --- Demo Navigation Bar -------------------------------------------------- */
+.demo-nav {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.75rem 2rem;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+
+.demo-nav a {
+  font-size: 13px;
+  font-weight: var(--font-weight-medium);
+  padding: 0.375rem 0.75rem;
+  border-radius: var(--radius-full);
+  color: var(--muted-foreground);
+  transition: background var(--duration-fast) var(--ease-out),
+              color var(--duration-fast) var(--ease-out);
+}
+
+.demo-nav a:hover {
+  background: var(--secondary);
+  color: var(--foreground);
+}
+
+.demo-nav a[aria-current="page"] {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.demo-nav .demo-nav-title {
+  font-size: 14px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--foreground);
+  margin-right: 1rem;
+  padding: 0;
+}
+
+.demo-nav .demo-nav-title:hover {
+  background: none;
+}
+
+/* --- Page Layout ---------------------------------------------------------- */
+.demo-page {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 2rem 2rem 4rem;
+}
+
+.demo-page > h1 {
+  margin-bottom: 0.5rem;
+}
+
+.demo-page > .demo-subtitle {
+  font-size: 17px;
+  color: var(--muted-foreground);
+  margin-bottom: 2.5rem;
+}
+
+/* --- Section -------------------------------------------------------------- */
+.demo-section {
+  margin-bottom: 3rem;
+}
+
+.demo-section > h2 {
+  font-size: 21px;
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: 0.25rem;
+}
+
+.demo-section > .demo-desc {
+  font-size: 14px;
+  color: var(--muted-foreground);
+  margin-bottom: 1rem;
+}
+
+/* --- Preview Card --------------------------------------------------------- */
+.demo-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+
+.demo-preview {
+  padding: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 0.75rem;
+  min-height: 60px;
+}
+
+.demo-preview.demo-preview--center {
+  justify-content: center;
+  align-items: center;
+}
+
+.demo-preview.demo-preview--col {
+  flex-direction: column;
+}
+
+.demo-preview.demo-preview--dark {
+  background: #1d1d1f;
+  color: #ffffff;
+}
+
+.demo-preview.demo-preview--grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+/* --- Code Block ----------------------------------------------------------- */
+.demo-code-toggle {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0.5rem 1rem;
+  font-size: 12px;
+  font-weight: var(--font-weight-medium);
+  color: var(--muted-foreground);
+  background: var(--gray-50);
+  border-top: 1px solid var(--border);
+  cursor: pointer;
+  user-select: none;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.demo-code-toggle:hover {
+  color: var(--foreground);
+}
+
+.demo-code-toggle svg {
+  width: 14px;
+  height: 14px;
+  margin-right: 0.5rem;
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+
+.demo-code-toggle[aria-expanded="true"] svg {
+  transform: rotate(90deg);
+}
+
+.demo-code-block {
+  display: none;
+  background: var(--gray-50);
+  border-top: 1px solid var(--border);
+  overflow-x: auto;
+}
+
+.demo-code-block[data-visible="true"] {
+  display: block;
+}
+
+.demo-code-block pre {
+  margin: 0;
+  padding: 1rem 1.25rem;
+  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
+  font-size: 12.5px;
+  line-height: 1.7;
+  color: var(--foreground);
+  white-space: pre;
+  tab-size: 2;
+}
+
+.demo-code-block code {
+  font-family: inherit;
+}
+
+/* --- Variant Grid --------------------------------------------------------- */
+.demo-variant-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.demo-variant-label {
+  font-size: 12px;
+  font-weight: var(--font-weight-medium);
+  color: var(--muted-foreground);
+  width: 100%;
+  margin-top: 0.75rem;
+  margin-bottom: 0.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.demo-variant-label:first-child {
+  margin-top: 0;
+}
+
+/* --- Inline Row ----------------------------------------------------------- */
+.demo-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.demo-row--spread {
+  justify-content: space-between;
+}
+
+/* --- Context Menu Area ---------------------------------------------------- */
+.demo-context-area {
+  border: 2px dashed var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  text-align: center;
+  color: var(--muted-foreground);
+  font-size: 14px;
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+
+/* --- Event Logger --------------------------------------------------------- */
+.demo-event-log {
+  background: #1d1d1f;
+  color: #34c759;
+  font-family: 'SF Mono', 'Fira Code', Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  padding: 1rem;
+  border-radius: var(--radius);
+  max-height: 200px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+}
+
+.demo-event-log:empty::before {
+  content: "// events will appear here…";
+  color: #86868b;
+}
+
+/* --- Token Swatch Grid --------------------------------------------------- */
+.demo-swatch-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 0.75rem;
+}
+
+.demo-swatch {
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+}
+
+.demo-swatch::before {
+  content: '';
+  display: block;
+  height: 48px;
+  background: var(--swatch);
+}
+
+.demo-swatch span {
+  padding: 0.375rem 0.5rem;
+  font-size: 11px;
+  font-family: 'SF Mono', Consolas, monospace;
+  color: var(--muted-foreground);
+  background: var(--card);
+}
+
+/* --- Shadow Gallery ------------------------------------------------------- */
+.demo-shadow-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 1.5rem;
+}
+
+.demo-shadow-box {
+  height: 64px;
+  border-radius: var(--radius);
+  background: var(--card);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  color: var(--muted-foreground);
+}
+
+/* --- Code Actions (dual HTML + JS toggles) -------------------------------- */
+.demo-code-actions {
+  display: flex;
+  border-top: 1px solid var(--border);
+}
+
+.demo-code-actions > .demo-code-toggle {
+  border-top: none;
+  flex: 1;
+}
+
+.demo-code-actions > .demo-code-toggle + .demo-code-toggle {
+  border-left: 1px solid var(--border);
+}
+
+.demo-code-toggle--js {
+  color: var(--muted-foreground);
+}
+
+.demo-code-toggle--js .demo-code-js-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 1px 5px;
+  border-radius: 3px;
+  background: #f7df1e;
+  color: #1d1d1f;
+  margin-right: 6px;
+  line-height: 1.4;
+}
+
+.demo-code-block--js pre {
+  border-left: 3px solid #f7df1e;
+}
+
+/* --- Hint strip (visual hint for overlay components) ---------------------- */
+.demo-hint {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 12px;
+  color: var(--muted-foreground);
+  padding: 0.5rem 0;
+}
+
+.demo-hint svg {
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+
+/* --- Spacer --------------------------------------------------------------- */
+.demo-spacer {
+  height: 1rem;
+}
+
+.demo-spacer--lg {
+  height: 2rem;
+}
+
+/* --- Responsive ----------------------------------------------------------- */
+@media (max-width: 768px) {
+  .demo-nav {
+    padding: 0.5rem 1rem;
+    flex-wrap: wrap;
+    gap: 0.125rem;
+  }
+  .demo-page {
+    padding: 1.5rem 1rem 3rem;
+  }
+  .demo-preview {
+    padding: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .demo-nav a {
+    font-size: 12px;
+    padding: 0.25rem 0.5rem;
+  }
+}
