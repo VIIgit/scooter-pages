@@ -71,7 +71,7 @@ scooter-pages/                ← project root
 | Internal parts | `data-slot="part-name"` on child elements |
 | Variants | `data-variant="default\|secondary\|outline\|ghost\|destructive"` |
 | Sizes | `data-size="default\|sm\|lg\|icon"` |
-| Paths | From `pages/<name>/index.html`: `../../base.css`, `../../components/*.js` |
+| Paths | From `pages/<name>/index.html`: `../../components.css`, `../../components/*.js` |
 | Sidebar-compatible | Wrap content in `<main class="scooter-page">` — required for dynamic loading |
 | Styling | Use CSS custom properties (`var(--primary)`) — never hardcode colors |
 | Scripts | `scooter-core.js` first, then only the component scripts the page uses |
@@ -90,7 +90,7 @@ Copy `pages/_template/` to `pages/<your-page-name>/` and edit `index.html`.
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Page Title — Scooter Pages</title>
-  <link rel="stylesheet" href="../../base.css" />
+  <link rel="stylesheet" href="../../components.css" />
   <!-- base.css auto-imports custom.css — no extra link needed -->
   <style>
     /* Page-specific styles go here (not in base.css) */
@@ -134,7 +134,7 @@ Copy `pages/_template/` to `pages/<your-page-name>/` and edit `index.html`.
 5. Add page-specific CSS in a `<style>` block — **never modify `base.css`**.
 6. For theming changes, edit `custom.css` instead.
 7. Use semantic HTML (`<nav>`, `<main>`, `<section>`, `<button>`, `<dialog>`).
-8. Paths from `pages/<name>/index.html`: use `../../base.css` and `../../components/*.js`.
+8. Paths from `pages/<name>/index.html`: use `../../components.css` and `../../components/*.js`.
 9. **Standalone + sidebar dual-mode**: Each page must work when opened directly in the browser *and* when loaded into `demo-sidebar-dynamic.html`. No special scaffolding is needed — just keep the `<main class="scooter-page">` wrapper and use Scooter components directly.
 10. **Do not use demo-specific patterns**: The `demo-*` CSS classes (`demo-card`, `demo-preview`, `demo-code-block`, `demo-section`, etc.), `toggleCode`, and `demo.css` are **only for pages in `demo-pages/`**. New pages should use plain semantic HTML.
 10. **To register a page in the sidebar**, add a `<li>` entry in `demo-pages/demo-sidebar-dynamic.html` with a `data-page` attribute pointing to `../pages/<name>/index.html`.
@@ -1278,7 +1278,7 @@ Use these as living references. Open them in a browser to see the components in 
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dashboard</title>
-  <link rel="stylesheet" href="../base.css" />
+  <link rel="stylesheet" href="../components.css" />
 </head>
 <body>
   <div class="page">

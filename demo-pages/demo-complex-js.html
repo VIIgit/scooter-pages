@@ -1,34 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Scooter Pages — Complex JS Components</title>
-  <link rel="stylesheet" href="../base.css">
+  <link rel="stylesheet" href="../components.css">
   <link rel="stylesheet" href="demo.css">
 </head>
+
 <body>
 
-<!-- Navigation -->
-<nav class="demo-nav">
-  <span class="demo-nav-title">Scooter Pages</span>
-  <a href="demo-css-only.html">CSS-Only</a>
-  <a href="demo-light-js.html">Light JS</a>
-  <a href="demo-medium-js.html">Medium JS</a>
-  <a href="demo-complex-js.html" aria-current="page">Complex JS</a>
-  <a href="demo-patterns.html">Patterns</a>
-</nav>
+  <!-- Navigation -->
+  <nav class="demo-nav">
+    <span class="demo-nav-title">Scooter Pages</span>
+    <a href="demo-css-only.html">CSS-Only</a>
+    <a href="demo-light-js.html">Light JS</a>
+    <a href="demo-medium-js.html">Medium JS</a>
+    <a href="demo-complex-js.html" aria-current="page">Complex JS</a>
+    <a href="demo-patterns.html">Patterns</a>
+  </nav>
 
-<main class="demo-page">
-  <h1>Complex JS Components</h1>
-  <p class="demo-subtitle">Tier 4 — Self-rendering, state-heavy components. Calendar, Form validation, Toast, Command palette, and more.</p>
+  <main class="demo-page">
+    <h1>Complex JS Components</h1>
+    <p class="demo-subtitle">Tier 4 — Self-rendering, state-heavy components. Calendar, Form validation, Toast, Command
+      palette, and more.</p>
 
-  <!-- ═══════════════════════ MENUBAR ═══════════════════════ -->
-  <section class="demo-section" id="menubar">
-    <h2>Menubar</h2>
-    <p class="demo-desc">Desktop-style menu bar with multiple top-level menus. Arrow key navigation between triggers.</p>
+    <!-- ═══════════════════════ MENUBAR ═══════════════════════ -->
+    <section class="demo-section" id="menubar">
+      <h2>Menubar</h2>
+      <p class="demo-desc">Desktop-style menu bar with multiple top-level menus. Arrow key navigation between triggers.
+      </p>
 
-    <div class="demo-card">
+      <div class="demo-card">
+        <div class="demo-code-block demo-code-block--js">
+          <pre><code>// Programmatic usage of the chart component (el._chart API)
       <div class="demo-preview">
         <div data-sc="menubar" data-slot="menubar">
           <button data-slot="menubar-trigger">File</button>
@@ -83,8 +89,10 @@
 
   &lt;button data-slot="menubar-trigger"&gt;Edit&lt;/button&gt;
   &lt;template data-slot="menubar-content" data-for="Edit"&gt;…&lt;/template&gt;
-&lt;/div&gt;</code></pre></div>
-      <div class="demo-code-block demo-code-block--js"><pre><code>// Get reference
+&lt;/div&gt;</code></pre>
+        </div>
+        <div class="demo-code-block demo-code-block--js">
+          <pre><code>// Get reference
 const menubar = document.querySelector('[data-sc="menubar"]');
 
 // Listen for item selection
@@ -95,54 +103,78 @@ menubar.addEventListener('sc:select', e =&gt; {
 
 // Programmatic API
 menubar._menubar.showMenu(0);   // open first menu (File)
-menubar._menubar.hideAll();     // close any open menu</code></pre></div>
-    </div>
-  </section>
-
-  <!-- ═══════════════════════ CAROUSEL ═══════════════════════ -->
-  <section class="demo-section" id="carousel">
-    <h2>Carousel</h2>
-    <p class="demo-desc">Swipeable slide carousel with previous/next controls. Emits <code>sc:slide</code>.</p>
-
-    <div class="demo-card">
-      <div class="demo-preview demo-preview--center" style="padding:2rem 3rem">
-        <div data-sc="carousel" data-slot="carousel" style="width:100%;max-width:400px">
-          <div data-slot="carousel-viewport">
-            <div data-slot="carousel-container">
-              <div data-slot="carousel-item">
-                <div style="height:200px;background:var(--primary);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;color:var(--primary-foreground);font-size:24px;font-weight:var(--font-weight-semibold)">Slide 1</div>
-              </div>
-              <div data-slot="carousel-item">
-                <div style="height:200px;background:var(--destructive);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;color:var(--destructive-foreground);font-size:24px;font-weight:var(--font-weight-semibold)">Slide 2</div>
-              </div>
-              <div data-slot="carousel-item">
-                <div style="height:200px;background:var(--success);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;color:var(--success-foreground);font-size:24px;font-weight:var(--font-weight-semibold)">Slide 3</div>
-              </div>
-              <div data-slot="carousel-item">
-                <div style="height:200px;background:var(--gray-700);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;color:#fff;font-size:24px;font-weight:var(--font-weight-semibold)">Slide 4</div>
-              </div>
-            </div>
-          </div>
-          <button data-slot="carousel-previous" aria-label="Previous slide">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-          </button>
-          <button data-slot="carousel-next" aria-label="Next slide">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-          </button>
+menubar._menubar.hideAll();     // close any open menu</code></pre>
         </div>
       </div>
+    </section>
 
-      <div class="demo-code-actions">
-        <button class="demo-code-toggle" aria-expanded="false" onclick="var b=this.closest('.demo-card').querySelector('.demo-code-block--html');this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='true'?'false':'true');b.dataset.visible=this.getAttribute('aria-expanded')">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-          Show HTML
-        </button>
-        <button class="demo-code-toggle demo-code-toggle--js" aria-expanded="false" onclick="var b=this.closest('.demo-card').querySelector('.demo-code-block--js');this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='true'?'false':'true');b.dataset.visible=this.getAttribute('aria-expanded')">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-          <span class="demo-code-js-badge">JS</span> Show JavaScript
-        </button>
-      </div>
-      <div class="demo-code-block demo-code-block--html"><pre><code>&lt;div data-sc="carousel" data-slot="carousel"&gt;
+    <!-- ═══════════════════════ CAROUSEL ═══════════════════════ -->
+    <section class="demo-section" id="carousel">
+      <h2>Carousel</h2>
+      <p class="demo-desc">Swipeable slide carousel with previous/next controls. Emits <code>sc:slide</code>.</p>
+
+      <div class="demo-card">
+        <div class="demo-preview demo-preview--center" style="padding:2rem 3rem">
+          <div data-sc="carousel" data-slot="carousel" style="width:100%;max-width:400px">
+            <div data-slot="carousel-viewport">
+              <div data-slot="carousel-container">
+                <div data-slot="carousel-item">
+                  <div
+                    style="height:200px;background:var(--primary);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;color:var(--primary-foreground);font-size:24px;font-weight:var(--font-weight-semibold)">
+                    Slide 1</div>
+                </div>
+                <div data-slot="carousel-item">
+                  <div
+                    style="height:200px;background:var(--destructive);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;color:var(--destructive-foreground);font-size:24px;font-weight:var(--font-weight-semibold)">
+                    Slide 2</div>
+                </div>
+                <div data-slot="carousel-item">
+                  <div
+                    style="height:200px;background:var(--success);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;color:var(--success-foreground);font-size:24px;font-weight:var(--font-weight-semibold)">
+                    Slide 3</div>
+                </div>
+                <div data-slot="carousel-item">
+                  <div
+                    style="height:200px;background:var(--gray-700);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;color:#fff;font-size:24px;font-weight:var(--font-weight-semibold)">
+                    Slide 4</div>
+                </div>
+              </div>
+            </div>
+            <button data-slot="carousel-previous" aria-label="Previous slide">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6" />
+              </svg>
+            </button>
+            <button data-slot="carousel-next" aria-label="Next slide">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="demo-code-actions">
+          <button class="demo-code-toggle" aria-expanded="false"
+            onclick="var b=this.closest('.demo-card').querySelector('.demo-code-block--html');this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='true'?'false':'true');b.dataset.visible=this.getAttribute('aria-expanded')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+            Show HTML
+          </button>
+          <button class="demo-code-toggle demo-code-toggle--js" aria-expanded="false"
+            onclick="var b=this.closest('.demo-card').querySelector('.demo-code-block--js');this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='true'?'false':'true');b.dataset.visible=this.getAttribute('aria-expanded')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+            <span class="demo-code-js-badge">JS</span> Show JavaScript
+          </button>
+        </div>
+        <div class="demo-code-block demo-code-block--html">
+          <pre><code>&lt;div data-sc="carousel" data-slot="carousel"&gt;
   &lt;div data-slot="carousel-viewport"&gt;
     &lt;div data-slot="carousel-container"&gt;
       &lt;div data-slot="carousel-item"&gt;Slide 1&lt;/div&gt;
@@ -152,8 +184,10 @@ menubar._menubar.hideAll();     // close any open menu</code></pre></div>
   &lt;/div&gt;
   &lt;button data-slot="carousel-previous"&gt;←&lt;/button&gt;
   &lt;button data-slot="carousel-next"&gt;→&lt;/button&gt;
-&lt;/div&gt;</code></pre></div>
-      <div class="demo-code-block demo-code-block--js"><pre><code>const carousel = document.querySelector('[data-sc="carousel"]');
+&lt;/div&gt;</code></pre>
+        </div>
+        <div class="demo-code-block demo-code-block--js">
+          <pre><code>const carousel = document.querySelector('[data-sc="carousel"]');
 
 // Listen for slide changes
 carousel.addEventListener('sc:slide', e =&gt; {
@@ -166,33 +200,48 @@ carousel._carousel.prev();          // go to previous slide
 carousel._carousel.goTo(2);         // jump to slide at index 2
 carousel._carousel.getCurrent();    // returns current index
 
-// Attributes: data-loop, data-auto-play="3000", data-orientation</code></pre></div>
-    </div>
-  </section>
-
-  <!-- ═══════════════════════ CALENDAR ═══════════════════════ -->
-  <section class="demo-section" id="calendar">
-    <h2>Calendar</h2>
-    <p class="demo-desc">Self-rendering date picker. Just an empty container — JS builds the entire UI. Emits <code>sc:change</code>.</p>
-
-    <div class="demo-card">
-      <div class="demo-preview demo-preview--center">
-        <div data-sc="calendar" style="border:1px solid var(--border);border-radius:var(--radius-lg);display:inline-block"></div>
+// Attributes: data-loop, data-auto-play="3000", data-orientation</code></pre>
+        </div>
       </div>
+    </section>
 
-      <div class="demo-code-actions">
-        <button class="demo-code-toggle" aria-expanded="false" onclick="var b=this.closest('.demo-card').querySelector('.demo-code-block--html');this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='true'?'false':'true');b.dataset.visible=this.getAttribute('aria-expanded')">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-          Show HTML
-        </button>
-        <button class="demo-code-toggle demo-code-toggle--js" aria-expanded="false" onclick="var b=this.closest('.demo-card').querySelector('.demo-code-block--js');this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='true'?'false':'true');b.dataset.visible=this.getAttribute('aria-expanded')">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-          <span class="demo-code-js-badge">JS</span> Show JavaScript
-        </button>
-      </div>
-      <div class="demo-code-block demo-code-block--html"><pre><code>&lt;!-- Self-rendering: just provide empty div --&gt;
-&lt;div data-sc="calendar"&gt;&lt;/div&gt;</code></pre></div>
-      <div class="demo-code-block demo-code-block--js"><pre><code>const calendar = document.querySelector('[data-sc="calendar"]');
+    <!-- ═══════════════════════ CALENDAR ═══════════════════════ -->
+    <section class="demo-section" id="calendar">
+      <h2>Calendar</h2>
+      <p class="demo-desc">Self-rendering date picker. Just an empty container — JS builds the entire UI. Emits
+        <code>sc:change</code>.
+      </p>
+
+      <div class="demo-card">
+        <div class="demo-preview demo-preview--center">
+          <div data-sc="calendar"
+            style="border:1px solid var(--border);border-radius:var(--radius-lg);display:inline-block"></div>
+        </div>
+
+        <div class="demo-code-actions">
+          <button class="demo-code-toggle" aria-expanded="false"
+            onclick="var b=this.closest('.demo-card').querySelector('.demo-code-block--html');this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='true'?'false':'true');b.dataset.visible=this.getAttribute('aria-expanded')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+            Show HTML
+          </button>
+          <button class="demo-code-toggle demo-code-toggle--js" aria-expanded="false"
+            onclick="var b=this.closest('.demo-card').querySelector('.demo-code-block--js');this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='true'?'false':'true');b.dataset.visible=this.getAttribute('aria-expanded')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+            <span class="demo-code-js-badge">JS</span> Show JavaScript
+          </button>
+        </div>
+        <div class="demo-code-block demo-code-block--html">
+          <pre><code>&lt;!-- Self-rendering: just provide empty div --&gt;
+&lt;div data-sc="calendar"&gt;&lt;/div&gt;</code></pre>
+        </div>
+        <div class="demo-code-block demo-code-block--js">
+          <pre><code>const calendar = document.querySelector('[data-sc="calendar"]');
 
 // Listen for date selection
 calendar.addEventListener('sc:change', e =&gt; {
@@ -203,64 +252,92 @@ calendar.addEventListener('sc:change', e =&gt; {
 // Programmatic API
 calendar._calendar.getValue();            // "2026-03-16" or ""
 calendar._calendar.setValue('2026-12-25'); // set date &amp; re-render
-calendar._calendar.goTo(2026, 5);         // navigate to June 2026 (0-based month)</code></pre></div>
-    </div>
-  </section>
+calendar._calendar.goTo(2026, 5);         // navigate to June 2026 (0-based month)</code></pre>
+        </div>
+      </div>
+    </section>
 
-  <!-- ═══════════════════════ COMMAND ═══════════════════════ -->
-  <section class="demo-section" id="command">
-    <h2>Command</h2>
-    <p class="demo-desc">Searchable command palette / list. Built-in fuzzy filtering. Emits <code>sc:select</code>.</p>
+    <!-- ═══════════════════════ COMMAND ═══════════════════════ -->
+    <section class="demo-section" id="command">
+      <h2>Command</h2>
+      <p class="demo-desc">Searchable command palette / list. Built-in fuzzy filtering. Emits <code>sc:select</code>.
+      </p>
 
-    <div class="demo-card">
-      <div class="demo-preview demo-preview--center">
-        <div data-sc="command" data-slot="command" style="max-width:440px;width:100%;border:1px solid var(--border);border-radius:var(--radius-lg)">
-          <div data-slot="command-input-wrapper">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input data-slot="command-input" placeholder="Type a command or search…">
-          </div>
-          <div data-slot="command-list">
-            <div data-slot="command-empty">No results found.</div>
-            <div data-slot="command-group" data-heading="Suggestions">
-              <div data-slot="command-group-heading">Suggestions</div>
-              <div data-slot="command-item" data-value="Calendar">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                Calendar
-              </div>
-              <div data-slot="command-item" data-value="Search Emoji">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
-                Search Emoji
-              </div>
-              <div data-slot="command-item" data-value="Calculator">Calculator</div>
+      <div class="demo-card">
+        <div class="demo-preview demo-preview--center">
+          <div data-sc="command" data-slot="command"
+            style="max-width:440px;width:100%;border:1px solid var(--border);border-radius:var(--radius-lg)">
+            <div data-slot="command-input-wrapper">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+              <input data-slot="command-input" placeholder="Type a command or search…">
             </div>
-            <div data-slot="command-separator"></div>
-            <div data-slot="command-group" data-heading="Settings">
-              <div data-slot="command-group-heading">Settings</div>
-              <div data-slot="command-item" data-value="Profile">
-                Profile <span data-slot="command-shortcut">⌘P</span>
+            <div data-slot="command-list">
+              <div data-slot="command-empty">No results found.</div>
+              <div data-slot="command-group" data-heading="Suggestions">
+                <div data-slot="command-group-heading">Suggestions</div>
+                <div data-slot="command-item" data-value="Calendar">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                    <line x1="16" y1="2" x2="16" y2="6" />
+                    <line x1="8" y1="2" x2="8" y2="6" />
+                    <line x1="3" y1="10" x2="21" y2="10" />
+                  </svg>
+                  Calendar
+                </div>
+                <div data-slot="command-item" data-value="Search Emoji">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M8 14s1.5 2 4 2 4-2 4-2" />
+                    <line x1="9" y1="9" x2="9.01" y2="9" />
+                    <line x1="15" y1="9" x2="15.01" y2="9" />
+                  </svg>
+                  Search Emoji
+                </div>
+                <div data-slot="command-item" data-value="Calculator">Calculator</div>
               </div>
-              <div data-slot="command-item" data-value="Billing">
-                Billing <span data-slot="command-shortcut">⌘B</span>
-              </div>
-              <div data-slot="command-item" data-value="Settings">
-                Settings <span data-slot="command-shortcut">⌘S</span>
+              <div data-slot="command-separator"></div>
+              <div data-slot="command-group" data-heading="Settings">
+                <div data-slot="command-group-heading">Settings</div>
+                <div data-slot="command-item" data-value="Profile">
+                  Profile <span data-slot="command-shortcut">⌘P</span>
+                </div>
+                <div data-slot="command-item" data-value="Billing">
+                  Billing <span data-slot="command-shortcut">⌘B</span>
+                </div>
+                <div data-slot="command-item" data-value="Settings">
+                  Settings <span data-slot="command-shortcut">⌘S</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="demo-code-actions">
-        <button class="demo-code-toggle" aria-expanded="false" onclick="var b=this.closest('.demo-card').querySelector('.demo-code-block--html');this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='true'?'false':'true');b.dataset.visible=this.getAttribute('aria-expanded')">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-          Show HTML
-        </button>
-        <button class="demo-code-toggle demo-code-toggle--js" aria-expanded="false" onclick="var b=this.closest('.demo-card').querySelector('.demo-code-block--js');this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='true'?'false':'true');b.dataset.visible=this.getAttribute('aria-expanded')">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-          <span class="demo-code-js-badge">JS</span> Show JavaScript
-        </button>
-      </div>
-      <div class="demo-code-block demo-code-block--html"><pre><code>&lt;div data-sc="command" data-slot="command"&gt;
+        <div class="demo-code-actions">
+          <button class="demo-code-toggle" aria-expanded="false"
+            onclick="var b=this.closest('.demo-card').querySelector('.demo-code-block--html');this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='true'?'false':'true');b.dataset.visible=this.getAttribute('aria-expanded')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+            Show HTML
+          </button>
+          <button class="demo-code-toggle demo-code-toggle--js" aria-expanded="false"
+            onclick="var b=this.closest('.demo-card').querySelector('.demo-code-block--js');this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='true'?'false':'true');b.dataset.visible=this.getAttribute('aria-expanded')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+            <span class="demo-code-js-badge">JS</span> Show JavaScript
+          </button>
+        </div>
+        <div class="demo-code-block demo-code-block--html">
+          <pre><code>&lt;div data-sc="command" data-slot="command"&gt;
   &lt;div data-slot="command-input-wrapper"&gt;
     &lt;svg …&gt;&lt;!-- search icon --&gt;&lt;/svg&gt;
     &lt;input data-slot="command-input" placeholder="Search…"&gt;
@@ -272,8 +349,10 @@ calendar._calendar.goTo(2026, 5);         // navigate to June 2026 (0-based mont
       &lt;div data-slot="command-item" data-value="item"&gt;Item&lt;/div&gt;
     &lt;/div&gt;
   &lt;/div&gt;
-&lt;/div&gt;</code></pre></div>
-      <div class="demo-code-block demo-code-block--js"><pre><code>const cmd = document.querySelector('[data-sc="command"]');
+&lt;/div&gt;</code></pre>
+        </div>
+        <div class="demo-code-block demo-code-block--js">
+          <pre><code>const cmd = document.querySelector('[data-sc="command"]');
 
 // Listen for item selection
 cmd.addEventListener('sc:select', e =&gt; {
@@ -284,67 +363,80 @@ cmd.addEventListener('sc:select', e =&gt; {
 // Programmatic API
 cmd._command.filter('cal');      // filter items by query string
 cmd._command.getValue();         // currently highlighted item's value
-cmd._command.focus();            // focus the search input</code></pre></div>
-    </div>
-  </section>
-
-  <!-- ═══════════════════════ FORM ═══════════════════════ -->
-  <section class="demo-section" id="form">
-    <h2>Form</h2>
-    <p class="demo-desc">Declarative validation via HTML5 attributes. Emits <code>sc:action</code> with cleaned data on submit. Shows inline errors.</p>
-
-    <div class="demo-card">
-      <div class="demo-preview demo-preview--col" style="max-width:400px">
-        <form data-sc="form" style="display:flex;flex-direction:column;gap:16px">
-          <div data-slot="form-item">
-            <label data-slot="form-label">Username</label>
-            <div data-slot="form-control">
-              <input data-slot="input" name="username" required minlength="3" placeholder="At least 3 characters">
-            </div>
-            <p data-slot="form-description">This is your public display name.</p>
-            <p data-slot="form-message"></p>
-          </div>
-
-          <div data-slot="form-item">
-            <label data-slot="form-label">Email</label>
-            <div data-slot="form-control">
-              <input data-slot="input" name="email" type="email" required placeholder="you@example.com">
-            </div>
-            <p data-slot="form-message"></p>
-          </div>
-
-          <div data-slot="form-item">
-            <label data-slot="form-label">Password</label>
-            <div data-slot="form-control">
-              <input data-slot="input" name="password" type="password" required minlength="8" placeholder="At least 8 characters">
-            </div>
-            <p data-slot="form-message"></p>
-          </div>
-
-          <div data-slot="form-item">
-            <label data-slot="form-label">Confirm Password</label>
-            <div data-slot="form-control">
-              <input data-slot="input" name="confirm" type="password" required data-match="password" placeholder="Repeat password">
-            </div>
-            <p data-slot="form-description">Must match the password field.</p>
-            <p data-slot="form-message"></p>
-          </div>
-
-          <button data-slot="button" type="submit">Create Account</button>
-        </form>
+cmd._command.focus();            // focus the search input</code></pre>
+        </div>
       </div>
+    </section>
 
-      <div class="demo-code-actions">
-        <button class="demo-code-toggle" aria-expanded="false" onclick="var b=this.closest('.demo-card').querySelector('.demo-code-block--html');this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='true'?'false':'true');b.dataset.visible=this.getAttribute('aria-expanded')">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-          Show HTML
-        </button>
-        <button class="demo-code-toggle demo-code-toggle--js" aria-expanded="false" onclick="var b=this.closest('.demo-card').querySelector('.demo-code-block--js');this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='true'?'false':'true');b.dataset.visible=this.getAttribute('aria-expanded')">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-          <span class="demo-code-js-badge">JS</span> Show JavaScript
-        </button>
-      </div>
-      <div class="demo-code-block demo-code-block--html"><pre><code>&lt;form data-sc="form"&gt;
+    <!-- ═══════════════════════ FORM ═══════════════════════ -->
+    <section class="demo-section" id="form">
+      <h2>Form</h2>
+      <p class="demo-desc">Declarative validation via HTML5 attributes. Emits <code>sc:action</code> with cleaned data
+        on submit. Shows inline errors.</p>
+
+      <div class="demo-card">
+        <div class="demo-preview demo-preview--col" style="max-width:400px">
+          <form data-sc="form" style="display:flex;flex-direction:column;gap:16px">
+            <div data-slot="form-item">
+              <label data-slot="form-label">Username</label>
+              <div data-slot="form-control">
+                <input data-slot="input" name="username" required minlength="3" placeholder="At least 3 characters">
+              </div>
+              <p data-slot="form-description">This is your public display name.</p>
+              <p data-slot="form-message"></p>
+            </div>
+
+            <div data-slot="form-item">
+              <label data-slot="form-label">Email</label>
+              <div data-slot="form-control">
+                <input data-slot="input" name="email" type="email" required placeholder="you@example.com">
+              </div>
+              <p data-slot="form-message"></p>
+            </div>
+
+            <div data-slot="form-item">
+              <label data-slot="form-label">Password</label>
+              <div data-slot="form-control">
+                <input data-slot="input" name="password" type="password" required minlength="8"
+                  placeholder="At least 8 characters">
+              </div>
+              <p data-slot="form-message"></p>
+            </div>
+
+            <div data-slot="form-item">
+              <label data-slot="form-label">Confirm Password</label>
+              <div data-slot="form-control">
+                <input data-slot="input" name="confirm" type="password" required data-match="password"
+                  placeholder="Repeat password">
+              </div>
+              <p data-slot="form-description">Must match the password field.</p>
+              <p data-slot="form-message"></p>
+            </div>
+
+            <button data-slot="button" type="submit">Create Account</button>
+          </form>
+        </div>
+
+        <div class="demo-code-actions">
+          <button class="demo-code-toggle" aria-expanded="false"
+            onclick="var b=this.closest('.demo-card').querySelector('.demo-code-block--html');this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='true'?'false':'true');b.dataset.visible=this.getAttribute('aria-expanded')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+            Show HTML
+          </button>
+          <button class="demo-code-toggle demo-code-toggle--js" aria-expanded="false"
+            onclick="var b=this.closest('.demo-card').querySelector('.demo-code-block--js');this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='true'?'false':'true');b.dataset.visible=this.getAttribute('aria-expanded')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+            <span class="demo-code-js-badge">JS</span> Show JavaScript
+          </button>
+        </div>
+        <div class="demo-code-block demo-code-block--html">
+          <pre><code>&lt;form data-sc="form"&gt;
   &lt;div data-slot="form-item"&gt;
     &lt;label data-slot="form-label"&gt;Username&lt;/label&gt;
     &lt;div data-slot="form-control"&gt;
@@ -358,8 +450,10 @@ cmd._command.focus();            // focus the search input</code></pre></div>
   &lt;input name="confirm" data-match="password"&gt;
 
   &lt;button type="submit"&gt;Submit&lt;/button&gt;
-&lt;/form&gt;</code></pre></div>
-      <div class="demo-code-block demo-code-block--js"><pre><code>const form = document.querySelector('[data-sc="form"]');
+&lt;/form&gt;</code></pre>
+        </div>
+        <div class="demo-code-block demo-code-block--js">
+          <pre><code>const form = document.querySelector('[data-sc="form"]');
 
 // Listen for valid form submission
 form.addEventListener('sc:action', e =&gt; {
@@ -372,45 +466,59 @@ form.addEventListener('sc:action', e =&gt; {
 form._form.validate();   // run all validations, returns true/false
 form._form.reset();      // clear form &amp; all error states
 
-// Supports data-match="fieldName" for cross-field validation</code></pre></div>
-    </div>
-  </section>
-
-  <!-- ═══════════════════════ INPUT OTP ═══════════════════════ -->
-  <section class="demo-section" id="input-otp">
-    <h2>Input OTP</h2>
-    <p class="demo-desc">Self-rendering OTP/PIN input. Set <code>data-length</code> and optional <code>data-groups</code>. Emits <code>sc:complete</code>.</p>
-
-    <div class="demo-card">
-      <div class="demo-preview demo-preview--col" style="gap:1.5rem;align-items:center">
-        <!-- 6-digit, groups of 3 -->
-        <div>
-          <p class="text-sm text-muted" style="margin-bottom:8px;text-align:center">6 digits, grouped 3-3</p>
-          <div data-sc="input-otp" data-length="6" data-groups="3,3"></div>
-        </div>
-        <!-- 4-digit single group -->
-        <div>
-          <p class="text-sm text-muted" style="margin-bottom:8px;text-align:center">4 digits, single group</p>
-          <div data-sc="input-otp" data-length="4"></div>
+// Supports data-match="fieldName" for cross-field validation</code></pre>
         </div>
       </div>
+    </section>
 
-      <div class="demo-code-actions">
-        <button class="demo-code-toggle" aria-expanded="false" onclick="var b=this.closest('.demo-card').querySelector('.demo-code-block--html');this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='true'?'false':'true');b.dataset.visible=this.getAttribute('aria-expanded')">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-          Show HTML
-        </button>
-        <button class="demo-code-toggle demo-code-toggle--js" aria-expanded="false" onclick="var b=this.closest('.demo-card').querySelector('.demo-code-block--js');this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='true'?'false':'true');b.dataset.visible=this.getAttribute('aria-expanded')">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-          <span class="demo-code-js-badge">JS</span> Show JavaScript
-        </button>
-      </div>
-      <div class="demo-code-block demo-code-block--html"><pre><code>&lt;!-- Self-rendering: just provide empty div --&gt;
+    <!-- ═══════════════════════ INPUT OTP ═══════════════════════ -->
+    <section class="demo-section" id="input-otp">
+      <h2>Input OTP</h2>
+      <p class="demo-desc">Self-rendering OTP/PIN input. Set <code>data-length</code> and optional
+        <code>data-groups</code>. Emits <code>sc:complete</code>.
+      </p>
+
+      <div class="demo-card">
+        <div class="demo-preview demo-preview--col" style="gap:1.5rem;align-items:center">
+          <!-- 6-digit, groups of 3 -->
+          <div>
+            <p class="text-sm text-muted" style="margin-bottom:8px;text-align:center">6 digits, grouped 3-3</p>
+            <div data-sc="input-otp" data-length="6" data-groups="3,3"></div>
+          </div>
+          <!-- 4-digit single group -->
+          <div>
+            <p class="text-sm text-muted" style="margin-bottom:8px;text-align:center">4 digits, single group</p>
+            <div data-sc="input-otp" data-length="4"></div>
+          </div>
+        </div>
+
+        <div class="demo-code-actions">
+          <button class="demo-code-toggle" aria-expanded="false"
+            onclick="var b=this.closest('.demo-card').querySelector('.demo-code-block--html');this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='true'?'false':'true');b.dataset.visible=this.getAttribute('aria-expanded')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+            Show HTML
+          </button>
+          <button class="demo-code-toggle demo-code-toggle--js" aria-expanded="false"
+            onclick="var b=this.closest('.demo-card').querySelector('.demo-code-block--js');this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='true'?'false':'true');b.dataset.visible=this.getAttribute('aria-expanded')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+            <span class="demo-code-js-badge">JS</span> Show JavaScript
+          </button>
+        </div>
+        <div class="demo-code-block demo-code-block--html">
+          <pre><code>&lt;!-- Self-rendering: just provide empty div --&gt;
 &lt;div data-sc="input-otp" data-length="6" data-groups="3,3"&gt;&lt;/div&gt;
 
 &lt;!-- 4-digit single group --&gt;
-&lt;div data-sc="input-otp" data-length="4"&gt;&lt;/div&gt;</code></pre></div>
-      <div class="demo-code-block demo-code-block--js"><pre><code>const otp = document.querySelector('[data-sc="input-otp"]');
+&lt;div data-sc="input-otp" data-length="4"&gt;&lt;/div&gt;</code></pre>
+        </div>
+        <div class="demo-code-block demo-code-block--js">
+          <pre><code>const otp = document.querySelector('[data-sc="input-otp"]');
 
 // Listen for completion (all slots filled)
 otp.addEventListener('sc:complete', e =&gt; {
@@ -422,89 +530,123 @@ otp.addEventListener('sc:complete', e =&gt; {
 otp._inputOtp.getValue();          // current value as string
 otp._inputOtp.setValue('123456');   // set value across slots
 otp._inputOtp.clear();             // clear all slots &amp; focus first
-otp._inputOtp.focus();             // focus first slot</code></pre></div>
-    </div>
-  </section>
-
-  <!-- ═══════════════════════ SIDEBAR ═══════════════════════ -->
-  <section class="demo-section" id="sidebar">
-    <h2>Sidebar</h2>
-    <p class="demo-desc">Collapsible sidebar navigation. Uses <code>data-sc="sidebar"</code>. Has collapse toggle.</p>
-
-    <div class="demo-card">
-      <div class="demo-preview" style="padding:0;overflow:hidden">
-        <div style="display:flex;height:360px;width:100%;border-radius:inherit;overflow:hidden">
-          <div data-sc="sidebar" data-slot="sidebar" style="height:100%;position:relative">
-            <div data-slot="sidebar-header" style="display:flex;align-items:center;justify-content:space-between">
-              <span style="font-weight:var(--font-weight-semibold);font-size:14px">Workspace</span>
-              <button data-slot="sidebar-trigger" aria-label="Toggle sidebar">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/></svg>
-              </button>
-            </div>
-            <div data-slot="sidebar-content">
-              <div data-slot="sidebar-group">
-                <div data-slot="sidebar-group-label">Platform</div>
-                <ul data-slot="sidebar-menu">
-                  <li data-slot="sidebar-menu-item">
-                    <button data-slot="sidebar-menu-button" data-active="true">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
-                      Dashboard
-                    </button>
-                  </li>
-                  <li data-slot="sidebar-menu-item">
-                    <button data-slot="sidebar-menu-button">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                      Calendar
-                    </button>
-                  </li>
-                  <li data-slot="sidebar-menu-item">
-                    <button data-slot="sidebar-menu-button">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                      Search
-                    </button>
-                  </li>
-                </ul>
-              </div>
-              <div data-slot="sidebar-group">
-                <div data-slot="sidebar-group-label">Projects</div>
-                <ul data-slot="sidebar-menu">
-                  <li data-slot="sidebar-menu-item">
-                    <button data-slot="sidebar-menu-button">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>
-                      Design System
-                    </button>
-                  </li>
-                  <li data-slot="sidebar-menu-item">
-                    <button data-slot="sidebar-menu-button">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>
-                      Marketing Site
-                    </button>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div data-slot="sidebar-footer">
-              <span class="text-xs text-muted">v1.0.0</span>
-            </div>
-          </div>
-          <div style="flex:1;padding:24px;background:var(--background)">
-            <h3 style="font-size:18px;margin-bottom:8px">Main Content</h3>
-            <p class="text-sm text-muted">Click the sidebar toggle to collapse/expand. The sidebar animates its width.</p>
-          </div>
+otp._inputOtp.focus();             // focus first slot</code></pre>
         </div>
       </div>
+    </section>
 
-      <div class="demo-code-actions">
-        <button class="demo-code-toggle" aria-expanded="false" onclick="var b=this.closest('.demo-card').querySelector('.demo-code-block--html');this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='true'?'false':'true');b.dataset.visible=this.getAttribute('aria-expanded')">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-          Show HTML
-        </button>
-        <button class="demo-code-toggle demo-code-toggle--js" aria-expanded="false" onclick="var b=this.closest('.demo-card').querySelector('.demo-code-block--js');this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='true'?'false':'true');b.dataset.visible=this.getAttribute('aria-expanded')">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-          <span class="demo-code-js-badge">JS</span> Show JavaScript
-        </button>
-      </div>
-      <div class="demo-code-block demo-code-block--html"><pre><code>&lt;div data-sc="sidebar" data-slot="sidebar"&gt;
+    <!-- ═══════════════════════ SIDEBAR ═══════════════════════ -->
+    <section class="demo-section" id="sidebar">
+      <h2>Sidebar</h2>
+      <p class="demo-desc">Collapsible sidebar navigation. Uses <code>data-sc="sidebar"</code>. Has collapse toggle.</p>
+
+      <div class="demo-card">
+        <div class="demo-preview" style="padding:0;overflow:hidden">
+          <div style="display:flex;height:360px;width:100%;border-radius:inherit;overflow:hidden">
+            <div data-sc="sidebar" data-slot="sidebar" style="height:100%;position:relative">
+              <div data-slot="sidebar-header" style="display:flex;align-items:center;justify-content:space-between">
+                <span style="font-weight:var(--font-weight-semibold);font-size:14px">Workspace</span>
+                <button data-slot="sidebar-trigger" aria-label="Toggle sidebar">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="2" />
+                    <path d="M9 3v18" />
+                  </svg>
+                </button>
+              </div>
+              <div data-slot="sidebar-content">
+                <div data-slot="sidebar-group">
+                  <div data-slot="sidebar-group-label">Platform</div>
+                  <ul data-slot="sidebar-menu">
+                    <li data-slot="sidebar-menu-item">
+                      <button data-slot="sidebar-menu-button" data-active="true">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+                        </svg>
+                        Dashboard
+                      </button>
+                    </li>
+                    <li data-slot="sidebar-menu-item">
+                      <button data-slot="sidebar-menu-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                          <line x1="16" y1="2" x2="16" y2="6" />
+                          <line x1="8" y1="2" x2="8" y2="6" />
+                          <line x1="3" y1="10" x2="21" y2="10" />
+                        </svg>
+                        Calendar
+                      </button>
+                    </li>
+                    <li data-slot="sidebar-menu-item">
+                      <button data-slot="sidebar-menu-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <circle cx="11" cy="11" r="8" />
+                          <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                        </svg>
+                        Search
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+                <div data-slot="sidebar-group">
+                  <div data-slot="sidebar-group-label">Projects</div>
+                  <ul data-slot="sidebar-menu">
+                    <li data-slot="sidebar-menu-item">
+                      <button data-slot="sidebar-menu-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z" />
+                        </svg>
+                        Design System
+                      </button>
+                    </li>
+                    <li data-slot="sidebar-menu-item">
+                      <button data-slot="sidebar-menu-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z" />
+                        </svg>
+                        Marketing Site
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div data-slot="sidebar-footer">
+                <span class="text-xs text-muted">v1.0.0</span>
+              </div>
+            </div>
+            <div style="flex:1;padding:24px;background:var(--background)">
+              <h3 style="font-size:18px;margin-bottom:8px">Main Content</h3>
+              <p class="text-sm text-muted">Click the sidebar toggle to collapse/expand. The sidebar animates its width.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-code-actions">
+          <button class="demo-code-toggle" aria-expanded="false"
+            onclick="var b=this.closest('.demo-card').querySelector('.demo-code-block--html');this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='true'?'false':'true');b.dataset.visible=this.getAttribute('aria-expanded')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+            Show HTML
+          </button>
+          <button class="demo-code-toggle demo-code-toggle--js" aria-expanded="false"
+            onclick="var b=this.closest('.demo-card').querySelector('.demo-code-block--js');this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='true'?'false':'true');b.dataset.visible=this.getAttribute('aria-expanded')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+            <span class="demo-code-js-badge">JS</span> Show JavaScript
+          </button>
+        </div>
+        <div class="demo-code-block demo-code-block--html">
+          <pre><code>&lt;div data-sc="sidebar" data-slot="sidebar"&gt;
   &lt;div data-slot="sidebar-header"&gt;
     &lt;span&gt;Title&lt;/span&gt;
     &lt;button data-slot="sidebar-trigger"&gt;Toggle&lt;/button&gt;
@@ -522,8 +664,10 @@ otp._inputOtp.focus();             // focus first slot</code></pre></div>
     &lt;/div&gt;
   &lt;/div&gt;
   &lt;div data-slot="sidebar-footer"&gt;…&lt;/div&gt;
-&lt;/div&gt;</code></pre></div>
-      <div class="demo-code-block demo-code-block--js"><pre><code>const sidebar = document.querySelector('[data-sc="sidebar"]');
+&lt;/div&gt;</code></pre>
+        </div>
+        <div class="demo-code-block demo-code-block--js">
+          <pre><code>const sidebar = document.querySelector('[data-sc="sidebar"]');
 
 // Listen for toggle events
 sidebar.addEventListener('sc:toggle', e =&gt; {
@@ -538,43 +682,61 @@ sidebar._sidebar.close();     // close sidebar
 
 // Supports: data-side="left|right"
 // data-collapsible="offcanvas|icon|none"
-// Keyboard shortcut: Ctrl/Cmd+B</code></pre></div>
-    </div>
-  </section>
-
-  <!-- ═══════════════════════ RESIZABLE ═══════════════════════ -->
-  <section class="demo-section" id="resizable">
-    <h2>Resizable</h2>
-    <p class="demo-desc">Resizable panel layout. Drag handles between panels. Emits <code>sc:resize</code>.</p>
-
-    <div class="demo-card">
-      <div class="demo-preview" style="padding:0;overflow:hidden">
-        <div data-sc="resizable" data-slot="resizable-panel-group" style="height:240px;width:100%;border-radius:inherit">
-          <div data-slot="resizable-panel" data-default-size="50" data-min-size="20" style="padding:24px;display:flex;align-items:center;justify-content:center;background:var(--gray-50)">
-            <span class="font-semibold text-sm">Panel A</span>
-          </div>
-          <div data-slot="resizable-handle">
-            <div data-slot="resizable-handle-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>
-            </div>
-          </div>
-          <div data-slot="resizable-panel" data-default-size="50" data-min-size="20" style="padding:24px;display:flex;align-items:center;justify-content:center">
-            <span class="font-semibold text-sm">Panel B</span>
-          </div>
+// Keyboard shortcut: Ctrl/Cmd+B</code></pre>
         </div>
       </div>
+    </section>
 
-      <div class="demo-code-actions">
-        <button class="demo-code-toggle" aria-expanded="false" onclick="var b=this.closest('.demo-card').querySelector('.demo-code-block--html');this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='true'?'false':'true');b.dataset.visible=this.getAttribute('aria-expanded')">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-          Show HTML
-        </button>
-        <button class="demo-code-toggle demo-code-toggle--js" aria-expanded="false" onclick="var b=this.closest('.demo-card').querySelector('.demo-code-block--js');this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='true'?'false':'true');b.dataset.visible=this.getAttribute('aria-expanded')">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-          <span class="demo-code-js-badge">JS</span> Show JavaScript
-        </button>
-      </div>
-      <div class="demo-code-block demo-code-block--html"><pre><code>&lt;div data-sc="resizable" data-slot="resizable-panel-group"
+    <!-- ═══════════════════════ RESIZABLE ═══════════════════════ -->
+    <section class="demo-section" id="resizable">
+      <h2>Resizable</h2>
+      <p class="demo-desc">Resizable panel layout. Drag handles between panels. Emits <code>sc:resize</code>.</p>
+
+      <div class="demo-card">
+        <div class="demo-preview" style="padding:0;overflow:hidden">
+          <div data-sc="resizable" data-slot="resizable-panel-group"
+            style="height:240px;width:100%;border-radius:inherit">
+            <div data-slot="resizable-panel" data-default-size="50" data-min-size="20"
+              style="padding:24px;display:flex;align-items:center;justify-content:center;background:var(--gray-50)">
+              <span class="font-semibold text-sm">Panel A</span>
+            </div>
+            <div data-slot="resizable-handle">
+              <div data-slot="resizable-handle-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="5" r="1" />
+                  <circle cx="12" cy="12" r="1" />
+                  <circle cx="12" cy="19" r="1" />
+                </svg>
+              </div>
+            </div>
+            <div data-slot="resizable-panel" data-default-size="50" data-min-size="20"
+              style="padding:24px;display:flex;align-items:center;justify-content:center">
+              <span class="font-semibold text-sm">Panel B</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-code-actions">
+          <button class="demo-code-toggle" aria-expanded="false"
+            onclick="var b=this.closest('.demo-card').querySelector('.demo-code-block--html');this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='true'?'false':'true');b.dataset.visible=this.getAttribute('aria-expanded')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+            Show HTML
+          </button>
+          <button class="demo-code-toggle demo-code-toggle--js" aria-expanded="false"
+            onclick="var b=this.closest('.demo-card').querySelector('.demo-code-block--js');this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='true'?'false':'true');b.dataset.visible=this.getAttribute('aria-expanded')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+            <span class="demo-code-js-badge">JS</span> Show JavaScript
+          </button>
+        </div>
+        <div class="demo-code-block demo-code-block--html">
+          <pre><code>&lt;div data-sc="resizable" data-slot="resizable-panel-group"
      style="height:240px"&gt;
   &lt;div data-slot="resizable-panel"
        data-default-size="50" data-min-size="20"&gt;
@@ -587,8 +749,10 @@ sidebar._sidebar.close();     // close sidebar
        data-default-size="50" data-min-size="20"&gt;
     Panel B
   &lt;/div&gt;
-&lt;/div&gt;</code></pre></div>
-      <div class="demo-code-block demo-code-block--js"><pre><code>const panels = document.querySelector('[data-sc="resizable"]');
+&lt;/div&gt;</code></pre>
+        </div>
+        <div class="demo-code-block demo-code-block--js">
+          <pre><code>const panels = document.querySelector('[data-sc="resizable"]');
 
 // Listen for resize events (fires during drag)
 panels.addEventListener('sc:resize', e =&gt; {
@@ -601,56 +765,72 @@ panels.addEventListener('sc:resize', e =&gt; {
 // data-default-size="30"       → panel default size (%)
 // data-min-size="20"           → minimum panel size (%)
 // data-max-size="80"           → maximum panel size (%)
-// Keyboard: Arrow keys resize focused handle (2% steps)</code></pre></div>
-    </div>
-  </section>
+// Keyboard: Arrow keys resize focused handle (2% steps)</code></pre>
+        </div>
+      </div>
+    </section>
 
-  <!-- ═══════════════════════ SCROLL AREA ═══════════════════════ -->
-  <section class="demo-section" id="scroll-area">
-    <h2>Scroll Area</h2>
-    <p class="demo-desc">Custom scrollbar overlay. Requires explicit height on root. <code>data-sc="scroll-area"</code>.</p>
+    <!-- ═══════════════════════ SCROLL AREA ═══════════════════════ -->
+    <section class="demo-section" id="scroll-area">
+      <h2>Scroll Area</h2>
+      <p class="demo-desc">Custom scrollbar overlay. Requires explicit height on root.
+        <code>data-sc="scroll-area"</code>.
+      </p>
 
-    <div class="demo-card">
-      <div class="demo-preview demo-preview--center">
-        <div data-sc="scroll-area" data-slot="scroll-area" style="height:200px;width:300px;border:1px solid var(--border);border-radius:var(--radius-md)">
-          <div data-slot="scroll-area-viewport" style="padding:16px">
-            <h4 style="font-size:15px;font-weight:var(--font-weight-medium);margin-bottom:12px">Tags</h4>
-            <div style="display:flex;flex-direction:column;gap:10px">
-              <div style="font-size:14px;padding-bottom:10px;border-bottom:1px solid var(--border)">v1.2.0-beta.1</div>
-              <div style="font-size:14px;padding-bottom:10px;border-bottom:1px solid var(--border)">v1.1.4</div>
-              <div style="font-size:14px;padding-bottom:10px;border-bottom:1px solid var(--border)">v1.1.3</div>
-              <div style="font-size:14px;padding-bottom:10px;border-bottom:1px solid var(--border)">v1.1.2</div>
-              <div style="font-size:14px;padding-bottom:10px;border-bottom:1px solid var(--border)">v1.1.1</div>
-              <div style="font-size:14px;padding-bottom:10px;border-bottom:1px solid var(--border)">v1.1.0</div>
-              <div style="font-size:14px;padding-bottom:10px;border-bottom:1px solid var(--border)">v1.0.4</div>
-              <div style="font-size:14px;padding-bottom:10px;border-bottom:1px solid var(--border)">v1.0.3</div>
-              <div style="font-size:14px;padding-bottom:10px;border-bottom:1px solid var(--border)">v1.0.2</div>
-              <div style="font-size:14px;padding-bottom:10px;border-bottom:1px solid var(--border)">v1.0.1</div>
-              <div style="font-size:14px;padding-bottom:10px;border-bottom:1px solid var(--border)">v1.0.0</div>
-              <div style="font-size:14px;padding-bottom:10px;border-bottom:1px solid var(--border)">v0.9.0</div>
-              <div style="font-size:14px">v0.8.0</div>
+      <div class="demo-card">
+        <div class="demo-preview demo-preview--center">
+          <div data-sc="scroll-area" data-slot="scroll-area"
+            style="height:200px;width:300px;border:1px solid var(--border);border-radius:var(--radius-md)">
+            <div data-slot="scroll-area-viewport" style="padding:16px">
+              <h4 style="font-size:15px;font-weight:var(--font-weight-medium);margin-bottom:12px">Tags</h4>
+              <div style="display:flex;flex-direction:column;gap:10px">
+                <div style="font-size:14px;padding-bottom:10px;border-bottom:1px solid var(--border)">v1.2.0-beta.1
+                </div>
+                <div style="font-size:14px;padding-bottom:10px;border-bottom:1px solid var(--border)">v1.1.4</div>
+                <div style="font-size:14px;padding-bottom:10px;border-bottom:1px solid var(--border)">v1.1.3</div>
+                <div style="font-size:14px;padding-bottom:10px;border-bottom:1px solid var(--border)">v1.1.2</div>
+                <div style="font-size:14px;padding-bottom:10px;border-bottom:1px solid var(--border)">v1.1.1</div>
+                <div style="font-size:14px;padding-bottom:10px;border-bottom:1px solid var(--border)">v1.1.0</div>
+                <div style="font-size:14px;padding-bottom:10px;border-bottom:1px solid var(--border)">v1.0.4</div>
+                <div style="font-size:14px;padding-bottom:10px;border-bottom:1px solid var(--border)">v1.0.3</div>
+                <div style="font-size:14px;padding-bottom:10px;border-bottom:1px solid var(--border)">v1.0.2</div>
+                <div style="font-size:14px;padding-bottom:10px;border-bottom:1px solid var(--border)">v1.0.1</div>
+                <div style="font-size:14px;padding-bottom:10px;border-bottom:1px solid var(--border)">v1.0.0</div>
+                <div style="font-size:14px;padding-bottom:10px;border-bottom:1px solid var(--border)">v0.9.0</div>
+                <div style="font-size:14px">v0.8.0</div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="demo-code-actions">
-        <button class="demo-code-toggle" aria-expanded="false" onclick="var b=this.closest('.demo-card').querySelector('.demo-code-block--html');this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='true'?'false':'true');b.dataset.visible=this.getAttribute('aria-expanded')">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-          Show HTML
-        </button>
-        <button class="demo-code-toggle demo-code-toggle--js" aria-expanded="false" onclick="var b=this.closest('.demo-card').querySelector('.demo-code-block--js');this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='true'?'false':'true');b.dataset.visible=this.getAttribute('aria-expanded')">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-          <span class="demo-code-js-badge">JS</span> Show JavaScript
-        </button>
-      </div>
-      <div class="demo-code-block demo-code-block--html"><pre><code>&lt;div data-sc="scroll-area" data-slot="scroll-area"
+        <div class="demo-code-actions">
+          <button class="demo-code-toggle" aria-expanded="false"
+            onclick="var b=this.closest('.demo-card').querySelector('.demo-code-block--html');this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='true'?'false':'true');b.dataset.visible=this.getAttribute('aria-expanded')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+            Show HTML
+          </button>
+          <button class="demo-code-toggle demo-code-toggle--js" aria-expanded="false"
+            onclick="var b=this.closest('.demo-card').querySelector('.demo-code-block--js');this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='true'?'false':'true');b.dataset.visible=this.getAttribute('aria-expanded')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+            <span class="demo-code-js-badge">JS</span> Show JavaScript
+          </button>
+        </div>
+        <div class="demo-code-block demo-code-block--html">
+          <pre><code>&lt;div data-sc="scroll-area" data-slot="scroll-area"
      style="height:200px;width:300px"&gt;
   &lt;div data-slot="scroll-area-viewport"&gt;
     Long content here…
   &lt;/div&gt;
-&lt;/div&gt;</code></pre></div>
-      <div class="demo-code-block demo-code-block--js"><pre><code>// Scroll Area provides CSS-enhanced scrollbar overlay.
+&lt;/div&gt;</code></pre>
+        </div>
+        <div class="demo-code-block demo-code-block--js">
+          <pre><code>// Scroll Area provides CSS-enhanced scrollbar overlay.
 // No programmatic API — configure via data attributes.
 
 const area = document.querySelector('[data-sc="scroll-area"]');
@@ -663,49 +843,66 @@ viewport.scrollTo({ top: 0, behavior: 'smooth' });
 // Orientation options (on root element):
 // data-orientation="vertical"    (default)
 // data-orientation="horizontal"
-// data-orientation="both"</code></pre></div>
-    </div>
-  </section>
-
-  <!-- ═══════════════════════ TOAST ═══════════════════════ -->
-  <section class="demo-section" id="toast">
-    <h2>Toast</h2>
-    <p class="demo-desc">Imperative-only notifications. Call <code>Scooter.toast(title, options)</code>. No HTML needed.</p>
-
-    <div class="demo-card">
-      <div class="demo-preview" style="gap:0.5rem">
-        <button data-slot="button" data-variant="outline" onclick="Scooter.toast('Event Created', { description: 'Sunday, December 03, 2023 at 9:00 AM' })">
-          Default Toast
-        </button>
-        <button data-slot="button" data-variant="outline" onclick="Scooter.toast('Success!', { description: 'Your changes have been saved.', variant: 'success' })">
-          Success Toast
-        </button>
-        <button data-slot="button" data-variant="outline" onclick="Scooter.toast('Error', { description: 'Something went wrong. Please try again.', variant: 'destructive' })">
-          Error Toast
-        </button>
-        <button data-slot="button" data-variant="outline" onclick="Scooter.toast('Undo Available', { description: 'Item moved to trash.', duration: 10000 })">
-          Long Duration (10s)
-        </button>
+// data-orientation="both"</code></pre>
+        </div>
       </div>
+    </section>
 
-      <div class="demo-code-actions">
-        <button class="demo-code-toggle" aria-expanded="false" onclick="var b=this.closest('.demo-card').querySelector('.demo-code-block--html');this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='true'?'false':'true');b.dataset.visible=this.getAttribute('aria-expanded')">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-          Show HTML
-        </button>
-        <button class="demo-code-toggle demo-code-toggle--js" aria-expanded="false" onclick="var b=this.closest('.demo-card').querySelector('.demo-code-block--js');this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='true'?'false':'true');b.dataset.visible=this.getAttribute('aria-expanded')">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-          <span class="demo-code-js-badge">JS</span> Show JavaScript
-        </button>
-      </div>
-      <div class="demo-code-block demo-code-block--html"><pre><code>&lt;!-- Toast is imperative — no HTML markup needed.
+    <!-- ═══════════════════════ TOAST ═══════════════════════ -->
+    <section class="demo-section" id="toast">
+      <h2>Toast</h2>
+      <p class="demo-desc">Imperative-only notifications. Call <code>Scooter.toast(title, options)</code>. No HTML
+        needed.</p>
+
+      <div class="demo-card">
+        <div class="demo-preview" style="gap:0.5rem">
+          <button data-slot="button" data-variant="outline"
+            onclick="Scooter.toast('Event Created', { description: 'Sunday, December 03, 2023 at 9:00 AM' })">
+            Default Toast
+          </button>
+          <button data-slot="button" data-variant="outline"
+            onclick="Scooter.toast('Success!', { description: 'Your changes have been saved.', variant: 'success' })">
+            Success Toast
+          </button>
+          <button data-slot="button" data-variant="outline"
+            onclick="Scooter.toast('Error', { description: 'Something went wrong. Please try again.', variant: 'destructive' })">
+            Error Toast
+          </button>
+          <button data-slot="button" data-variant="outline"
+            onclick="Scooter.toast('Undo Available', { description: 'Item moved to trash.', duration: 10000 })">
+            Long Duration (10s)
+          </button>
+        </div>
+
+        <div class="demo-code-actions">
+          <button class="demo-code-toggle" aria-expanded="false"
+            onclick="var b=this.closest('.demo-card').querySelector('.demo-code-block--html');this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='true'?'false':'true');b.dataset.visible=this.getAttribute('aria-expanded')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+            Show HTML
+          </button>
+          <button class="demo-code-toggle demo-code-toggle--js" aria-expanded="false"
+            onclick="var b=this.closest('.demo-card').querySelector('.demo-code-block--js');this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='true'?'false':'true');b.dataset.visible=this.getAttribute('aria-expanded')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+            <span class="demo-code-js-badge">JS</span> Show JavaScript
+          </button>
+        </div>
+        <div class="demo-code-block demo-code-block--html">
+          <pre><code>&lt;!-- Toast is imperative — no HTML markup needed.
      Trigger via onclick or call from JavaScript. --&gt;
 
 &lt;button data-slot="button" data-variant="outline"
   onclick="Scooter.toast('Hello!', { description: 'World' })"&gt;
   Show Toast
-&lt;/button&gt;</code></pre></div>
-      <div class="demo-code-block demo-code-block--js"><pre><code>// Default toast
+&lt;/button&gt;</code></pre>
+        </div>
+        <div class="demo-code-block demo-code-block--js">
+          <pre><code>// Default toast
 Scooter.toast('Event Created', {
   description: 'Sunday, December 03, 2023 at 9:00 AM'
 });
@@ -732,55 +929,69 @@ t.dismiss();   // dismiss manually
 // Configure defaults
 Scooter.toast.defaults.position = 'top-right';
 Scooter.toast.defaults.duration = 6000;
-Scooter.toast.defaults.maxToasts = 3;</code></pre></div>
-    </div>
-  </section>
-
-  <!-- ═══════════════════════ SYSTEM ENVIRONMENT MATRIX ═══════════════════════ -->
-  <section class="demo-section" id="system-environment-matrix">
-    <h2>System Environment Matrix</h2>
-    <p class="demo-desc">Interactive matrix showing system elements across environments. Default view is the full grid. Click any element to select &amp; filter to a compact view of its environment. Click the environment name to expand back to the grid. Click the background to reset. Add <code>data-compact-default</code> to start in compact mode instead.</p>
-
-    <div class="demo-card">
-      <div class="demo-preview" style="flex-direction:column;gap:12px">
-        <div data-sc="system-environment-matrix" id="demo-sem">
-          <div data-slot="sem-environment" data-name="Production">
-            <div data-slot="sem-element" data-characteristic="Security">Firewall</div>
-            <div data-slot="sem-element" data-characteristic="Storage">S3 Bucket</div>
-            <div data-slot="sem-element" data-characteristic="Compute">ECS Cluster</div>
-            <div data-slot="sem-element" data-characteristic="Compute">ECS Cluster 2</div>
-            <div data-slot="sem-element" data-characteristic="CDN">CloudFront</div>
-          </div>
-          <div data-slot="sem-environment" data-name="Staging">
-            <div data-slot="sem-element" data-characteristic="Security">VPN</div>
-            <div data-slot="sem-element" data-characteristic="Storage">S3 Bucket</div>
-            <div data-slot="sem-element" data-characteristic="Compute">ECS Service</div>
-            <div data-slot="sem-element" data-characteristic="Database">PostgreSQL</div>
-          </div>
-          <div data-slot="sem-environment" data-name="Development">
-            <div data-slot="sem-element" data-characteristic="Compute">Docker</div>
-            <div data-slot="sem-element" data-characteristic="Database">SQLite</div>
-          </div>
-          <div data-slot="sem-environment" data-name="CI / CD">
-            <div data-slot="sem-element" data-characteristic="Compute">GitHub Actions</div>
-            <div data-slot="sem-element" data-characteristic="Security">SAST Scanner</div>
-            <div data-slot="sem-element" data-characteristic="Storage">Artifact Store</div>
-          </div>
+Scooter.toast.defaults.maxToasts = 3;</code></pre>
         </div>
       </div>
-      <div class="demo-event-log" id="sem-log" style="width:100%;height:60px">// system-environment-matrix events appear here…</div>
+    </section>
 
-      <div class="demo-code-actions">
-        <button class="demo-code-toggle" aria-expanded="false" onclick="var b=this.closest('.demo-card').querySelector('.demo-code-block--html');this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='true'?'false':'true');b.dataset.visible=this.getAttribute('aria-expanded')">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-          Show HTML
-        </button>
-        <button class="demo-code-toggle demo-code-toggle--js" aria-expanded="false" onclick="var b=this.closest('.demo-card').querySelector('.demo-code-block--js');this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='true'?'false':'true');b.dataset.visible=this.getAttribute('aria-expanded')">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-          <span class="demo-code-js-badge">JS</span> Show JavaScript
-        </button>
-      </div>
-      <div class="demo-code-block demo-code-block--html"><pre><code>&lt;!-- Default — starts in grid view, compact on selection --&gt;
+    <!-- ═══════════════════════ SYSTEM ENVIRONMENT MATRIX ═══════════════════════ -->
+    <section class="demo-section" id="system-environment-matrix">
+      <h2>System Environment Matrix</h2>
+      <p class="demo-desc">Interactive matrix showing system elements across environments. Default view is the full
+        grid. Click any element to select &amp; filter to a compact view of its environment. Click the environment name
+        to expand back to the grid. Click the background to reset. Add <code>data-compact-default</code> to start in
+        compact mode instead.</p>
+
+      <div class="demo-card">
+        <div class="demo-preview" style="flex-direction:column;gap:12px">
+          <div data-sc="system-environment-matrix" id="demo-sem">
+            <div data-slot="sem-environment" data-name="Production">
+              <div data-slot="sem-element" data-characteristic="Security">Firewall</div>
+              <div data-slot="sem-element" data-characteristic="Storage">S3 Bucket</div>
+              <div data-slot="sem-element" data-characteristic="Compute">ECS Cluster</div>
+              <div data-slot="sem-element" data-characteristic="Compute">ECS Cluster 2</div>
+              <div data-slot="sem-element" data-characteristic="CDN">CloudFront</div>
+            </div>
+            <div data-slot="sem-environment" data-name="Staging">
+              <div data-slot="sem-element" data-characteristic="Security">VPN</div>
+              <div data-slot="sem-element" data-characteristic="Storage">S3 Bucket</div>
+              <div data-slot="sem-element" data-characteristic="Compute">ECS Service</div>
+              <div data-slot="sem-element" data-characteristic="Database">PostgreSQL</div>
+            </div>
+            <div data-slot="sem-environment" data-name="Development">
+              <div data-slot="sem-element" data-characteristic="Compute">Docker</div>
+              <div data-slot="sem-element" data-characteristic="Database">SQLite</div>
+            </div>
+            <div data-slot="sem-environment" data-name="CI / CD">
+              <div data-slot="sem-element" data-characteristic="Compute">GitHub Actions</div>
+              <div data-slot="sem-element" data-characteristic="Security">SAST Scanner</div>
+              <div data-slot="sem-element" data-characteristic="Storage">Artifact Store</div>
+            </div>
+          </div>
+        </div>
+        <div class="demo-event-log" id="sem-log" style="width:100%;height:60px">// system-environment-matrix events
+          appear here…</div>
+
+        <div class="demo-code-actions">
+          <button class="demo-code-toggle" aria-expanded="false"
+            onclick="var b=this.closest('.demo-card').querySelector('.demo-code-block--html');this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='true'?'false':'true');b.dataset.visible=this.getAttribute('aria-expanded')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+            Show HTML
+          </button>
+          <button class="demo-code-toggle demo-code-toggle--js" aria-expanded="false"
+            onclick="var b=this.closest('.demo-card').querySelector('.demo-code-block--js');this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='true'?'false':'true');b.dataset.visible=this.getAttribute('aria-expanded')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+            <span class="demo-code-js-badge">JS</span> Show JavaScript
+          </button>
+        </div>
+        <div class="demo-code-block demo-code-block--html">
+          <pre><code>&lt;!-- Default — starts in grid view, compact on selection --&gt;
 &lt;div data-sc="system-environment-matrix"&gt;
   &lt;div data-slot="sem-environment" data-name="Production"&gt;
     &lt;div data-slot="sem-element" data-characteristic="Security"&gt;Firewall&lt;/div&gt;
@@ -794,8 +1005,10 @@ Scooter.toast.defaults.maxToasts = 3;</code></pre></div>
 &lt;!-- data-compact-default — starts in compact tag view --&gt;
 &lt;div data-sc="system-environment-matrix" data-compact-default&gt;
   &lt;!-- same markup; starts compact with all envs shown --&gt;
-&lt;/div&gt;</code></pre></div>
-      <div class="demo-code-block demo-code-block--js"><pre><code>const sem = document.querySelector('[data-sc="system-environment-matrix"]');
+&lt;/div&gt;</code></pre>
+        </div>
+        <div class="demo-code-block demo-code-block--js">
+          <pre><code>const sem = document.querySelector('[data-sc="system-environment-matrix"]');
 
 // Element click → selects element, filters to compact view of that env
 sem.addEventListener('sc:element', e =&gt; {
@@ -820,52 +1033,253 @@ sem._sem.expand();               // force expanded grid
 sem._sem.collapse();             // force collapsed tags
 sem._sem.toggle();               // switch mode
 sem._sem.selected;               // current env filter (string | null)
-sem._sem.selectedElement;        // { environment, name, characteristic } | null</code></pre></div>
-    </div>
-  </section>
+sem._sem.selectedElement;        // { environment, name, characteristic } | null</code></pre>
+        </div>
+      </div>
+    </section>
 
-</main>
+    <!-- ═══════════════════════ KPI Charts (KPIChart + internal chart renderer examples) ═══════════════════════ -->
+    <section class="demo-section" id="kpicharts">
+      <h2>KPI Charts</h2>
+      <p class="demo-desc">KPIChart ring modes (progress &amp; multi-series) and declarative
+        <code>data-sc="chart"</code> charts (bar, line, area, donut).</p>
 
-<!-- Scripts: core + all Tier 4 components -->
-<script src="../components/scooter-core.js"></script>
-<script src="../components/menubar.js"></script>
-<script src="../components/carousel.js"></script>
-<script src="../components/calendar.js"></script>
-<script src="../components/command.js"></script>
-<script src="../components/form.js"></script>
-<script src="../components/input-otp.js"></script>
-<script src="../components/sidebar.js"></script>
-<script src="../components/resizable.js"></script>
-<script src="../components/scroll-area.js"></script>
-<script src="../components/toast.js"></script>
-<script src="../components/system-environment-matrix.js"></script>
+      <div class="demo-card">
+        <div class="demo-preview" style="display:flex;gap:16px;flex-wrap:wrap">
+          <div id="progress-chart" class="chart-container kpichart-container" style="width:260px;height:260px"></div>
+          <div id="chart1" class="chart-container kpichart-container" style="width:260px;height:260px"></div>
+        </div>
+        <div class="demo-code-actions">
+          <button class="demo-code-toggle" aria-expanded="false"
+            onclick="var b=this.closest('.demo-card').querySelector('.demo-code-block--html');this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='true'?'false':'true');b.dataset.visible=this.getAttribute('aria-expanded')">Show
+            HTML</button>
+          <button class="demo-code-toggle demo-code-toggle--js" aria-expanded="false"
+            onclick="var b=this.closest('.demo-card').querySelector('.demo-code-block--js');this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='true'?'false':'true');b.dataset.visible=this.getAttribute('aria-expanded')"><span
+              class="demo-code-js-badge">JS</span> Show JavaScript</button>
+        </div>
+        <div class="demo-code-block demo-code-block--html">
+          <pre><code>&lt;div id="progress-chart" class="chart-container kpichart-container"&gt;&lt;/div&gt;
+&lt;div id="chart1" class="chart-container kpichart-container"&gt;&lt;/div&gt;</code></pre>
+        </div>
+        <div class="demo-code-block demo-code-block--js">
+          <pre><code>// Progress rings
+KPIChart.createProgressChart('progress-chart', {
+  rings: [
+    { label: 'Sales Target', value: 75 },
+    { label: 'Revenue Goal', value: 60 },
+    { label: 'Growth Rate', value: 90 },
+    { label: 'Retention', value: 45 }
+  ],
+  // Colors auto-assigned from --chart-1…--chart-5
+  onRingClick: (label, value) =&gt; { /* handle click */ }
+});
 
-<!-- Form demo event listener -->
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const form = document.querySelector('[data-sc="form"]');
-    if (form) form.addEventListener('sc:action', e => {
-      Scooter.toast('Form Submitted', {
-        description: 'Data: ' + JSON.stringify(Object.fromEntries(e.detail.data)),
-        variant: 'success'
-      });
-    });
+// Multi-series rings (Olympic medals)
+KPIChart.createChart('chart1', {
+  xAxis: { categories: ['Norway','USA','Germany','Austria','Canada'] },
+  series: [
+    { name: 'Gold', data: [148,113,104,71,77] },
+    { name: 'Silver', data: [113,122,98,88,72] },
+    { name: 'Bronze', data: [124,95,65,91,176] }
+  ],
+  // Colors auto-assigned from --chart-1…--chart-5
+  onSegmentClick: (label) =&gt; { /* handle click */ }
+});</code></pre>
+        </div>
+      </div>
 
-    // SEM event logger
-    const sem = document.getElementById('demo-sem');
-    const semLog = document.getElementById('sem-log');
-    if (sem && semLog) {
-      ['sc:element', 'sc:filter', 'sc:reset'].forEach(evt => {
-        sem.addEventListener(evt, e => {
-          const ts = new Date().toLocaleTimeString();
-          const msg = evt === 'sc:reset'
-            ? `[${ts}] ${evt}`
-            : `[${ts}] ${evt} → ${JSON.stringify(e.detail)}`;
-          semLog.textContent = msg + '\n' + semLog.textContent;
+      <!-- Internal chart renderer examples (bar, line, area, donut) -->
+      <h3 style="margin-top:1.5rem">Internal Chart Renderer</h3>
+      <p class="demo-desc">Declarative <code>data-sc="chart"</code> charts — bar, line, area, and donut.</p>
+
+      <div class="demo-card">
+
+        <div class="demo-preview" style="display:flex;gap:12px;flex-wrap:wrap">
+          <div data-sc="chart" data-type="bar" data-height="180" style="width:240px">
+            <script
+              type="application/json">{"labels":["Jan","Feb","Mar","Apr"],"datasets":[{"label":"Revenue","values":[4200,6500,5100,8000]},{"label":"Expenses","values":[3100,4200,3500,5000]}]}</script>
+          </div>
+          <div data-sc="chart" data-type="line" data-height="180" style="width:240px">
+            <script
+              type="application/json">{"labels":["Mon","Tue","Wed","Thu","Fri"],"datasets":[{"label":"Users","values":[820,932,1100,1250,1340]}]}</script>
+          </div>
+          <div data-sc="chart" data-type="area" data-height="180" style="width:240px">
+            <script
+              type="application/json">{"labels":["Q1","Q2","Q3","Q4"],"datasets":[{"label":"Cumulative","values":[120,300,540,760]}]}</script>
+          </div>
+          <div data-sc="chart" data-type="donut" data-height="180" style="width:240px">
+            <script
+              type="application/json">{"labels":["Enterprise","Pro","Starter"],"datasets":[{"label":"Revenue","values":[22000,14000,6500]}]}</script>
+          </div>
+        </div>
+        <div class="demo-code-actions">
+          <button class="demo-code-toggle" aria-expanded="false"
+            onclick="var b=this.closest('.demo-card').querySelector('.demo-code-block--html');this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='true'?'false':'true');b.dataset.visible=this.getAttribute('aria-expanded')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+            Show HTML
+          </button>
+          <button class="demo-code-toggle demo-code-toggle--js" aria-expanded="false"
+            onclick="var b=this.closest('.demo-card').querySelector('.demo-code-block--js');this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='true'?'false':'true');b.dataset.visible=this.getAttribute('aria-expanded')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+            <span class="demo-code-js-badge">JS</span> Show JavaScript
+          </button>
+        </div>
+        <div class="demo-code-block demo-code-block--html">
+          <pre><code>&lt;!-- Bar chart --&gt;
+&lt;div data-sc="chart" data-type="bar" data-height="220"&gt;
+  &lt;script type="application/json"&gt;{
+    "labels": ["Jan","Feb","Mar","Apr"],
+    "datasets": [
+      { "label": "Revenue", "values": [4200,6500,5100,8000] },
+      { "label": "Expenses", "values": [3100,4200,3500,5000] }
+    ]
+  }&lt;/script&gt;
+&lt;/div&gt;
+
+&lt;!-- Line chart --&gt;
+&lt;div data-sc="chart" data-type="line" data-height="220"&gt;
+  &lt;script type="application/json"&gt;{
+    "labels": ["Mon","Tue","Wed","Thu","Fri"],
+    "datasets": [
+      { "label": "Users", "values": [820,932,1100,1250,1340] }
+    ]
+  }&lt;/script&gt;
+&lt;/div&gt;
+
+&lt;!-- Area chart --&gt;
+&lt;div data-sc="chart" data-type="area" data-height="220"&gt;
+  &lt;script type="application/json"&gt;{
+    "labels": ["Q1","Q2","Q3","Q4"],
+    "datasets": [
+      { "label": "Cumulative", "values": [120,300,540,760] }
+    ]
+  }&lt;/script&gt;
+&lt;/div&gt;
+
+&lt;!-- Donut chart --&gt;
+&lt;div data-sc="chart" data-type="donut" data-height="220"&gt;
+  &lt;script type="application/json"&gt;{
+    "labels": ["Enterprise","Pro","Starter"],
+    "datasets": [
+      { "label": "Revenue", "values": [22000,14000,6500] }
+    ]
+  }&lt;/script&gt;
+&lt;/div&gt;</code></pre>
+        </div>
+        <div class="demo-code-block demo-code-block--js">
+          <pre><code>// Access the chart API on any data-sc="chart" element
+const el = document.querySelector('[data-sc="chart"]');
+
+// Update data programmatically
+el._chart.setData({
+  labels: ['Jan','Feb','Mar','Apr'],
+  datasets: [
+    { label: 'Revenue', values: [5000,7000,6200,9000] },
+    { label: 'Expenses', values: [3500,4800,4000,5500] }
+  ]
+});
+
+// Other API methods
+el._chart.getData();     // returns current data object
+el._chart.render();      // re-render (e.g. after resize)
+el._chart.destroy();     // remove SVG and clean up
+
+// Supported data-type values:
+// "bar" | "line" | "area" | "pie" | "donut"</code></pre>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Scripts: core + all Tier 4 components -->
+  <script src="../components/scooter-core.js"></script>
+  <script src="../components/menubar.js"></script>
+  <script src="../components/carousel.js"></script>
+  <script src="../components/calendar.js"></script>
+  <script src="../components/chart.js"></script>
+  <script src="../components/command.js"></script>
+  <script src="../components/form.js"></script>
+  <script src="../components/input-otp.js"></script>
+  <script src="../components/sidebar.js"></script>
+  <script src="../components/resizable.js"></script>
+  <script src="../components/scroll-area.js"></script>
+  <script src="../components/toast.js"></script>
+  <script src="../components/system-environment-matrix.js"></script>
+  <script src="../components/kpichart.js"></script>
+
+  <!-- Form demo event listener -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.querySelector('[data-sc="form"]');
+      if (form) form.addEventListener('sc:action', e => {
+        Scooter.toast('Form Submitted', {
+          description: 'Data: ' + JSON.stringify(Object.fromEntries(e.detail.data)),
+          variant: 'success'
         });
       });
-    }
-  });
-</script>
+
+      // SEM event logger
+      const sem = document.getElementById('demo-sem');
+      const semLog = document.getElementById('sem-log');
+      if (sem && semLog) {
+        ['sc:element', 'sc:filter', 'sc:reset'].forEach(evt => {
+          sem.addEventListener(evt, e => {
+            const ts = new Date().toLocaleTimeString();
+            const msg = evt === 'sc:reset'
+              ? `[${ts}] ${evt}`
+              : `[${ts}] ${evt} → ${JSON.stringify(e.detail)}`;
+            semLog.textContent = msg + '\n' + semLog.textContent;
+          });
+        });
+      }
+
+      // KPIChart initializers (progress rings + Olympic medals)
+      if (typeof KPIChart !== 'undefined') {
+        try {
+          const progressEl = document.getElementById('progress-chart');
+          if (progressEl) {
+            KPIChart.createProgressChart('progress-chart', {
+              rings: [
+                { label: 'Sales Target', value: 75 },
+                { label: 'Revenue Goal', value: 60 },
+                { label: 'Growth Rate', value: 90 },
+                { label: 'Retention', value: 45 }
+              ],
+              onRingClick: (label, value) => {
+                const out = document.getElementById('progress-output');
+                if (out) out.textContent = `Clicked: ${label} (${value}%)`;
+              }
+            });
+          }
+
+          const chart1El = document.getElementById('chart1');
+          if (chart1El) {
+            KPIChart.createChart('chart1', {
+              xAxis: { categories: ['Norway', 'USA', 'Germany', 'Austria', 'Canada'] },
+              series: [
+                { name: 'Gold', data: [148, 113, 104, 71, 77] },
+                { name: 'Silver', data: [113, 122, 98, 88, 72] },
+                { name: 'Bronze', data: [124, 95, 65, 91, 176] }
+              ],
+              onSegmentClick: (label) => {
+                const out = document.getElementById('console-output');
+                if (out) out.textContent = `Clicked: ${label}`;
+              }
+            });
+          }
+        } catch (e) {
+          console.error('KPIChart init failed:', e);
+        }
+      }
+    });
+  </script>
 </body>
+
 </html>

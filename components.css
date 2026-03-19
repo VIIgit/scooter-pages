@@ -1,7 +1,7 @@
 /* ============================================================================
    SCOOTER PAGES — Base Stylesheet
    Unified design tokens, reset, typography, animations, and component styles.
-   Every scooter page links to this: <link rel="stylesheet" href="../base.css">
+   Every scooter page links to this: <link rel="stylesheet" href="../components.css">
    Customizable variables live in custom.css — edit that file to re-theme.
    ============================================================================ */
 
@@ -421,6 +421,26 @@ a[data-slot="button"] { text-decoration: none; }
   color: rgba(255,255,255,0.75); text-transform: uppercase; letter-spacing: 0.06em;
 }
 .metadata-value { font-size: 24px; font-weight: var(--font-weight-semibold); color: #ffffff; }
+
+/* ==========================================================================
+   KPI Chart Styles (moved from components/styles.css)
+   These styles are used by the KPI ring / donut charts and tooltips.
+   ========================================================================== */
+.kpichart-container {
+  width: 100%;
+  max-width: 500px;
+  margin: auto;
+  background-color: white;
+}
+
+.kpichart-segment {
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.kpichart-segment:hover {
+  opacity: 0.8;
+}
 
 /* --- Badge --------------------------------------------------------------- */
 [data-slot="badge"] {
