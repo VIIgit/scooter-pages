@@ -668,6 +668,22 @@ a[data-slot="button"] { text-decoration: none; }
 [data-slot="tabs-content"][data-state="inactive"],
 [data-slot="tabs-content"]:not([data-state="active"]):not(.active) { display: none; }
 
+/* Underline tab variant */
+[data-variant="underline"] > [data-slot="tabs-list"] {
+  display: flex; width: 100%; gap: 0; padding: 0;
+  background: none; border-radius: 0;
+  border-bottom: 1px solid var(--border);
+}
+[data-variant="underline"] > [data-slot="tabs-list"] > [data-slot="tabs-trigger"] {
+  flex: 1; border-radius: 0; padding: 8px 16px;
+  border-bottom: 2px solid transparent; margin-bottom: -1px;
+}
+[data-variant="underline"] > [data-slot="tabs-list"] > [data-slot="tabs-trigger"][data-state="active"],
+[data-variant="underline"] > [data-slot="tabs-list"] > [data-slot="tabs-trigger"][aria-selected="true"] {
+  background: none; box-shadow: none; color: var(--primary);
+  border-bottom-color: var(--primary);
+}
+
 /* --- Checkbox ------------------------------------------------------------ */
 [data-slot="checkbox"] {
   display: inline-flex; align-items: center; justify-content: center;

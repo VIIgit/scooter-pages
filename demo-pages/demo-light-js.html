@@ -271,6 +271,64 @@ tabs.addEventListener('sc:change', (e) =&gt; {
 });</code></pre></div>
       <div class="demo-event-log" id="tabs-log"></div>
     </div>
+
+    <h3 style="margin-top:24px">Underline Variant</h3>
+    <p class="demo-desc">Full-width tabs with a bottom border indicator. Add <code>data-variant="underline"</code>.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview demo-preview--col" style="max-width:480px">
+        <div data-sc="tabs" data-variant="underline" data-default-value="overview" id="demo-tabs-underline">
+          <div data-slot="tabs-list">
+            <button data-slot="tabs-trigger" data-value="overview">Overview</button>
+            <button data-slot="tabs-trigger" data-value="analytics">Analytics</button>
+            <button data-slot="tabs-trigger" data-value="reports">Reports</button>
+            <button data-slot="tabs-trigger" data-value="notifications">Notifications</button>
+          </div>
+          <div data-slot="tabs-content" data-value="overview">
+            <div style="padding:16px 0">
+              <h3 style="font-size:16px;margin-bottom:4px">Overview</h3>
+              <p class="text-sm text-muted">A high-level summary of your project.</p>
+            </div>
+          </div>
+          <div data-slot="tabs-content" data-value="analytics">
+            <div style="padding:16px 0">
+              <h3 style="font-size:16px;margin-bottom:4px">Analytics</h3>
+              <p class="text-sm text-muted">Track engagement and performance metrics.</p>
+            </div>
+          </div>
+          <div data-slot="tabs-content" data-value="reports">
+            <div style="padding:16px 0">
+              <h3 style="font-size:16px;margin-bottom:4px">Reports</h3>
+              <p class="text-sm text-muted">Generate and download detailed reports.</p>
+            </div>
+          </div>
+          <div data-slot="tabs-content" data-value="notifications">
+            <div style="padding:16px 0">
+              <h3 style="font-size:16px;margin-bottom:4px">Notifications</h3>
+              <p class="text-sm text-muted">Configure how you receive alerts.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-code-actions">
+        <button class="demo-code-toggle" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--html')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          Show HTML
+        </button>
+      </div>
+      <div class="demo-code-block demo-code-block--html"><pre><code>&lt;div data-sc="tabs" data-variant="underline" data-default-value="overview"&gt;
+  &lt;div data-slot="tabs-list"&gt;
+    &lt;button data-slot="tabs-trigger" data-value="overview"&gt;Overview&lt;/button&gt;
+    &lt;button data-slot="tabs-trigger" data-value="analytics"&gt;Analytics&lt;/button&gt;
+    &lt;button data-slot="tabs-trigger" data-value="reports"&gt;Reports&lt;/button&gt;
+    &lt;button data-slot="tabs-trigger" data-value="notifications"&gt;Notifications&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;div data-slot="tabs-content" data-value="overview"&gt;…&lt;/div&gt;
+  &lt;div data-slot="tabs-content" data-value="analytics"&gt;…&lt;/div&gt;
+&lt;/div&gt;</code></pre></div>
+      <div class="demo-event-log" id="tabs-underline-log"></div>
+    </div>
   </section>
 
   <!-- ═══════════════════════ TOGGLE ═══════════════════════ -->
@@ -938,6 +996,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const tabsEl = document.getElementById('demo-tabs');
   if (tabsEl) {
     tabsEl.addEventListener('sc:change', (e) => logTo('tabs-log', 'sc:change', e.detail));
+  }
+
+  // Tabs (underline variant)
+  const tabsUnderlineEl = document.getElementById('demo-tabs-underline');
+  if (tabsUnderlineEl) {
+    tabsUnderlineEl.addEventListener('sc:change', (e) => logTo('tabs-underline-log', 'sc:change', e.detail));
   }
 
   // Toggle — capture all toggle buttons in the section
