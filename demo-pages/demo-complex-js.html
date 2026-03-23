@@ -946,26 +946,26 @@ Scooter.toast.defaults.maxToasts = 3;</code></pre>
         <div class="demo-preview" style="flex-direction:column;gap:12px">
           <div data-sc="system-environment-matrix" id="demo-sem">
             <div data-slot="sem-environment" data-name="Production">
-              <div data-slot="sem-element" data-characteristic="Security">Firewall</div>
-              <div data-slot="sem-element" data-characteristic="Storage">S3 Bucket</div>
-              <div data-slot="sem-element" data-characteristic="Compute">ECS Cluster</div>
-              <div data-slot="sem-element" data-characteristic="Compute">ECS Cluster 2</div>
-              <div data-slot="sem-element" data-characteristic="CDN">CloudFront</div>
+              <div data-slot="sem-element" data-key="prod-fw" data-characteristic="Security">Firewall</div>
+              <div data-slot="sem-element" data-key="prod-s3" data-characteristic="Storage">S3 Bucket</div>
+              <div data-slot="sem-element" data-key="prod-ecs1" data-characteristic="Compute">ECS Cluster</div>
+              <div data-slot="sem-element" data-key="prod-ecs2" data-characteristic="Compute">ECS Cluster 2</div>
+              <div data-slot="sem-element" data-key="prod-cf" data-characteristic="CDN">CloudFront</div>
             </div>
             <div data-slot="sem-environment" data-name="Staging">
-              <div data-slot="sem-element" data-characteristic="Security">VPN</div>
-              <div data-slot="sem-element" data-characteristic="Storage">S3 Bucket</div>
-              <div data-slot="sem-element" data-characteristic="Compute">ECS Service</div>
-              <div data-slot="sem-element" data-characteristic="Database">PostgreSQL</div>
+              <div data-slot="sem-element" data-key="stg-vpn" data-characteristic="Security">VPN</div>
+              <div data-slot="sem-element" data-key="stg-s3" data-characteristic="Storage">S3 Bucket</div>
+              <div data-slot="sem-element" data-key="stg-ecs" data-characteristic="Compute">ECS Service</div>
+              <div data-slot="sem-element" data-key="stg-pg" data-characteristic="Database">PostgreSQL</div>
             </div>
             <div data-slot="sem-environment" data-name="Development">
-              <div data-slot="sem-element" data-characteristic="Compute">Docker</div>
-              <div data-slot="sem-element" data-characteristic="Database">SQLite</div>
+              <div data-slot="sem-element" data-key="dev-docker" data-characteristic="Compute">Docker</div>
+              <div data-slot="sem-element" data-key="dev-sqlite" data-characteristic="Database">SQLite</div>
             </div>
             <div data-slot="sem-environment" data-name="CI / CD">
-              <div data-slot="sem-element" data-characteristic="Compute">GitHub Actions</div>
-              <div data-slot="sem-element" data-characteristic="Security">SAST Scanner</div>
-              <div data-slot="sem-element" data-characteristic="Storage">Artifact Store</div>
+              <div data-slot="sem-element" data-key="ci-gha" data-characteristic="Compute">GitHub Actions</div>
+              <div data-slot="sem-element" data-key="ci-sast" data-characteristic="Security">SAST Scanner</div>
+              <div data-slot="sem-element" data-key="ci-artifacts" data-characteristic="Storage">Artifact Store</div>
             </div>
           </div>
         </div>
@@ -994,11 +994,11 @@ Scooter.toast.defaults.maxToasts = 3;</code></pre>
           <pre><code>&lt;!-- Default — starts in grid view, compact on selection --&gt;
 &lt;div data-sc="system-environment-matrix"&gt;
   &lt;div data-slot="sem-environment" data-name="Production"&gt;
-    &lt;div data-slot="sem-element" data-characteristic="Security"&gt;Firewall&lt;/div&gt;
-    &lt;div data-slot="sem-element" data-characteristic="Storage"&gt;S3 Bucket&lt;/div&gt;
+    &lt;div data-slot="sem-element" data-key="prod-fw" data-characteristic="Security"&gt;Firewall&lt;/div&gt;
+    &lt;div data-slot="sem-element" data-key="prod-s3" data-characteristic="Storage"&gt;S3 Bucket&lt;/div&gt;
   &lt;/div&gt;
   &lt;div data-slot="sem-environment" data-name="Staging"&gt;
-    &lt;div data-slot="sem-element" data-characteristic="Security"&gt;VPN&lt;/div&gt;
+    &lt;div data-slot="sem-element" data-key="stg-vpn" data-characteristic="Security"&gt;VPN&lt;/div&gt;
   &lt;/div&gt;
 &lt;/div&gt;
 
@@ -1013,7 +1013,7 @@ Scooter.toast.defaults.maxToasts = 3;</code></pre>
 // Element click → selects element, filters to compact view of that env
 sem.addEventListener('sc:element', e =&gt; {
   console.log(e.detail);
-  // { environment: "Production", element: "Firewall", characteristic: "Security" }
+  // { key: "prod-fw", environment: "Production", element: "Firewall", characteristic: "Security" }
 });
 
 // After filtering, click the env name to expand back to the grid
@@ -1033,7 +1033,8 @@ sem._sem.expand();               // force expanded grid
 sem._sem.collapse();             // force collapsed tags
 sem._sem.toggle();               // switch mode
 sem._sem.selected;               // current env filter (string | null)
-sem._sem.selectedElement;        // { environment, name, characteristic } | null</code></pre>
+sem._sem.selectedElement;        // { key, environment, name, characteristic } | null
+sem._sem.selectByKey('prod-fw'); // select element by its unique key</code></pre>
         </div>
       </div>
     </section>

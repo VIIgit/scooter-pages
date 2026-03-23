@@ -2,11 +2,11 @@
  * Scooter System Environment Matrix Component
  * Usage: <div data-sc="system-environment-matrix">
  *          <div data-slot="sem-environment" data-name="Production">
- *            <div data-slot="sem-element" data-characteristic="Security">Firewall</div>
- *            <div data-slot="sem-element" data-characteristic="Storage">S3</div>
+ *            <div data-slot="sem-element" data-key="prod-fw" data-characteristic="Security">Firewall</div>
+ *            <div data-slot="sem-element" data-key="prod-s3" data-characteristic="Storage">S3</div>
  *          </div>
  *          <div data-slot="sem-environment" data-name="Staging">
- *            <div data-slot="sem-element" data-characteristic="Security">VPN</div>
+ *            <div data-slot="sem-element" data-key="stg-vpn" data-characteristic="Security">VPN</div>
  *          </div>
  *        </div>
  *
@@ -18,11 +18,13 @@
  * Attributes:
  *   data-compact-default — Start in compact view even without a selection.
  *                          By default the grid view is shown until an element is clicked.
+ *   data-key             — (on sem-element) Unique technical key for the element.
+ *                          Auto-generated from env-id + name if omitted.
  *
  * Events:
  *   sc:filter   — { environment: string }  (environment selected)
  *   sc:reset    — {}                        (filter cleared)
- *   sc:element  — { environment, element, characteristic } (element clicked)
+ *   sc:element  — { key, environment, element, characteristic } (element clicked)
  */
 ;(function () {
   Scooter.register('system-environment-matrix', function (el) {
@@ -40,8 +42,12 @@
       };
       envEl.querySelectorAll('[data-slot="sem-element"]').forEach(elemEl => {
         const char = elemEl.getAttribute('data-characteristic') || '';
+        const name = elemEl.textContent.trim();
+        const key = elemEl.getAttribute('data-key')
+          || (env.id + '-' + name).toLowerCase().replace(/[^a-z0-9]+/g, '-');
         env.elements.push({
-          name: elemEl.textContent.trim(),
+          key: key,
+          name: name,
           characteristic: char
         });
         charSet.add(char);
@@ -56,7 +62,7 @@
 
     /* ── State ── */
     let selectedEnv = null;
-    let selectedEl = null;        // { environment, name, characteristic }
+    let selectedEl = null;        // { key, environment, name, characteristic }
     let isExpanded = compactDefault ? el.hasAttribute('data-expanded') : true;
 
     /* ── Render ── */
@@ -111,19 +117,23 @@
         env.elements.forEach(element => {
           const btn = document.createElement('button');
           btn.setAttribute('data-slot', 'sem-element');
-          if (isSelected(env.name, element.name)) {
-            btn.setAttribute('data-selected', '');
-          }
+          btn.setAttribute('data-key', element.key);
 
           const nameSpan = document.createElement('span');
           nameSpan.setAttribute('data-slot', 'sem-element-name');
           nameSpan.textContent = element.name;
           btn.appendChild(nameSpan);
 
-          const charSpan = document.createElement('span');
-          charSpan.setAttribute('data-slot', 'sem-element-char');
-          charSpan.textContent = element.characteristic;
-          btn.appendChild(charSpan);
+          if (element.characteristic) {
+            const charSpan = document.createElement('span');
+            charSpan.setAttribute('data-slot', 'sem-element-char');
+            charSpan.textContent = element.characteristic;
+            btn.appendChild(charSpan);
+          }
+
+          if (isSelected(element.key)) {
+            btn.setAttribute('data-selected', '');
+          }
 
           btn.addEventListener('click', handleElementClick(env, element));
           tags.appendChild(btn);
@@ -176,7 +186,8 @@
             elements.forEach(element => {
               const btn = document.createElement('button');
               btn.setAttribute('data-slot', 'sem-element');
-              if (isSelected(env.name, element.name)) {
+              btn.setAttribute('data-key', element.key);
+              if (isSelected(element.key)) {
                 btn.setAttribute('data-selected', '');
               }
 
@@ -203,8 +214,8 @@
     }
 
     /* ── Helpers ── */
-    function isSelected(envName, elemName) {
-      return selectedEl && selectedEl.environment === envName && selectedEl.name === elemName;
+    function isSelected(key) {
+      return selectedEl && selectedEl.key === key;
     }
 
     function handleElementClick(env, element) {
@@ -214,6 +225,7 @@
         var prevEl = selectedEl;
         selectedEnv = env.id;
         selectedEl = {
+          key: element.key,
           environment: env.name,
           name: element.name,
           characteristic: element.characteristic
@@ -222,7 +234,7 @@
         el.setAttribute('data-filtered', '');
         el.dispatchEvent(new CustomEvent('sc:element', {
           bubbles: true,
-          detail: { environment: env.name, element: element.name, characteristic: element.characteristic }
+          detail: { key: element.key, environment: env.name, element: element.name, characteristic: element.characteristic }
         }));
         el.dispatchEvent(new CustomEvent('sc:filter', {
           bubbles: true,
@@ -238,8 +250,7 @@
               function (n) { n.removeAttribute('data-selected'); }
             );
             wrap.querySelectorAll('[data-slot="sem-element"]').forEach(function (btn) {
-              var nameNode = btn.querySelector('[data-slot="sem-element-name"]');
-              if (nameNode && nameNode.textContent === element.name) {
+              if (btn.getAttribute('data-key') === element.key) {
                 btn.setAttribute('data-selected', '');
               }
             });
@@ -313,6 +324,20 @@
       get expanded() { return isExpanded; },
       get selected() { return selectedEnv; },
       get selectedElement() { return selectedEl; },
+      selectByKey(key) {
+        for (const env of environments) {
+          const element = env.elements.find(e => e.key === key);
+          if (element) {
+            selectedEnv = env.id;
+            selectedEl = { key: element.key, environment: env.name, name: element.name, characteristic: element.characteristic };
+            el.setAttribute('data-filtered', '');
+            isExpanded = false;
+            el.removeAttribute('data-expanded');
+            render();
+            return;
+          }
+        }
+      },
       get environments() { return environments; },
       get characteristics() { return characteristics; }
     };
