@@ -30,13 +30,15 @@
       if (!item.hasAttribute('tabindex')) item.setAttribute('tabindex', '-1');
     });
 
+    let currentValue = null;
+
     // Set default value
     const defaultVal = el.getAttribute('data-default-value');
-    if (defaultVal) selectValue(defaultVal);
+    if (defaultVal) selectValue(defaultVal, false);
     else {
       // First checked item or make first item tabbable
       const checked = el.querySelector('[aria-checked="true"]');
-      if (checked) selectValue(checked.getAttribute('data-value'));
+      if (checked) selectValue(checked.getAttribute('data-value'), false);
       else { const first = items()[0]; if (first) first.setAttribute('tabindex', '0'); }
     }
 
@@ -44,7 +46,6 @@
       const item = e.target.closest('[data-slot="radio-group-item"]');
       if (!item || item.disabled) return;
       selectValue(item.getAttribute('data-value'));
-      el.dispatchEvent(new CustomEvent('sc:change', { detail: { value: item.getAttribute('data-value') }, bubbles: true }));
     });
 
     el.addEventListener('keydown', e => {
@@ -60,11 +61,10 @@
     items().forEach(item => {
       item.addEventListener('focus', () => {
         selectValue(item.getAttribute('data-value'));
-        el.dispatchEvent(new CustomEvent('sc:change', { detail: { value: item.getAttribute('data-value') }, bubbles: true }));
       });
     });
 
-    function selectValue(value) {
+    function selectValue(value, notify) {
       items().forEach(item => {
         const match = item.getAttribute('data-value') === value;
         item.setAttribute('aria-checked', String(match));
@@ -72,6 +72,10 @@
         item.setAttribute('tabindex', match ? '0' : '-1');
       });
       if (hidden) hidden.value = value || '';
+      if (notify !== false && value !== currentValue) {
+        el.dispatchEvent(new CustomEvent('sc:change', { detail: { value }, bubbles: true }));
+      }
+      currentValue = value;
     }
 
     // Programmatic API

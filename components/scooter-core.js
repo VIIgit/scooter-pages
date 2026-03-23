@@ -14,6 +14,16 @@
   const registry = {};
   const initialized = new WeakSet();
 
+  /** Check if an element is effectively hidden (hidden attr or display:none). */
+  function isElementHidden(el) {
+    if (el.closest('[hidden]')) return true;
+    if (!el.offsetParent && el.tagName !== 'BODY') {
+      const pos = getComputedStyle(el).position;
+      if (pos !== 'fixed' && pos !== 'sticky') return true;
+    }
+    return false;
+  }
+
   const Scooter = {
     version: '1.0.0',
 
@@ -22,12 +32,21 @@
       registry[name] = initFn;
     },
 
-    /** Scan the DOM (or a subtree) and initialize all [data-sc] elements. */
-    init(root) {
+    /**
+     * Scan the DOM (or a subtree) and initialize [data-sc] elements.
+     * @param {Element|Document} [root=document] - Subtree to scan.
+     * @param {Object}  [options]
+     * @param {'visible'|'all'} [options.include='visible']
+     *   'visible' — skip hidden elements (hidden attr / display:none).
+     *               They auto-init when shown if observe() is active.
+     *   'all'     — initialize every [data-sc] element regardless.
+     */
+    init(root, { include = 'visible' } = {}) {
       root = root || document;
       const els = root.querySelectorAll('[data-sc]');
       els.forEach(el => {
         if (initialized.has(el)) return;
+        if (include === 'visible' && isElementHidden(el)) return;
         const names = el.getAttribute('data-sc').split(/\s+/);
         names.forEach(name => {
           const fn = registry[name];
@@ -39,7 +58,7 @@
       });
     },
 
-    /** Auto-init new elements added to the DOM. */
+    /** Auto-init new elements and elements that become visible (hidden→shown). */
     observe() {
       if (typeof MutationObserver === 'undefined') return;
       const observer = new MutationObserver(mutations => {
@@ -47,9 +66,22 @@
           m.addedNodes.forEach(node => {
             if (node.nodeType === 1) Scooter.init(node.parentElement || document);
           });
+          if (m.type === 'attributes' && m.attributeName === 'hidden') {
+            const target = m.target;
+            if (!target.hasAttribute('hidden')) {
+              if (target.hasAttribute('data-sc')) {
+                Scooter.init(target.parentElement || document);
+              } else if (target.querySelector('[data-sc]')) {
+                Scooter.init(target);
+              }
+            }
+          }
         });
       });
-      observer.observe(document.body, { childList: true, subtree: true });
+      observer.observe(document.body, {
+        childList: true, subtree: true,
+        attributes: true, attributeFilter: ['hidden']
+      });
       return observer;
     },
 

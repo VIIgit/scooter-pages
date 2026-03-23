@@ -8,11 +8,21 @@
  */
 ;(function () {
   Scooter.register('tooltip', function (el) {
-    const trigger = el.querySelector('[data-slot="tooltip-trigger"]');
-    const content = el.querySelector('[data-slot="tooltip-content"]');
+    let trigger = el.querySelector('[data-slot="tooltip-trigger"]');
+    let content = el.querySelector('[data-slot="tooltip-content"]');
+
+    // Shorthand: data-tooltip="text" on the element itself
+    if (!trigger && el.hasAttribute('data-tooltip')) {
+      trigger = el;
+      content = document.createElement('div');
+      content.setAttribute('data-slot', 'tooltip-content');
+      content.textContent = el.getAttribute('data-tooltip');
+      el.appendChild(content);
+    }
+
     if (!trigger || !content) return;
 
-    const side = el.getAttribute('data-side') || 'top';
+    const side = el.getAttribute('data-tooltip-side') || el.getAttribute('data-side') || 'top';
     const delay = parseInt(el.getAttribute('data-delay') || '300', 10);
     let showTimer, hideTimer;
 

@@ -115,6 +115,7 @@ accordion.addEventListener('sc:change', (e) =&gt; {
 // Programmatic control
 accordion._accordion.open('item-2');  // expand a specific item
 accordion._accordion.closeAll();      // collapse everything</code></pre></div>
+      <div class="demo-event-log" id="accordion-log"></div>
     </div>
   </section>
 
@@ -176,6 +177,7 @@ collapsible.addEventListener('sc:close', () =&gt; {
 collapsible._collapsible.toggle();
 collapsible._collapsible.open();
 collapsible._collapsible.close();</code></pre></div>
+      <div class="demo-event-log" id="collapsible-log"></div>
     </div>
   </section>
 
@@ -267,6 +269,7 @@ tabs.addEventListener('sc:change', (e) =&gt; {
       .then(html =&gt; { /* inject into panel */ });
   }
 });</code></pre></div>
+      <div class="demo-event-log" id="tabs-log"></div>
     </div>
   </section>
 
@@ -321,6 +324,7 @@ toggle.addEventListener('sc:change', (e) =&gt; {
 
 // Read state
 const isPressed = toggle.getAttribute('aria-pressed') === 'true';</code></pre></div>
+      <div class="demo-event-log" id="toggle-log"></div>
     </div>
   </section>
 
@@ -388,6 +392,7 @@ group.addEventListener('sc:change', (e) =&gt; {
 
 // Get current value
 const current = group._toggleGroup.getValue();</code></pre></div>
+      <div class="demo-event-log" id="toggle-group-log"></div>
     </div>
   </section>
 
@@ -464,6 +469,7 @@ document.getElementById('selectAll')
     document.querySelectorAll('.item-checkbox')
       .forEach(cb =&gt; cb._checkbox.setChecked(e.detail.checked));
   });</code></pre></div>
+      <div class="demo-event-log" id="checkbox-log"></div>
     </div>
   </section>
 
@@ -534,6 +540,7 @@ radioGroup.addEventListener('sc:change', (e) =&gt; {
     el.hidden = el.dataset.density !== e.detail.value;
   });
 });</code></pre></div>
+      <div class="demo-event-log" id="radio-group-log"></div>
     </div>
   </section>
 
@@ -600,6 +607,7 @@ document.querySelectorAll('[data-sc="switch"]').forEach(s =&gt; {
     savePreference(setting, e.detail.checked);
   });
 });</code></pre></div>
+      <div class="demo-event-log" id="switch-log"></div>
     </div>
   </section>
 
@@ -865,6 +873,7 @@ function setLoading(btn, loading) {
     btn.innerHTML = 'Save';
   }
 }</code></pre></div>
+      <div class="demo-event-log" id="button-group-log"></div>
     </div>
   </section>
 
@@ -896,5 +905,79 @@ document.getElementById('demo-button-group').addEventListener('click', function(
 <script src="../components/hover-card.js"></script>
 <script src="../components/avatar.js"></script>
 <script src="../components/image-with-fallback.js"></script>
+
+<!-- Live event loggers -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+  function logTo(logId, type, detail) {
+    const el = document.getElementById(logId);
+    if (!el) return;
+    const time = new Date().toLocaleTimeString('en-US', { hour12: false });
+    const d = detail ? JSON.stringify(detail) : '{}';
+    const line = document.createElement('div');
+    line.innerHTML = '<span style="color:var(--gray-500)">[' + time + ']</span> <span style="color:#34c759">' + type + '</span> ' + d;
+    el.appendChild(line);
+    el.scrollTop = el.scrollHeight;
+  }
+
+  // Accordion
+  const accordionEl = document.getElementById('demo-accordion');
+  if (accordionEl) {
+    accordionEl.addEventListener('sc:change', (e) => logTo('accordion-log', 'sc:change', e.detail));
+  }
+
+  // Collapsible
+  const collapsibleEl = document.getElementById('demo-collapsible');
+  if (collapsibleEl) {
+    collapsibleEl.addEventListener('sc:open',  () => logTo('collapsible-log', 'sc:open', {}));
+    collapsibleEl.addEventListener('sc:close', () => logTo('collapsible-log', 'sc:close', {}));
+  }
+
+  // Tabs
+  const tabsEl = document.getElementById('demo-tabs');
+  if (tabsEl) {
+    tabsEl.addEventListener('sc:change', (e) => logTo('tabs-log', 'sc:change', e.detail));
+  }
+
+  // Toggle — capture all toggle buttons in the section
+  document.querySelectorAll('#toggle [data-sc="toggle"]').forEach(t => {
+    t.addEventListener('sc:change', (e) => logTo('toggle-log', 'sc:change', { id: t.id || t.getAttribute('aria-label'), pressed: e.detail.pressed }));
+  });
+
+  // Toggle Group — capture all toggle groups in the section
+  document.querySelectorAll('#toggle-group [data-sc="toggle-group"]').forEach(tg => {
+    tg.addEventListener('sc:change', (e) => logTo('toggle-group-log', 'sc:change', e.detail));
+  });
+
+  // Checkbox
+  ['cb1', 'cb2', 'cb3'].forEach(id => {
+    const cb = document.getElementById(id);
+    if (cb) cb.addEventListener('sc:change', (e) => logTo('checkbox-log', 'sc:change', { id, checked: e.detail.checked }));
+  });
+
+  // Radio Group
+  const radioEl = document.getElementById('demo-radio-group');
+  if (radioEl) {
+    radioEl.addEventListener('sc:change', (e) => logTo('radio-group-log', 'sc:change', e.detail));
+  }
+
+  // Switch
+  const switchEl = document.getElementById('demo-switch');
+  if (switchEl) {
+    switchEl.addEventListener('sc:change', (e) => logTo('switch-log', 'sc:change', e.detail));
+  }
+
+  // Button Group
+  const btnGroup = document.getElementById('demo-button-group');
+  if (btnGroup) {
+    btnGroup.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-slot="button"]');
+      if (btn) logTo('button-group-log', 'click', { value: btn.dataset.value });
+    });
+  }
+
+});
+</script>
 </body>
 </html>
