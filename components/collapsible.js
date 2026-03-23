@@ -16,31 +16,44 @@
     trigger.setAttribute('aria-expanded', String(startOpen));
     if (!startOpen) content.style.height = '0';
 
+    function doOpen() {
+      trigger.setAttribute('aria-expanded', 'true');
+      content.setAttribute('data-state', 'open');
+      el.dispatchEvent(new CustomEvent('sc:open', { bubbles: true }));
+      const h = content.scrollHeight;
+      content.style.height = '0';
+      requestAnimationFrame(() => {
+        content.style.height = h + 'px';
+        content.addEventListener('transitionend', function onEnd() {
+          content.style.height = 'auto';
+          content.removeEventListener('transitionend', onEnd);
+        });
+      });
+    }
+
+    function doClose() {
+      trigger.setAttribute('aria-expanded', 'false');
+      content.style.height = content.scrollHeight + 'px';
+      requestAnimationFrame(() => {
+        content.style.height = '0';
+        content.addEventListener('transitionend', function onEnd() {
+          content.setAttribute('data-state', 'closed');
+          el.dispatchEvent(new CustomEvent('sc:close', { bubbles: true }));
+          content.removeEventListener('transitionend', onEnd);
+        });
+      });
+    }
+
     trigger.addEventListener('click', () => {
       const isOpen = content.getAttribute('data-state') === 'open';
-      if (isOpen) {
-        trigger.setAttribute('aria-expanded', 'false');
-        content.style.height = content.scrollHeight + 'px';
-        requestAnimationFrame(() => {
-          content.style.height = '0';
-          content.addEventListener('transitionend', function onEnd() {
-            content.setAttribute('data-state', 'closed');
-            content.removeEventListener('transitionend', onEnd);
-          });
-        });
-      } else {
-        trigger.setAttribute('aria-expanded', 'true');
-        content.setAttribute('data-state', 'open');
-        const h = content.scrollHeight;
-        content.style.height = '0';
-        requestAnimationFrame(() => {
-          content.style.height = h + 'px';
-          content.addEventListener('transitionend', function onEnd() {
-            content.style.height = 'auto';
-            content.removeEventListener('transitionend', onEnd);
-          });
-        });
-      }
+      isOpen ? doClose() : doOpen();
     });
+
+    // Programmatic API
+    el._collapsible = {
+      toggle: function () { trigger.click(); },
+      open: function () { if (content.getAttribute('data-state') !== 'open') doOpen(); },
+      close: function () { if (content.getAttribute('data-state') === 'open') doClose(); }
+    };
   });
 })();

@@ -50,11 +50,12 @@
 
       trigger.setAttribute('aria-expanded', 'true');
       content.setAttribute('data-state', 'open');
+      const value = item.getAttribute('data-value');
+      el.dispatchEvent(new CustomEvent('sc:change', { detail: { value }, bubbles: true }));
       const targetHeight = inner.scrollHeight;
       content.style.height = '0';
       requestAnimationFrame(() => {
         content.style.height = targetHeight + 'px';
-        // After transition, set auto for dynamic content
         const onEnd = () => {
           content.style.height = 'auto';
           content.removeEventListener('transitionend', onEnd);
@@ -68,7 +69,6 @@
       const content = item.querySelector('[data-slot="accordion-content"]');
 
       trigger.setAttribute('aria-expanded', 'false');
-      // Set explicit height first so transition works
       content.style.height = content.scrollHeight + 'px';
       requestAnimationFrame(() => {
         content.style.height = '0';
@@ -79,5 +79,16 @@
         content.addEventListener('transitionend', onEnd);
       });
     }
+
+    // Programmatic API
+    el._accordion = {
+      open: function (value) {
+        const item = el.querySelector('[data-slot="accordion-item"][data-value="' + value + '"]');
+        if (item) { openItem(item); }
+      },
+      closeAll: function () {
+        el.querySelectorAll('[data-slot="accordion-item"]').forEach(closeItem);
+      }
+    };
   });
 })();

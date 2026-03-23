@@ -28,6 +28,7 @@
       Scooter.position(content, trigger, { side, align, offset: 6 });
       trigger.setAttribute('aria-expanded', 'true');
       content.setAttribute('data-state', 'open');
+      el.dispatchEvent(new CustomEvent('sc:open', { bubbles: true }));
 
       // Focus first focusable
       const focusable = content.querySelector('input, button, [tabindex]');
@@ -41,6 +42,7 @@
     function hide() {
       if (!open) return;
       content.setAttribute('data-state', 'closed');
+      el.dispatchEvent(new CustomEvent('sc:close', { bubbles: true }));
       Scooter.animateOut(content, () => {
         content.hidden = true;
         if (content.parentElement !== el) el.appendChild(content);

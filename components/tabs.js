@@ -15,7 +15,7 @@
     const panels = el.querySelectorAll('[data-slot="tabs-content"]');
     const defaultVal = el.getAttribute('data-default-value');
 
-    function activate(value) {
+    function activate(value, notify) {
       triggers.forEach(t => {
         const active = t.getAttribute('data-value') === value;
         t.setAttribute('aria-selected', String(active));
@@ -28,6 +28,9 @@
         p.hidden = !active;
       });
       el.setAttribute('data-value', value);
+      if (notify !== false) {
+        el.dispatchEvent(new CustomEvent('sc:change', { detail: { value }, bubbles: true }));
+      }
     }
 
     // Wire click
@@ -48,8 +51,14 @@
       });
     }
 
-    // Initial state
-    if (defaultVal) activate(defaultVal);
-    else if (triggers.length) activate(triggers[0].getAttribute('data-value'));
+    // Initial state (no event on init)
+    if (defaultVal) activate(defaultVal, false);
+    else if (triggers.length) activate(triggers[0].getAttribute('data-value'), false);
+
+    // Programmatic API
+    el._tabs = {
+      select: function (value) { activate(value); },
+      getValue: function () { return el.getAttribute('data-value'); }
+    };
   });
 })();

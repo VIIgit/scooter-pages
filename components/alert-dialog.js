@@ -36,7 +36,10 @@
 
     // Cancel button
     dlg.addEventListener('click', function (e) {
-      if (e.target.closest('[data-slot="alert-dialog-cancel"]')) close();
+      if (e.target.closest('[data-slot="alert-dialog-cancel"]')) {
+        el.dispatchEvent(new CustomEvent('sc:cancel', { bubbles: true }));
+        close();
+      }
     });
 
     // Action button — fires event then closes

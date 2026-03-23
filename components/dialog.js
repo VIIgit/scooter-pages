@@ -31,10 +31,12 @@
       dlg.showModal();
       dlg.setAttribute('data-state', 'open');
       Scooter.trapFocus(dlg);
+      el.dispatchEvent(new CustomEvent('sc:open', { bubbles: true }));
     }
 
     function close() {
       dlg.setAttribute('data-state', 'closed');
+      el.dispatchEvent(new CustomEvent('sc:close', { bubbles: true }));
       Scooter.animateOut(dlg, () => dlg.close(), 200);
     }
 

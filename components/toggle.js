@@ -10,7 +10,7 @@
     el.addEventListener('click', () => {
       const isOn = el.getAttribute('aria-pressed') === 'true';
       setState(!isOn);
-      el.dispatchEvent(new CustomEvent('sc:toggle', { detail: { pressed: !isOn }, bubbles: true }));
+      el.dispatchEvent(new CustomEvent('sc:change', { detail: { pressed: !isOn }, bubbles: true }));
     });
 
     function setState(on) {

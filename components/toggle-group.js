@@ -43,5 +43,15 @@
     });
 
     Scooter.arrowNav(el, '[data-slot="toggle-group-item"]', { orientation: 'horizontal' });
+
+    // Programmatic API
+    el._toggleGroup = {
+      getValue: function () {
+        const vals = [...items()]
+          .filter(i => i.getAttribute('aria-pressed') === 'true')
+          .map(i => i.getAttribute('data-value'));
+        return type === 'single' ? (vals[0] || null) : vals;
+      }
+    };
   });
 })();

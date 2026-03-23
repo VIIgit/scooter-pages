@@ -30,10 +30,12 @@
       dlg.setAttribute('data-state', 'open');
       dlg.style.transform = '';
       Scooter.trapFocus(dlg);
+      el.dispatchEvent(new CustomEvent('sc:open', { bubbles: true }));
     }
 
     function close() {
       dlg.setAttribute('data-state', 'closed');
+      el.dispatchEvent(new CustomEvent('sc:close', { bubbles: true }));
       dlg.style.transform = 'translateY(100%)';
       Scooter.animateOut(dlg, () => {
         dlg.close();

@@ -73,5 +73,13 @@
       });
       if (hidden) hidden.value = value || '';
     }
+
+    // Programmatic API
+    el._radioGroup = {
+      getValue: function () {
+        const checked = el.querySelector('[data-slot="radio-group-item"][aria-checked="true"]');
+        return checked ? checked.getAttribute('data-value') : null;
+      }
+    };
   });
 })();
