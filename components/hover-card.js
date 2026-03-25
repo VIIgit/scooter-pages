@@ -9,8 +9,19 @@
 ;(function () {
   Scooter.register('hover-card', function (el) {
     const trigger = el.querySelector('[data-slot="hover-card-trigger"]');
-    const content = el.querySelector('[data-slot="hover-card-content"]');
-    if (!trigger || !content) return;
+    let contentSource = el.querySelector('[data-slot="hover-card-content"]');
+    if (!trigger || !contentSource) return;
+
+    // If the content is inside a <template>, clone it into a real element
+    let content;
+    if (contentSource.tagName === 'TEMPLATE') {
+      content = document.createElement('div');
+      content.setAttribute('data-slot', 'hover-card-content');
+      content.appendChild(contentSource.content.cloneNode(true));
+      contentSource.parentNode.replaceChild(content, contentSource);
+    } else {
+      content = contentSource;
+    }
 
     const side = el.getAttribute('data-side') || 'bottom';
     const openDelay = parseInt(el.getAttribute('data-open-delay') || '500', 10);

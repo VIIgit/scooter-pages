@@ -935,6 +935,110 @@ function setLoading(btn, loading) {
     </div>
   </section>
 
+  <!-- ═══════════════════════ PROGRESS ═══════════════════════ -->
+  <section class="demo-section" id="progress">
+    <h2>Progress</h2>
+    <p class="demo-desc">Progress bar with optional title, description, and percentage. Customizable color via <code>data-color</code>.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview demo-preview--col" style="max-width:480px">
+        <!-- Default -->
+        <div data-sc="progress" data-value="90" data-max="100" id="demo-progress-1">
+          <div data-slot="progress-header">
+            <p data-slot="progress-title">Storage</p>
+            <p data-slot="progress-description">45 GB of 50 GB used</p>
+            <span data-slot="progress-value"></span>
+          </div>
+          <div data-slot="progress">
+            <div data-slot="progress-indicator"></div>
+          </div>
+        </div>
+
+        <!-- Custom color -->
+        <div data-sc="progress" style="width: 400px;" data-value="62" data-max="100" data-color="#22c55e" id="demo-progress-2">
+          <div data-slot="progress-header">
+            <span data-slot="progress-title">Upload</span>
+            <span data-slot="progress-description">Uploading files…</span>
+            <span data-slot="progress-value"></span>
+          </div>
+          <div data-slot="progress">
+            <div data-slot="progress-indicator"></div>
+          </div>
+        </div>
+
+        <!-- Warning color -->
+        <div data-sc="progress" data-value="35" data-max="100" data-color="#f59e0b" id="demo-progress-3">
+          <div data-slot="progress-header">
+            <p data-slot="progress-title">CPU</p>
+            <p data-slot="progress-description">Average load</p>
+            <span data-slot="progress-value"></span>
+          </div>
+          <div data-slot="progress">
+            <div data-slot="progress-indicator"></div>
+          </div>
+        </div>
+
+        <!-- Minimal (bar only) -->
+        <div data-sc="progress" data-value="50" data-color="#8b5cf6">
+          <div data-slot="progress">
+            <div data-slot="progress-indicator"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-code-actions">
+        <button class="demo-code-toggle" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--html')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          Show HTML
+        </button>
+        <button class="demo-code-toggle demo-code-toggle--js" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--js')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          <span class="demo-code-js-badge">JS</span> Show JavaScript
+        </button>
+      </div>
+      <div class="demo-code-block demo-code-block--html"><pre><code>&lt;!-- Full layout: title + description + percentage --&gt;
+&lt;div data-sc="progress" data-value="90" data-max="100"&gt;
+  &lt;div data-slot="progress-header"&gt;
+    &lt;p data-slot="progress-title"&gt;Storage&lt;/p&gt;
+    &lt;p data-slot="progress-description"&gt;45 GB of 50 GB used&lt;/p&gt;
+    &lt;span data-slot="progress-value"&gt;&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div data-slot="progress"&gt;
+    &lt;div data-slot="progress-indicator"&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Custom color --&gt;
+&lt;div data-sc="progress" data-value="62" data-color="#22c55e"&gt;
+  …
+&lt;/div&gt;
+
+&lt;!-- Minimal (bar only) --&gt;
+&lt;div data-sc="progress" data-value="50" data-color="#8b5cf6"&gt;
+  &lt;div data-slot="progress"&gt;
+    &lt;div data-slot="progress-indicator"&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre></div>
+      <div class="demo-code-block demo-code-block--js"><pre><code>const progress = document.querySelector('[data-sc="progress"]');
+
+// Listen for value changes
+progress.addEventListener('sc:change', (e) =&gt; {
+  console.log('Progress:', e.detail);
+  // e.detail → { value: 90, max: 100, percent: 90 }
+});
+
+// Update value programmatically
+progress._progress.setValue(75);
+
+// Read current value
+const current = progress._progress.getValue();
+
+// Change color at runtime
+progress.setAttribute('data-color', '#ef4444');</code></pre></div>
+      <div class="demo-event-log" id="progress-log"></div>
+    </div>
+  </section>
+
 </main>
 
 <script>
@@ -963,6 +1067,7 @@ document.getElementById('demo-button-group').addEventListener('click', function(
 <script src="../components/hover-card.js"></script>
 <script src="../components/avatar.js"></script>
 <script src="../components/image-with-fallback.js"></script>
+<script src="../components/progress.js"></script>
 
 <!-- Live event loggers -->
 <script>
@@ -1040,6 +1145,12 @@ document.addEventListener('DOMContentLoaded', () => {
       if (btn) logTo('button-group-log', 'click', { value: btn.dataset.value });
     });
   }
+
+  // Progress
+  ['demo-progress-1', 'demo-progress-2', 'demo-progress-3'].forEach(id => {
+    const p = document.getElementById(id);
+    if (p) p.addEventListener('sc:change', (e) => logTo('progress-log', 'sc:change', e.detail));
+  });
 
 });
 </script>
