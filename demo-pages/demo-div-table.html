@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scooter Pages — DivTable Widget Demo</title>
+  <link rel="stylesheet" href="../components.css">
+  <link rel="stylesheet" href="../components/custom/div-table/div-table.css">
+  <link rel="stylesheet" href="../components/custom/monaco-editor/style.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body>
+
+<!-- Page metadata for dynamic loading -->
+<script type="scooter/page-meta">
+{
+  "scripts": [
+    "components/custom/monaco-editor/monaco-editor.js",
+    "components/custom/div-table/query.js",
+    "components/custom/div-table/div-table.js"
+  ],
+  "init": "ScooterPageInit_demoDivTable"
+}
+</script>
+
+<!-- Navigation -->
+<nav class="demo-nav">
+  <span class="demo-nav-title">Scooter Pages</span>
+  <a href="demo-css-only.html">CSS-Only</a>
+  <a href="demo-light-js.html">Light JS</a>
+  <a href="demo-medium-js.html">Medium JS</a>
+  <a href="demo-complex-js.html">Complex JS</a>
+  <a href="demo-patterns.html">Patterns</a>
+  <a href="demo-service-registry.html">Service Registry</a>
+  <a href="demo-monaco-editor.html">Monaco Editor</a>
+  <a href="demo-div-table.html" aria-current="page">DivTable</a>
+</nav>
+
+<main class="demo-page">
+  <h1>DivTable Widget</h1>
+  <p class="demo-subtitle">A modern table widget built with CSS Grid and Flexbox — no HTML tables. Features grouping, sorting, filtering, virtual scrolling, and inline editing powered by Monaco Editor.</p>
+
+  <!-- ═══════════════════════ TABLE WITH CHECKBOXES ═══════════════════════ -->
+  <section class="demo-section" id="table-checkboxes">
+    <h2>Table with Checkboxes</h2>
+    <p class="demo-desc">
+      Multi-select rows via checkboxes. Supports grouping, filtering via query expressions, and
+      aggregate columns (e.g. salary sum). A new record is added programmatically after 3 seconds.
+    </p>
+
+    <div class="demo-card demo-card--full">
+      <div class="table-layout">
+        <div class="table-section">
+          <div id="divtable1" class="div-table-widget"></div>
+        </div>
+        <div class="details-section">
+          <div id="details1" class="details-panel">
+            <h3>Row Details</h3>
+            <div class="details-content empty">Click on a row to see details here</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-code-actions">
+        <button class="demo-code-toggle" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--t1-html')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          Show HTML
+        </button>
+        <button class="demo-code-toggle demo-code-toggle--js" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--t1-js')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          <span class="demo-code-js-badge">JS</span> Show JavaScript
+        </button>
+      </div>
+      <div class="demo-code-block demo-code-block--t1-html"><pre><code>&lt;div id="divtable1" class="div-table-widget"&gt;&lt;/div&gt;</code></pre></div>
+      <div class="demo-code-block demo-code-block--t1-js"><pre><code>const table = new DivTable(monaco, {
+  tableWidgetElement: document.getElementById('divtable1'),
+  data: data,
+  columns: columns,
+  showCheckboxes: true,
+  multiSelect: true,
+  showHeaderSummary: true,
+  showGroupSummary: true,
+  onSelectionChange: (rows) =&gt; { /* handle selection */ },
+  onRowFocus: (row, group) =&gt; { /* handle focus */ }
+});
+
+// Apply a query filter
+table.applyQuery('city = "Chicago" AND age &gt; 26');
+
+// Add a record programmatically
+table.addRecord({ id: 14, name: 'New User', age: 22, city: 'Hamburg' });</code></pre></div>
+      <div class="demo-event-log" id="divtable1-log"></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ TABLE WITHOUT CHECKBOXES ═══════════════════════ -->
+  <section class="demo-section" id="table-no-checkboxes">
+    <h2>Table without Checkboxes</h2>
+    <p class="demo-desc">
+      Same data, no checkbox column. Pre-grouped by city. Click rows to see details in the side panel.
+    </p>
+
+    <div class="demo-card demo-card--full">
+      <div class="table-layout">
+        <div class="table-section">
+          <div id="divtable2" class="div-table-widget"></div>
+        </div>
+        <div class="details-section">
+          <div id="details2" class="details-panel">
+            <h3>Row Details</h3>
+            <div class="details-content empty">Click on a row to see details here</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-code-actions">
+        <button class="demo-code-toggle" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--t2-js')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          <span class="demo-code-js-badge">JS</span> Show JavaScript
+        </button>
+      </div>
+      <div class="demo-code-block demo-code-block--t2-js"><pre><code>const table2 = new DivTable(monaco, {
+  tableWidgetElement: document.getElementById('divtable2'),
+  data: data,
+  columns: columns,
+  showCheckboxes: false,
+  showHeaderSummary: false,
+  showGroupSummary: false,
+  onRowFocus: (row, group) =&gt; { /* handle focus */ }
+});
+
+// Group by a column
+table2.group('city');</code></pre></div>
+      <div class="demo-event-log" id="divtable2-log"></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ VIRTUAL SCROLLING ═══════════════════════ -->
+  <section class="demo-section" id="virtual-scrolling">
+    <h2>Virtual Scrolling (1000+ Records) with Fixed Columns</h2>
+    <p class="demo-desc">
+      Lazy-loads pages of 100 records as you scroll. First column is fixed.
+      Grouped by department with sort on city. Includes auto-fetch and refresh buttons.
+    </p>
+
+    <div class="demo-card demo-card--full">
+      <div class="table-layout">
+        <div class="table-section">
+          <div id="divtable3" class="div-table-widget" style="max-height:500px;min-height:500px"></div>
+          <div class="refresh-controls">
+            <button id="programmaticRefreshBtn">🔄 Trigger Refresh Programmatically</button>
+            <span id="refreshStatus"></span>
+          </div>
+        </div>
+        <div class="details-section">
+          <div id="details3" class="details-panel">
+            <h3>Row Details</h3>
+            <div class="details-content empty">Click on a row to see details here</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-code-actions">
+        <button class="demo-code-toggle" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--t3-js')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          <span class="demo-code-js-badge">JS</span> Show JavaScript
+        </button>
+      </div>
+      <div class="demo-code-block demo-code-block--t3-js"><pre><code>const virtualTable = new DivTable(monaco, {
+  tableWidgetElement: el,
+  data: null,                           // Load first page via onNextPage
+  columns: virtualColumns,
+  group: 'department',
+  sort: { field: 'city', direction: 'asc' },
+  fixedColumns: 1,
+  showCheckboxes: true,
+  multiSelect: true,
+  showGroupSummary: true,
+
+  // Virtual scrolling configuration
+  virtualScrolling: true,
+  pageSize: 100,
+  totalRecords: 1000,
+  loadingThreshold: 20,
+  showRefreshButton: true,
+  showAutoFetchButton: true,
+  autoFetchDelay: 500,
+
+  onNextPage: async (page, pageSize) =&gt; {
+    return await fetchData(page, pageSize);
+  }
+});
+
+// Programmatic refresh
+await virtualTable.refresh();</code></pre></div>
+      <div class="demo-event-log" id="divtable3-log"></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ FEATURES ═══════════════════════ -->
+  <section class="demo-section" id="features">
+    <h2>Component Features</h2>
+    <p class="demo-desc">Overview of what the DivTable widget provides.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview demo-preview--col" style="gap:24px">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;width:100%">
+          <div data-slot="card" style="padding:20px;margin:0">
+            <h4 style="font-size:16px;margin-bottom:8px">CSS Grid Layout</h4>
+            <p class="text-sm text-muted">No HTML tables — built entirely with divs, CSS Grid and Flexbox for maximum flexibility.</p>
+          </div>
+          <div data-slot="card" style="padding:20px;margin:0">
+            <h4 style="font-size:16px;margin-bottom:8px">Virtual Scrolling</h4>
+            <p class="text-sm text-muted">Lazy-loads pages of data as you scroll. Handles 1000+ records smoothly with configurable page sizes.</p>
+          </div>
+          <div data-slot="card" style="padding:20px;margin:0">
+            <h4 style="font-size:16px;margin-bottom:8px">Grouping &amp; Aggregates</h4>
+            <p class="text-sm text-muted">Group by any column with collapsible headers. Supports sum, count and custom aggregate functions per group.</p>
+          </div>
+          <div data-slot="card" style="padding:20px;margin:0">
+            <h4 style="font-size:16px;margin-bottom:8px">Query Filtering</h4>
+            <p class="text-sm text-muted">Filter data with expressions like <code>city = "Chicago" AND age &gt; 26</code> — powered by the built-in query engine.</p>
+          </div>
+          <div data-slot="card" style="padding:20px;margin:0">
+            <h4 style="font-size:16px;margin-bottom:8px">Fixed Columns</h4>
+            <p class="text-sm text-muted">Pin columns to the left so they remain visible while scrolling horizontally through wide datasets.</p>
+          </div>
+          <div data-slot="card" style="padding:20px;margin:0">
+            <h4 style="font-size:16px;margin-bottom:8px">Monaco Integration</h4>
+            <p class="text-sm text-muted">Uses the shared <code>Scooter.loadMonaco()</code> singleton loader — no duplicate CDN loads, no race conditions.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- Toggle helper -->
+<script>
+function toggleCode(btn, cls) {
+  var card = btn.closest('.demo-card');
+  var block = card.querySelector(cls);
+  if (!block) return;
+  var expanded = btn.getAttribute('aria-expanded') === 'true' ? 'false' : 'true';
+  btn.setAttribute('aria-expanded', expanded);
+  block.dataset.visible = expanded;
+}
+</script>
+
+<!-- Scripts: core + monaco loader + div-table -->
+<script src="../components/scooter-core.js"></script>
+<script src="../components/custom/monaco-editor/monaco-editor.js"></script>
+<script src="../components/custom/div-table/query.js"></script>
+<script src="../components/custom/div-table/div-table.js"></script>
+
+<!-- DivTable demo logic -->
+<script>
+function ScooterPageInit_demoDivTable(root) {
+
+  // ── Event logger helper ──
+  function logTo(logId, type, detail) {
+    var el = root.querySelector('#' + logId);
+    if (!el) return;
+    var time = new Date().toLocaleTimeString('en-US', { hour12: false });
+    var d = detail ? JSON.stringify(detail) : '{}';
+    var line = document.createElement('div');
+    line.innerHTML = '<span style="color:var(--gray-500)">[' + time + ']</span> <span style="color:#34c759">' + type + '</span> ' + d;
+    el.appendChild(line);
+    el.scrollTop = el.scrollHeight;
+  }
+
+  // ── Details panel updater ──
+  function updateDetailsPanel(detailsId, row, group) {
+    var detailsContent = root.querySelector('#' + detailsId + ' .details-content');
+    if (!detailsContent) return;
+
+    if (group) {
+      detailsContent.className = 'details-content';
+      detailsContent.innerHTML =
+        '<div class="detail-item"><span class="detail-label">Group Type:</span><span class="detail-value">' + group.label + '</span></div>' +
+        '<div class="detail-item"><span class="detail-label">Group Value:</span><span class="detail-value">' + (group.value || 'undefined') + '</span></div>' +
+        '<div class="detail-item"><span class="detail-label">Items in Group:</span><span class="detail-value">' + group.itemCount + '</span></div>';
+    } else if (row) {
+      detailsContent.className = 'details-content';
+      var items = Object.entries(row)
+        .filter(function (kv) { return kv[1] !== undefined && kv[1] !== null && kv[1] !== ''; })
+        .map(function (kv) {
+          return '<div class="detail-item"><span class="detail-label">' +
+            kv[0].charAt(0).toUpperCase() + kv[0].slice(1) +
+            ':</span><span class="detail-value">' + kv[1] + '</span></div>';
+        }).join('');
+      detailsContent.innerHTML = items || '<div class="detail-item">No data available</div>';
+    } else {
+      detailsContent.className = 'details-content empty';
+      detailsContent.innerHTML = 'Click on a row to see details here';
+    }
+  }
+
+  // ── Sample data ──
+  var data = [
+    { id: 1, name: 'John Doe', age: 30, city: 'New York', active: true, technical: 1001, salary: 75000 },
+    { id: 2, name: 'Jane Smith', age: 25, city: 'Los Angeles', active: false, technical: 1002, salary: 65000 },
+    { id: 3, name: 'Bob Johnson', age: 35, city: 'Chicago', active: true, technical: 1003, salary: 85000 },
+    { id: 4, name: 'Alice Brown', age: 28, city: 'New York', active: false, technical: 1004, salary: 70000 },
+    { id: 5, name: 'Charlie Wilson', age: 32, city: 'Los Angeles', active: true, technical: 1005, salary: 90000 },
+    { id: 6, name: 'Eva Martinez', age: 27, city: 'Chicago', active: true, technical: 1006, salary: 72000 },
+    { id: 7, name: 'David Lee', age: 40, city: 'New York', active: false, technical: 1007, salary: 95000 },
+    { id: 8, name: 'Grace Taylor', age: 22, city: 'Los Angeles', active: true, technical: 1008, salary: 55000 },
+    { id: 9, name: 'Grace Taylor9', age: 2, city: 'Los Angeles', active: true, technical: 1009, salary: 48000 },
+    { id: 10, name: 'Grace Taylor10', city: 'Los Angeles', active: true, technical: 1010, salary: 62000 },
+    { id: 11, name: 'Grace11 Taylor', age: 22, city: 'Los Angeles', active: true, technical: 1011, salary: 58000 },
+    { id: 12, name: 'no age, city, active', technical: 1012, salary: 45000 },
+    { id: 13, name: 'Grace Taylor13', age: 22, city: 'Los Angeles', active: true, technical: 1013, salary: 52000 }
+  ];
+
+  // ── Column definitions ──
+  var columns = [
+    { field: 'technical', label: 'Technical ID', hidden: true, primaryKey: true },
+    { field: 'id', label: 'ID', responsive: { priority: 'low', size: 'fixed-narrow', hideMobile: true }, groupable: false },
+    { field: 'name', label: 'Name', responsive: { priority: 'high', size: 'flexible-medium', allowWrap: true }, groupable: false, fieldCompositeName: 'person' },
+    {
+      field: 'age', label: 'Age',
+      render: function (v) { return v ? v + ' years' : ''; },
+      responsive: { priority: 'medium', size: 'fixed-medium', hideSmall: true },
+      groupable: true, fieldCompositeName: 'person'
+    },
+    {
+      field: 'city', label: 'City<br>(with link)',
+      render: function (v) { return v ? '<a href="https://www.example.com?city=' + encodeURIComponent(v) + '" target="_blank" rel="noopener noreferrer">' + v + '</a>' : ''; },
+      responsive: { priority: 'medium', size: 'flexible-medium', allowWrap: true },
+      groupable: true
+    },
+    {
+      field: 'active', label: 'Status',
+      render: function (v) { if (v === true) return '✅ Active'; if (v === false) return '❌ Inactive'; return ''; },
+      responsive: { priority: 'high', size: 'flexible-small' },
+      groupable: true
+    },
+    {
+      field: 'salary', label: 'Salary', type: 'number', align: 'right',
+      render: function (v) { return v ? '$' + v.toLocaleString() : ''; },
+      responsive: { priority: 'medium', size: 'fixed-medium' },
+      groupable: false, aggregate: 'sum',
+      aggregateRender: function (v) { return '$' + v.toLocaleString(); }
+    }
+  ];
+
+  // ── Load Monaco via the shared singleton, then initialise all tables ──
+  Scooter.loadMonaco('0.55.1').then(function (monaco) {
+
+    logTo('divtable1-log', 'monaco:loaded', { version: '0.55.1' });
+
+    // ────────── Table 1: with checkboxes ──────────
+    var divTable1 = new DivTable(monaco, {
+      tableWidgetElement: root.querySelector('#divtable1'),
+      data: data.map(function (r) { return Object.assign({}, r); }),
+      columns: columns,
+      showCheckboxes: true,
+      multiSelect: true,
+      showHeaderSummary: true,
+      showGroupSummary: true,
+      onSelectionChange: function (rows) {
+        logTo('divtable1-log', 'selectionChange', { count: rows.length, ids: rows.map(function (r) { return r && r.technical; }).filter(Boolean) });
+      },
+      onRowFocus: function (row, group) {
+        if (group) {
+          updateDetailsPanel('details1', null, group);
+          logTo('divtable1-log', 'groupFocus', { label: group.label, value: group.value });
+        } else if (row) {
+          updateDetailsPanel('details1', row, null);
+          logTo('divtable1-log', 'rowFocus', { id: row.id, name: row.name });
+        } else {
+          updateDetailsPanel('details1', null, null);
+        }
+      }
+    });
+
+    // Apply a query filter
+    divTable1.applyQuery('city = "Chicago" AND age > 26');
+    logTo('divtable1-log', 'queryApplied', { query: 'city = "Chicago" AND age > 26' });
+
+    // Add a new record after 3 seconds
+    setTimeout(function () {
+      divTable1.addRecord({ technical: 2001, id: 14, name: 'Eva Hidden ✅ Added record', age: 22, city: 'Hamburg', active: false });
+      logTo('divtable1-log', 'recordAdded', { technical: 2001 });
+    }, 3000);
+
+    setTimeout(function () {
+      divTable1.addRecord({ technical: 1012, id: 12, name: 'Eva Adam ✅ updated record', age: 22, city: 'Hamburg', active: false });
+      logTo('divtable1-log', 'recordUpdated', { technical: 1012 });
+    }, 3000);
+
+    // ────────── Table 2: without checkboxes ──────────
+    var divTable2 = new DivTable(monaco, {
+      tableWidgetElement: root.querySelector('#divtable2'),
+      data: data.map(function (r) { return Object.assign({}, r); }),
+      columns: columns,
+      showCheckboxes: false,
+      multiSelect: true,
+      showHeaderSummary: false,
+      showGroupSummary: false,
+      onSelectionChange: function (rows) {
+        logTo('divtable2-log', 'selectionChange', { count: rows.length });
+      },
+      onRowFocus: function (row, group) {
+        if (group) {
+          updateDetailsPanel('details2', null, group);
+          logTo('divtable2-log', 'groupFocus', { label: group.label, value: group.value });
+        } else if (row) {
+          updateDetailsPanel('details2', row, null);
+          logTo('divtable2-log', 'rowFocus', { id: row.id, name: row.name });
+        } else {
+          updateDetailsPanel('details2', null, null);
+        }
+      }
+    });
+
+    divTable2.group('city');
+    logTo('divtable2-log', 'grouped', { field: 'city' });
+
+    // ────────── Table 3: virtual scrolling ──────────
+    function simulateDataFetch(page, pageSize) {
+      return new Promise(function (resolve) {
+        setTimeout(function () {
+          var startId = page * pageSize + 1;
+          if (startId > 477) { resolve([]); return; }
+
+          var cities = ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix', 'Philadelphia', 'San Antonio', 'San Diego', 'Dallas', 'San Jose'];
+          var departments = ['Engineering', 'Marketing', 'Sales', 'Support', 'Finance', 'HR', 'Operations'];
+          var firstNames = ['John', 'Jane', 'Bob', 'Alice', 'Charlie', 'Diana', 'Eve', 'Frank', 'Grace', 'Henry'];
+          var lastNames = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia', 'Miller', 'Davis', 'Rodriguez', 'Martinez'];
+          var tagsArray = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
+
+          var newData = [];
+          for (var i = 0; i < pageSize; i++) {
+            var id = startId + i;
+            var firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
+            var lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
+            var active = Math.random() > 0.3;
+            var tags = [tagsArray[Math.floor(Math.random() * tagsArray.length)]];
+            if (!active) tags.push(tagsArray[Math.floor(Math.random() * tagsArray.length)]);
+
+            newData.push({
+              id: id,
+              name: firstName + ' ' + lastName,
+              age: Math.floor(Math.random() * 40) + 22,
+              city: cities[Math.floor(Math.random() * cities.length)],
+              department: departments[Math.floor(Math.random() * departments.length)],
+              active: active,
+              tags: tags,
+              technical: 5000 + id,
+              salary: Math.floor(Math.random() * 80000) + 40000
+            });
+          }
+          resolve(newData);
+        }, 1600 + Math.random() * 700);
+      });
+    }
+
+    var virtualScrollingTable;
+
+    simulateDataFetch(0, 100).then(function (initialData) {
+      virtualScrollingTable = new DivTable(monaco, {
+        tableWidgetElement: root.querySelector('#divtable3'),
+        showHeaderSummary: false,
+        showGroupSummary: true,
+        data: null,
+        fixedColumns: 1,
+        columns: [
+          { field: 'technical', label: 'Technical ID', hidden: true, primaryKey: true },
+          { field: 'id', label: 'ID', type: 'number', responsive: { priority: 'low', size: 'fixed-narrow', hideMobile: true }, groupable: false },
+          { field: 'name', label: 'Name', responsive: { priority: 'high', size: 'flexible-large', allowWrap: true }, groupable: false, fieldCompositeName: 'person' },
+          {
+            field: 'age', label: 'Age', type: 'number',
+            render: function (v) { return v ? v + ' years old' : 'Age not specified'; },
+            responsive: { priority: 'high', size: 'flexible-medium', allowWrap: true },
+            groupable: true, fieldCompositeName: 'person'
+          },
+          { field: 'department', label: 'Department', responsive: { priority: 'medium', size: 'flexible-large', allowWrap: true }, groupable: true },
+          { field: 'tags', label: 'Tags', responsive: { priority: 'medium', size: 'flexible-small', allowWrap: true }, groupable: true },
+          {
+            field: 'city', label: 'City',
+            render: function (v) { return v ? '<a href="https://www.example.com?city=' + encodeURIComponent(v) + '" target="_blank" rel="noopener noreferrer">' + v + '</a>' : ''; },
+            responsive: { priority: 'medium', size: 'flexible-medium', allowWrap: true },
+            groupable: true
+          },
+          {
+            field: 'active', label: 'Status', type: 'boolean',
+            render: function (v) { if (v === true) return '✅ Active'; if (v === false) return '❌ Inactive'; return ''; },
+            responsive: { priority: 'high', size: 'flexible-small' },
+            groupable: true, fieldCompositeName: 'locationStatus'
+          },
+          {
+            field: 'salary', label: 'Salary', type: 'number', align: 'right',
+            render: function (v) { return v ? '$' + v.toLocaleString() : ''; },
+            responsive: { priority: 'medium', size: 'fixed-medium' },
+            groupable: false, aggregate: 'sum',
+            aggregateRender: function (v) { return '$' + v.toLocaleString(); }
+          }
+        ],
+        group: 'department',
+        sort: { field: 'city', direction: 'asc' },
+        showCheckboxes: true,
+        multiSelect: true,
+        virtualScrolling: true,
+        pageSize: 100,
+        totalRecords: 1000,
+        loadingThreshold: 20,
+        showRefreshButton: true,
+        showAutoFetchButton: true,
+        autoFetchDelay: 500,
+        onNextPage: function (page, pageSize) {
+          logTo('divtable3-log', 'loadPage', { page: page, pageSize: pageSize });
+          virtualScrollingTable.setTotalRecords(477);
+          return simulateDataFetch(page, pageSize);
+        },
+        onSelectionChange: function (rows) {
+          logTo('divtable3-log', 'selectionChange', { count: rows.length });
+        },
+        onRowFocus: function (row, group) {
+          if (group) {
+            updateDetailsPanel('details3', null, group);
+            logTo('divtable3-log', 'groupFocus', { label: group.label, value: group.value });
+          } else if (row) {
+            updateDetailsPanel('details3', row, null);
+            logTo('divtable3-log', 'rowFocus', { id: row.id, name: row.name });
+          } else {
+            updateDetailsPanel('details3', null, null);
+          }
+        }
+      });
+
+      logTo('divtable3-log', 'virtualTable:ready', { pageSize: 100 });
+
+      // Programmatic refresh button
+      var refreshBtn = root.querySelector('#programmaticRefreshBtn');
+      var statusDiv = root.querySelector('#refreshStatus');
+
+      if (refreshBtn) {
+        refreshBtn.addEventListener('click', function () {
+          refreshBtn.disabled = true;
+          refreshBtn.textContent = '⏳ Refreshing...';
+          statusDiv.textContent = 'Calling virtualScrollingTable.refresh()...';
+          statusDiv.style.color = '#0ea5e9';
+
+          virtualScrollingTable.refresh().then(function () {
+            statusDiv.textContent = '✅ Refresh completed!';
+            statusDiv.style.color = '#10b981';
+            logTo('divtable3-log', 'refresh:complete', {});
+            setTimeout(function () {
+              refreshBtn.disabled = false;
+              refreshBtn.textContent = '🔄 Trigger Refresh Programmatically';
+              statusDiv.textContent = '';
+            }, 2000);
+          }).catch(function (err) {
+            statusDiv.textContent = '❌ Error: ' + err.message;
+            statusDiv.style.color = '#ef4444';
+            logTo('divtable3-log', 'refresh:error', { message: err.message });
+            setTimeout(function () {
+              refreshBtn.disabled = false;
+              refreshBtn.textContent = '🔄 Trigger Refresh Programmatically';
+            }, 3000);
+          });
+        });
+      }
+    });
+
+  }).catch(function (err) {
+    console.error('[demo-div-table] Failed to load Monaco:', err);
+  });
+
+}
+
+// Standalone mode
+document.addEventListener('DOMContentLoaded', function() {
+  var main = document.querySelector('main.demo-page');
+  if (main) {
+    Scooter.init(main);
+    ScooterPageInit_demoDivTable(main);
+  }
+});
+</script>
+
+</body>
+</html>

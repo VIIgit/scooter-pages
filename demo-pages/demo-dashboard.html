@@ -88,6 +88,17 @@
   </style>
 </head>
 <body>
+
+<!-- Page metadata for dynamic loading -->
+<script type="scooter/page-meta">
+{
+  "scripts": [
+    "components/chart.js"
+  ],
+  "init": "ScooterPageInit_demoDashboard"
+}
+</script>
+
   <div class="page">
     <main class="demo-page container">
       <header class="header">
@@ -355,10 +366,13 @@
   <script src="../components/scooter-core.js"></script>
   <script src="../components/chart.js"></script>
   <script>
-  (function () {
-    'use strict';
+  /**
+   * Page init — wires up period toggle and chart data switching.
+   * Called by PageLoader (dynamic) or standalone below.
+   * @param {HTMLElement} root - container holding the page content
+   */
+  function ScooterPageInit_demoDashboard(root) {
 
-    // ── Two period datasets ──────────────────────
     var periods = {
       current: {
         kpis: [
@@ -396,7 +410,6 @@
       }
     };
 
-    // Chart element references by key (order matches the DOM)
     var chartKeys = ['revenue', 'users', 'traffic', 'plan', 'perf', 'browser', 'api'];
     var arrowUp = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>';
     var arrowDown = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>';
@@ -404,8 +417,7 @@
     function applyPeriod(key) {
       var p = periods[key];
 
-      // KPI cards
-      var cards = document.querySelectorAll('.dashboard-grid [data-slot="card"]');
+      var cards = root.querySelectorAll('.dashboard-grid [data-slot="card"]');
       cards.forEach(function (card, i) {
         var kpi = p.kpis[i];
         if (!kpi) return;
@@ -415,8 +427,7 @@
         span.innerHTML = (kpi.dir === 'positive' ? arrowUp : arrowDown) + ' ' + kpi.change;
       });
 
-      // Charts
-      var allCharts = document.querySelectorAll('[data-sc="chart"]');
+      var allCharts = root.querySelectorAll('[data-sc="chart"]');
       allCharts.forEach(function (el, i) {
         var chartKey = chartKeys[i];
         if (chartKey && p.charts[chartKey] && el._chart) {
@@ -425,22 +436,30 @@
       });
     }
 
-    // Toggle buttons
-    var btnCurrent = document.getElementById('btn-current');
-    var btnPrevious = document.getElementById('btn-previous');
+    var btnCurrent = root.querySelector('#btn-current');
+    var btnPrevious = root.querySelector('#btn-previous');
+    if (btnCurrent && btnPrevious) {
+      btnCurrent.addEventListener('click', function () {
+        btnCurrent.setAttribute('aria-pressed', 'true');
+        btnPrevious.setAttribute('aria-pressed', 'false');
+        applyPeriod('current');
+      });
+      btnPrevious.addEventListener('click', function () {
+        btnPrevious.setAttribute('aria-pressed', 'true');
+        btnCurrent.setAttribute('aria-pressed', 'false');
+        applyPeriod('previous');
+      });
+    }
+  }
 
-    btnCurrent.addEventListener('click', function () {
-      btnCurrent.setAttribute('aria-pressed', 'true');
-      btnPrevious.setAttribute('aria-pressed', 'false');
-      applyPeriod('current');
-    });
-
-    btnPrevious.addEventListener('click', function () {
-      btnPrevious.setAttribute('aria-pressed', 'true');
-      btnCurrent.setAttribute('aria-pressed', 'false');
-      applyPeriod('previous');
-    });
-  })();
+  // Standalone mode
+  document.addEventListener('DOMContentLoaded', function() {
+    var main = document.querySelector('main.demo-page');
+    if (main) {
+      Scooter.init(main);
+      ScooterPageInit_demoDashboard(main);
+    }
+  });
   </script>
 </body>
 </html>

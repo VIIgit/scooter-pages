@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scooter Pages — Service Health Registry Demo</title>
+  <link rel="stylesheet" href="../components.css">
+  <link rel="stylesheet" href="../components/custom/service-health-registry/style.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="demo-nav">
+  <span class="demo-nav-title">Scooter Pages</span>
+  <a href="demo-css-only.html">CSS-Only</a>
+  <a href="demo-light-js.html">Light JS</a>
+  <a href="demo-medium-js.html">Medium JS</a>
+  <a href="demo-complex-js.html">Complex JS</a>
+  <a href="demo-patterns.html">Patterns</a>
+  <a href="demo-service-registry.html" aria-current="page">Service Registry</a>
+  <a href="demo-monaco-editor.html">Monaco Editor</a>
+  <a href="demo-div-table.html">DivTable</a>
+</nav>
+
+<main class="demo-page">
+  <h1>Service Health Registry</h1>
+  <p class="demo-subtitle">A dashboard for managing ~500 microservices with health monitoring, filtering, and multiple view modes.</p>
+
+  <!-- ═══════════════════════ SERVICE HEALTH REGISTRY ═══════════════════════ -->
+  <section class="demo-section" id="service-registry">
+    <h2>Interactive Registry</h2>
+    <p class="demo-desc">
+      Click on service cards to view detailed information. Use filters to narrow down services. 
+      Toggle between Grid, Grouped, and Treemap views using the buttons in the header.
+    </p>
+
+    <div class="demo-card demo-card--full">
+      <div class="demo-preview demo-preview--col" style="padding:0">
+        <!-- Service Health Registry -->
+        <div data-sc="service-health-registry" data-view="grid" data-detail-dialog="#demo-detail-dialog" id="demo-registry"></div>
+
+        <!-- Service Detail Dialog (triggers on card click) -->
+        <div data-sc="service-detail-dialog" id="demo-detail-dialog">
+          <dialog data-slot="dialog-content">
+            <!-- Content populated dynamically -->
+          </dialog>
+        </div>
+      </div>
+
+      <div class="demo-code-actions">
+        <button class="demo-code-toggle" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--html')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          Show HTML
+        </button>
+        <button class="demo-code-toggle demo-code-toggle--js" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--js')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          <span class="demo-code-js-badge">JS</span> Show JavaScript
+        </button>
+      </div>
+      <div class="demo-code-block demo-code-block--html"><pre><code>&lt;!-- Service Health Registry --&gt;
+&lt;div data-sc="service-health-registry" data-view="grid" data-detail-dialog="#demo-detail-dialog"&gt;
+  &lt;!-- Content auto-generated based on services data --&gt;
+&lt;/div&gt;
+
+&lt;!-- Service Detail Dialog --&gt;
+&lt;div data-sc="service-detail-dialog"&gt;
+  &lt;dialog data-slot="dialog-content"&gt;
+    &lt;!-- Content populated when service is selected --&gt;
+  &lt;/dialog&gt;
+&lt;/div&gt;</code></pre></div>
+      <div class="demo-code-block demo-code-block--js"><pre><code>// Get component references
+const registry = document.querySelector('[data-sc="service-health-registry"]');
+const dialog = document.querySelector('[data-sc="service-detail-dialog"]');
+
+// Load services data (from API, mock generator, etc.)
+const services = generateMockServices(500);
+registry._serviceHealthRegistry.setStatusColors(STATUS_COLORS);
+registry._serviceHealthRegistry.setServices(services);
+
+// The linked detail dialog opens automatically on card click
+registry.addEventListener('sc:select', (e) =&gt; {
+  const service = e.detail.service;
+  console.log('Selected:', service.name);
+});
+
+// Listen for filter changes
+registry.addEventListener('sc:filter', (e) =&gt; {
+  console.log('Filters:', e.detail.filters);
+});
+
+// Listen for view changes
+registry.addEventListener('sc:view-change', (e) =&gt; {
+  console.log('View:', e.detail.view);
+});
+
+// Programmatic control
+registry._serviceHealthRegistry.setView('grouped');
+registry._serviceHealthRegistry.setFilters({ region: 'EU-WEST' });
+registry._serviceHealthRegistry.getFiltered(); // → filtered service array
+
+// Dialog events
+dialog.addEventListener('sc:open', (e) =&gt; {
+  console.log('Dialog opened for:', e.detail.service.name);
+});
+dialog.addEventListener('sc:close', () =&gt; {
+  console.log('Dialog closed');
+});</code></pre></div>
+      <div class="demo-event-log" id="registry-log"></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ COMPONENT FEATURES ═══════════════════════ -->
+  <section class="demo-section" id="features">
+    <h2>Component Features</h2>
+    <p class="demo-desc">Overview of what the Service Health Registry provides.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview demo-preview--col" style="gap:24px">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;width:100%">
+          <div data-slot="card" style="padding:20px;margin:0">
+            <h4 style="font-size:16px;margin-bottom:8px">🔍 Smart Filtering</h4>
+            <p class="text-sm text-muted">Filter by region, exposure level, tier, interface type, and health status. Full-text search across service names.</p>
+          </div>
+          <div data-slot="card" style="padding:20px;margin:0">
+            <h4 style="font-size:16px;margin-bottom:8px">📊 Multiple Views</h4>
+            <p class="text-sm text-muted">Grid view for browsing, grouped view by deployment context, and treemap for status overview.</p>
+          </div>
+          <div data-slot="card" style="padding:20px;margin:0">
+            <h4 style="font-size:16px;margin-bottom:8px">📋 Service Details</h4>
+            <p class="text-sm text-muted">Click any service to see APIs, deployment context, health metrics, and golden rule compliance.</p>
+          </div>
+          <div data-slot="card" style="padding:20px;margin:0">
+            <h4 style="font-size:16px;margin-bottom:8px">⚡ Mock Data</h4>
+            <p class="text-sm text-muted">Auto-generates 500 realistic services with varied health states and deployment contexts.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ DEPLOYMENT CONTEXTS ═══════════════════════ -->
+  <section class="demo-section" id="contexts">
+    <h2>Deployment Contexts</h2>
+    <p class="demo-desc">Services are organized across different deployment contexts.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview">
+        <table data-slot="table" style="width:100%">
+          <thead data-slot="table-header">
+            <tr>
+              <th data-slot="table-head">Context</th>
+              <th data-slot="table-head">Region</th>
+              <th data-slot="table-head">Exposure</th>
+              <th data-slot="table-head">Tier</th>
+            </tr>
+          </thead>
+          <tbody data-slot="table-body">
+            <tr data-slot="table-row">
+              <td data-slot="table-cell">partner-premium</td>
+              <td data-slot="table-cell">EU-WEST</td>
+              <td data-slot="table-cell"><span data-slot="badge" data-variant="secondary">EXTERNAL</span></td>
+              <td data-slot="table-cell"><span data-slot="badge" data-variant="warning">GOLD</span></td>
+            </tr>
+            <tr data-slot="table-row">
+              <td data-slot="table-cell">hr-portal-backend</td>
+              <td data-slot="table-cell">EU-WEST</td>
+              <td data-slot="table-cell"><span data-slot="badge" data-variant="outline">INTERNAL</span></td>
+              <td data-slot="table-cell"><span data-slot="badge" data-variant="secondary">SILVER</span></td>
+            </tr>
+            <tr data-slot="table-row">
+              <td data-slot="table-cell">mobile-app-gw</td>
+              <td data-slot="table-cell">US-EAST</td>
+              <td data-slot="table-cell"><span data-slot="badge" data-variant="secondary">EXTERNAL</span></td>
+              <td data-slot="table-cell"><span data-slot="badge" data-variant="warning">GOLD</span></td>
+            </tr>
+            <tr data-slot="table-row">
+              <td data-slot="table-cell">internal-ai-mcp</td>
+              <td data-slot="table-cell">US-EAST</td>
+              <td data-slot="table-cell"><span data-slot="badge" data-variant="outline">INTERNAL</span></td>
+              <td data-slot="table-cell"><span data-slot="badge" data-variant="secondary">SILVER</span></td>
+            </tr>
+            <tr data-slot="table-row">
+              <td data-slot="table-cell">open-gov-data</td>
+              <td data-slot="table-cell">EU-WEST</td>
+              <td data-slot="table-cell"><span data-slot="badge" data-variant="secondary">EXTERNAL</span></td>
+              <td data-slot="table-cell"><span data-slot="badge" data-variant="outline">BRONZE</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- Toggle helper -->
+<script>
+function toggleCode(btn, cls) {
+  var card = btn.closest('.demo-card');
+  var block = card.querySelector(cls);
+  if (!block) return;
+  var expanded = btn.getAttribute('aria-expanded') === 'true' ? 'false' : 'true';
+  btn.setAttribute('aria-expanded', expanded);
+  block.dataset.visible = expanded;
+}
+</script>
+
+<!-- Scripts: core + custom components -->
+<script src="../components/scooter-core.js"></script>
+<script src="../components/custom/service-health-registry/service-health-registry.js"></script>
+<script src="../components/custom/service-health-registry/service-detail-dialog.js"></script>
+
+<!-- Mock data for demo (replace with real data in production) -->
+<script>
+const DEPLOYMENT_CONTEXTS = [
+  { name: 'partner-premium', region: 'EU-WEST', exposure: 'EXTERNAL', dataOwner: 'ACME', authProfile: 'OAUTH2_TOKEN_EXCH', interfaceType: 'REST_API', dataClassification: 'CONFIDENTIAL', serviceTier: 'GOLD' },
+  { name: 'public-market-data', region: 'APAC-SOUTH', exposure: 'EXTERNAL', dataOwner: 'FINANCE', authProfile: 'API_KEY', interfaceType: 'REST_API', dataClassification: 'PUBLIC', serviceTier: 'BRONZE' },
+  { name: 'hr-portal-backend', region: 'EU-WEST', exposure: 'INTERNAL', dataOwner: 'CORP', authProfile: 'OAUTH2_AUTH_CODE', interfaceType: 'REST_API', dataClassification: 'STRICT_CONF', serviceTier: 'SILVER' },
+  { name: 'mobile-app-gw', region: 'US-EAST', exposure: 'EXTERNAL', dataOwner: 'RETAIL', authProfile: 'OAUTH2_AUTH_CODE', interfaceType: 'REST_API', dataClassification: 'CONFIDENTIAL', serviceTier: 'GOLD' },
+  { name: 'b2b-supply-chain', region: 'EU-WEST', exposure: 'EXTERNAL', dataOwner: 'LOGISTICS', authProfile: 'MTLS', interfaceType: 'ASYNC_API', dataClassification: 'CONFIDENTIAL', serviceTier: 'GOLD' },
+  { name: 'internal-ai-mcp', region: 'US-EAST', exposure: 'INTERNAL', dataOwner: 'AI_LAB', authProfile: 'OAUTH2_CLIENT_CREDS', interfaceType: 'MCP', dataClassification: 'INTERNAL', serviceTier: 'SILVER' },
+  { name: 'stock-ticker-live', region: 'US-EAST', exposure: 'EXTERNAL', dataOwner: 'EXCHANGE', authProfile: 'API_KEY', interfaceType: 'ASYNC_API', dataClassification: 'PUBLIC', serviceTier: 'GOLD' },
+  { name: 'hft-algo-lane', region: 'APAC-SOUTH', exposure: 'INTERNAL', dataOwner: 'ALGO', authProfile: 'MTLS', interfaceType: 'GRPC', dataClassification: 'INTERNAL', serviceTier: 'GOLD' },
+  { name: 'iot-telemetry', region: 'EU-WEST', exposure: 'INTERNAL', dataOwner: 'IOT', authProfile: 'API_KEY', interfaceType: 'GRPC', dataClassification: 'INTERNAL', serviceTier: 'SILVER' },
+  { name: 'health-records', region: 'EU-WEST', exposure: 'INTERNAL', dataOwner: 'HEALTH', authProfile: 'MTLS', interfaceType: 'REST_API', dataClassification: 'STRICT_CONF', serviceTier: 'GOLD' },
+  { name: 'open-gov-data', region: 'EU-WEST', exposure: 'EXTERNAL', dataOwner: 'GOV', authProfile: 'NONE', interfaceType: 'STATIC', dataClassification: 'PUBLIC', serviceTier: 'BRONZE' },
+  { name: 'admin-dashboard', region: 'EU-WEST', exposure: 'INTERNAL', dataOwner: 'CORP', authProfile: 'OAUTH2_AUTH_CODE', interfaceType: 'SSR_WEB', dataClassification: 'CONFIDENTIAL', serviceTier: 'SILVER' },
+  { name: 'legacy-erp-bridge', region: 'EU-WEST', exposure: 'INTERNAL', dataOwner: 'LEGACY', authProfile: 'API_KEY', interfaceType: 'REST_API', dataClassification: 'INTERNAL', serviceTier: 'BRONZE' },
+  { name: 'it-audit-logs', region: 'US-EAST', exposure: 'INTERNAL', dataOwner: 'GRP_GLOBAL', authProfile: 'MTLS', interfaceType: 'ASYNC_API', dataClassification: 'STRICT_CONF', serviceTier: 'SILVER' },
+  { name: 'ai-agent-tools', region: 'US-EAST', exposure: 'INTERNAL', dataOwner: 'GENAI', authProfile: 'OAUTH2_CLIENT_CREDS', interfaceType: 'MCP', dataClassification: 'INTERNAL', serviceTier: 'GOLD' },
+  { name: 'fed-banking-node', region: 'APAC-SOUTH', exposure: 'EXTERNAL', dataOwner: 'GRP_BANK', authProfile: 'OAUTH2_TOKEN_EXCH', interfaceType: 'REST_API', dataClassification: 'STRICT_CONF', serviceTier: 'GOLD' },
+  { name: 'realtime-sports', region: 'APAC-SOUTH', exposure: 'EXTERNAL', dataOwner: 'MEDIA', authProfile: 'API_KEY', interfaceType: 'ASYNC_API', dataClassification: 'PUBLIC', serviceTier: 'SILVER' },
+  { name: 'legacy-soap-proxy', region: 'US-EAST', exposure: 'INTERNAL', dataOwner: 'LEGACY', authProfile: 'API_KEY', interfaceType: 'REST_API', dataClassification: 'INTERNAL', serviceTier: 'BRONZE' },
+  { name: 'customer-self-srv', region: 'APAC-SOUTH', exposure: 'EXTERNAL', dataOwner: 'RETAIL', authProfile: 'OAUTH2_AUTH_CODE', interfaceType: 'SSR_WEB', dataClassification: 'CONFIDENTIAL', serviceTier: 'SILVER' },
+  { name: 'dev-portal-docs', region: 'US-EAST', exposure: 'EXTERNAL', dataOwner: 'ACME', authProfile: 'NONE', interfaceType: 'STATIC', dataClassification: 'PUBLIC', serviceTier: 'BRONZE' }
+];
+
+const CATEGORIES = [
+  'Authentication', 'Payment', 'Inventory', 'Analytics', 'Notification',
+  'User Management', 'Content Delivery', 'Search', 'Recommendation', 'Data Processing'
+];
+
+const STATUSES = ['healthy', 'degraded', 'critical'];
+const STATUS_WEIGHTS = [0.85, 0.10, 0.05];
+
+const STATUS_COLORS = {
+  healthy: 'var(--success)',
+  degraded: '#f59e0b',
+  critical: 'var(--destructive)'
+};
+
+function weightedRandom(items, weights) {
+  const total = weights.reduce((a, b) => a + b, 0);
+  const r = Math.random() * total;
+  let sum = 0;
+  for (let i = 0; i < items.length; i++) {
+    sum += weights[i];
+    if (r <= sum) return items[i];
+  }
+  return items[items.length - 1];
+}
+
+function generateMockServices(count = 500) {
+  const services = [];
+  const methods = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'];
+  for (let i = 0; i < count; i++) {
+    const ctx = DEPLOYMENT_CONTEXTS[i % DEPLOYMENT_CONTEXTS.length];
+    const category = CATEGORIES[i % CATEGORIES.length];
+    const status = weightedRandom(STATUSES, STATUS_WEIGHTS);
+    const catSlug = category.toLowerCase().replace(/\s+/g, '-');
+    services.push({
+      id: `svc-${(i + 1).toString().padStart(4, '0')}`,
+      name: `${category}-${Math.floor(i / CATEGORIES.length) + 1}`,
+      category: category,
+      description: `Handles ${category.toLowerCase()} operations`,
+      status,
+      responseTime: Math.floor(Math.random() * 300) + 50,
+      healthEndpoint: '/health',
+      tier: ctx.serviceTier,
+      region: ctx.region,
+      exposure: ctx.exposure,
+      interface: ctx.interfaceType,
+      deploymentContext: { ...ctx },
+      apis: Array.from({ length: Math.floor(Math.random() * 5) + 2 }, (_, j) => {
+        const method = methods[Math.floor(Math.random() * methods.length)];
+        return {
+          method,
+          path: `/api/v1/${catSlug}/${['list', 'create', 'update', 'delete', 'status', 'health', 'metrics'][j] || 'action'}`,
+          description: `${['List', 'Create', 'Update', 'Delete', 'Status', 'Health', 'Metrics'][j] || 'Action'} ${category.toLowerCase()}`,
+          version: 'v1',
+          rateLimit: `${Math.floor(Math.random() * 900) + 100}/min`
+        };
+      }),
+      goldenRule: {
+        compliant: Math.random() > 0.2,
+        description: Math.random() > 0.2 ? 'All golden signals within thresholds' : 'Latency P99 exceeds threshold'
+      }
+    });
+  }
+  return services;
+}
+</script>
+
+<!-- Event logger & integration -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // Ensure Scooter has initialized components
+  if (typeof Scooter !== 'undefined') {
+    Scooter.init();
+  }
+
+  const registry = document.getElementById('demo-registry');
+  const dialog = document.getElementById('demo-detail-dialog');
+  const log = document.getElementById('registry-log');
+
+  // Load mock data into the registry component
+  if (registry && registry._serviceHealthRegistry) {
+    registry._serviceHealthRegistry.setStatusColors(STATUS_COLORS);
+    registry._serviceHealthRegistry.setServices(generateMockServices(500));
+  }
+
+  function logTo(type, detail) {
+    if (!log) return;
+    const time = new Date().toLocaleTimeString('en-US', { hour12: false });
+    const d = detail ? JSON.stringify(detail).slice(0, 100) : '{}';
+    const line = document.createElement('div');
+    line.innerHTML = `<span style="color:var(--gray-500)">[${time}]</span> <span style="color:#34c759">${type}</span> ${d}`;
+    log.appendChild(line);
+    log.scrollTop = log.scrollHeight;
+  }
+
+  // Connect registry selection to dialog
+  if (registry && dialog && dialog._serviceDetailDialog) {
+    registry.addEventListener('sc:select', (e) => {
+      logTo('sc:select', { name: e.detail.service.name, status: e.detail.service.status });
+    });
+
+    registry.addEventListener('sc:filter', (e) => {
+      logTo('sc:filter', e.detail.filters);
+    });
+
+    registry.addEventListener('sc:view-change', (e) => {
+      logTo('sc:view-change', e.detail);
+    });
+
+    dialog.addEventListener('sc:open', (e) => {
+      logTo('dialog:open', { service: e.detail.service.name });
+    });
+
+    dialog.addEventListener('sc:close', () => {
+      logTo('dialog:close', {});
+    });
+  } else {
+    console.error('Service registry or dialog component not initialized');
+  }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+/**
+ * DivTable Widget - Dark Theme
+ * Include this file after div-table.css to enable dark mode.
+ * Activate by adding class="theme-dark" to a parent element (e.g., <body>).
+ * 
+ * Usage:
+ *   <link rel="stylesheet" href="div-table.css">
+ *   <link rel="stylesheet" href="div-table-theme-dark.css">
+ *   <body class="theme-dark">...</body>
+ * 
+ * Or toggle dynamically:
+ *   document.body.classList.toggle('theme-dark');
+ */
+
+/* Dark theme variables - activated via .theme-dark or .dark class */
+.theme-dark,
+.dark {
+  /* === Primary/Accent Colors === */
+  --dt-primary: hsl(38, 100%, 50%);
+  --dt-primary-hover: hsl(38, 100%, 40%);
+  --dt-primary-light: hsla(38, 100%, 50%, 0.12);
+  --dt-primary-lighter: hsla(38, 100%, 50%, 0.07);
+  --dt-focus-ring: hsla(38, 100%, 50%, 0.18);
+
+  /* === Background Colors === */
+  --dt-bg-base: hsl(0, 0%, 9%);
+  --dt-bg-light: hsl(0, 0%, 14%);
+  --dt-bg-hover: hsl(0, 0%, 18%);
+  --dt-bg-selected: hsla(38, 100%, 50%, 0.12);
+  --dt-bg-header: hsl(0, 0%, 12%);
+  --dt-bg-summary: hsl(0, 0%, 12%);
+  --dt-bg-disabled: hsl(0, 0%, 20%);
+
+  /* === Border Colors === */
+  --dt-border-light: hsl(0, 0%, 22%);
+  --dt-border-medium: hsl(0, 0%, 20%);
+  --dt-border-dark: hsl(0, 0%, 18%);
+  --dt-border-row: hsl(0, 0%, 22%);
+  --dt-border-focus: hsl(38, 100%, 50%);
+  --dt-border-hover: hsl(38, 100%, 50%);
+
+  /* === Text Colors === */
+  --dt-text-primary: hsl(0, 0%, 98%);
+  --dt-text-secondary: hsl(0, 0%, 90%);
+  --dt-text-muted: hsl(0, 0%, 60%);
+  --dt-text-light: hsl(0, 0%, 90%);
+  --dt-text-disabled: hsl(0, 0%, 55%);
+  --dt-text-inverse: hsl(0, 0%, 9%);
+
+  /* === Shadow === */
+  --dt-shadow: rgba(0, 0, 0, 0.4);
+  --dt-shadow-medium: rgba(0, 0, 0, 0.5);
+  --dt-shadow-heavy: rgba(0, 0, 0, 0.6);
+
+  /* === Error State === */
+  --dt-error: hsl(0, 84%, 60%);
+  --dt-error-light: hsla(0, 84%, 60%, 0.6);
+  --dt-error-hover: hsl(0, 62%, 30%);
+  --dt-error-active: hsl(0, 62%, 20%);
+  --dt-error-bg: hsl(0, 30%, 14%);
+  --dt-error-border: hsl(0, 84%, 70%);
+  --dt-error-text: hsl(0, 84%, 65%);
+  --dt-error-border-hover: hsla(0, 84%, 60%, 0.6);
+  --dt-error-focus-ring: hsla(0, 84%, 60%, 0.25);
+
+  /* === Success State === */
+  --dt-success: hsl(143, 72%, 50%);
+  --dt-success-bg: hsl(143, 25%, 15%);
+  --dt-success-bg-hover: hsl(143, 25%, 22%);
+
+  /* === Warning State === */
+  --dt-warning: hsl(43, 100%, 50%);
+  --dt-warning-bg: hsl(43, 25%, 15%);
+  --dt-warning-bg-hover: hsl(43, 25%, 22%);
+
+  /* === Info State === */
+  --dt-info: hsl(198, 89%, 60%);
+  --dt-info-bg: hsl(198, 25%, 15%);
+  --dt-info-bg-hover: hsl(198, 25%, 22%);
+
+  /* === Button Colors === */
+  --dt-button-bg: hsl(0, 0%, 14%);
+  --dt-button-bg-hover: hsl(0, 0%, 18%);
+  --dt-button-text: hsl(0, 0%, 98%);
+
+  /* === Scrollbar Colors === */
+  --dt-scrollbar-track: hsl(0, 0%, 14%);
+  --dt-scrollbar-thumb: hsl(0, 0%, 22%);
+  --dt-scrollbar-thumb-hover: hsl(0, 0%, 28%);
+
+  /* === Spinner Colors === */
+  --dt-spinner-track: hsl(0, 0%, 20%);
+  --dt-spinner-active: hsl(0, 0%, 90%);
+
+  /* === Skeleton Loading === */
+  --dt-skeleton-base: hsl(0, 0%, 14%);
+  --dt-skeleton-shine: hsl(0, 0%, 20%);
+
+  /* === Group Row === */
+  --dt-group-bg: hsla(0, 0%, 14%, 0.5);
+
+  /* === Summary Row === */
+  --dt-summary-border: hsl(0, 0%, 18%);
+}

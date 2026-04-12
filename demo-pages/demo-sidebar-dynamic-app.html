@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scooter Pages — App Layout</title>
+  <link rel="stylesheet" href="../components.css" />
+  <link rel="stylesheet" href="../components/custom/monaco-editor/style.css" />
+  <link rel="stylesheet" href="../components/custom/div-table/div-table.css" />
+  <link rel="stylesheet" href="demo.css" />
+  <style>
+    /* Full-viewport layout */
+    html, body { margin: 0; height: 100%; overflow: hidden; }
+
+    /* ── Outer sidebar wrapper (reuse sidebar.js) ── */
+    [data-sc="sidebar"] {
+      display: flex;
+      height: 100vh;
+    }
+
+    /* ── Sidebar panel ── */
+    [data-slot="sidebar-panel"] {
+      width: 240px;
+      min-width: 240px;
+      background: var(--secondary);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+    [data-sc="sidebar"][data-state="collapsed"] [data-slot="sidebar-panel"] {
+      width: 0;
+      min-width: 0;
+      overflow: hidden;
+      border-right: none;
+    }
+
+    [data-slot="sidebar-header"] {
+      padding: 16px 20px;
+      font-weight: 600;
+      font-size: var(--text-title2);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 60px;
+    }
+    .layout-sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .layout-sidebar-brand-icon { display: flex; }
+
+    [data-slot="sidebar-group-label"] {
+      padding: 12px 20px 4px;
+      font-size: var(--text-caption);
+      font-weight: 600;
+      color: var(--muted-foreground);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    [data-slot="sidebar-group-content"] {
+      list-style: none;
+      margin: 0;
+      padding: 4px 8px;
+    }
+    [data-slot="sidebar-menu-button"] {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      padding: 8px 12px;
+      border: none;
+      background: none;
+      border-radius: var(--radius-sm);
+      font-size: var(--text-callout);
+      color: var(--foreground);
+      cursor: pointer;
+      text-decoration: none;
+      transition: background var(--transition-fast);
+    }
+    [data-slot="sidebar-menu-button"]:hover { background: var(--accent); }
+    [data-slot="sidebar-menu-button"][data-active="true"] {
+      background: var(--primary);
+      color: var(--primary-foreground);
+    }
+    [data-slot="sidebar-footer"] {
+      margin-top: auto;
+      padding: 12px 20px;
+      font-size: var(--text-footnote);
+      color: var(--muted-foreground);
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── Main content area (to the right of sidebar) ── */
+    .app-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* ── Layout Header ── */
+    [data-sc="layout-header"] {
+      height: 48px;
+      min-height: 60px;
+      border-bottom: 1px solid var(--border);
+      background: var(--card, var(--background));
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    [data-slot="header-search"] {
+      position: relative;
+      flex: 1;
+      max-width: 480px;
+    }
+    .header-search-icon {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted-foreground);
+      display: flex;
+    }
+    .header-search-input {
+      width: 100%;
+      height: 32px;
+      padding-left: 32px;
+      padding-right: 12px;
+      border-radius: var(--radius-md, 8px);
+      border: 1px solid var(--border);
+      background: var(--background);
+      font-size: var(--text-callout, 14px);
+      color: var(--foreground);
+      outline: none;
+    }
+    .header-search-input:focus {
+      box-shadow: 0 0 0 2px var(--ring, rgba(0,0,0,.1));
+    }
+    [data-slot="header-actions"] {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .header-action-btn {
+      position: relative;
+      padding: 6px;
+      background: none;
+      border: none;
+      border-radius: var(--radius-sm);
+      color: var(--muted-foreground);
+      cursor: pointer;
+      transition: color var(--transition-fast), background var(--transition-fast);
+    }
+    .header-action-btn:hover {
+      background: var(--accent);
+      color: var(--foreground);
+    }
+    .header-notification-dot {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--destructive, #ef4444);
+    }
+
+    /* ── Sidebar toggle button (collapsed state) ── */
+    .sidebar-trigger-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: var(--radius-sm);
+      color: var(--muted-foreground);
+    }
+    .sidebar-trigger-btn:hover {
+      background: var(--accent);
+      color: var(--foreground);
+    }
+
+    /* Toggle visibility rules */
+    [data-sc="sidebar"][data-state="collapsed"] .sidebar-header-toggle { display: none; }
+    [data-sc="sidebar"][data-state="expanded"] .app-sidebar-expand { display: none; }
+
+    /* ── Page Container ── */
+    [data-sc="layout-page-container"] {
+      flex: 1;
+      overflow-y: auto;
+      background: var(--background);
+    }
+    .page-container-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 24px 32px;
+    }
+
+    /* ── Welcome state ── */
+    .welcome-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 60vh;
+      gap: 12px;
+      color: var(--muted-foreground);
+    }
+    .welcome-state h2 {
+      color: var(--foreground);
+      font-size: var(--text-title1);
+    }
+
+    /* ── Loading state ── */
+    .loading-placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 200px;
+      color: var(--muted-foreground);
+      font-size: var(--text-body);
+    }
+
+    /* ── Dashboard styles (for dynamically loaded dashboard) ── */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .chart-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    @media (max-width: 768px) { .chart-row { grid-template-columns: 1fr; } }
+    .chart-row-3 {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    @media (max-width: 768px) { .chart-row-3 { grid-template-columns: 1fr; } }
+    .stat-value { font-size: var(--text-title1); font-weight: 700; color: var(--foreground); margin: 4px 0; }
+    .stat-change { font-size: var(--text-footnote); display: inline-flex; align-items: center; gap: 4px; }
+    .stat-change.positive { color: var(--success); }
+    .stat-change.negative { color: var(--destructive); }
+    .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .period-toggle { display: inline-flex; border-radius: 6px; overflow: hidden; border: 1px solid var(--border); background: var(--muted); }
+    .period-toggle button { padding: 6px 14px; font-size: 13px; font-weight: 500; border: none; background: transparent; color: var(--muted-foreground); cursor: pointer; transition: background 150ms, color 150ms; }
+    .period-toggle button[aria-pressed="true"] { background: var(--background); color: var(--foreground); box-shadow: 0 1px 2px rgba(0,0,0,.06); }
+    [data-sc="chart"] { width: 100%; }
+  </style>
+</head>
+<body>
+
+<div data-sc="sidebar" data-side="left" data-collapsible="offcanvas" data-default-open="true">
+
+  <!-- ── Sidebar: layout-sidebar generates the panel contents ── -->
+  <aside data-slot="sidebar-panel">
+    <div data-sc="layout-sidebar" id="app-sidebar"
+         data-title="Scooter Pages"
+         data-subtitle="v1.0"
+         data-footer="Scooter v1.0"
+         data-brand-icon='<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/></svg>'>
+    </div>
+  </aside>
+
+  <button data-slot="sidebar-trigger" style="display:none"></button>
+
+  <!-- ── Main area: header + page container ── -->
+  <div class="app-main" data-slot="sidebar-inset">
+
+    <!-- Top header with expand toggle + search -->
+    <div style="display:flex;align-items:center;">
+      <button class="sidebar-trigger-btn app-sidebar-expand" aria-label="Expand sidebar" style="margin:0 4px 0 8px"
+              onclick="document.querySelector('[data-sc=sidebar]')._sidebar.toggle()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/><path d="m14 9 3 3-3 3"/></svg>
+      </button>
+      <div data-sc="layout-header" id="app-header" data-search-placeholder="Search proxies, products, realms…" style="flex:1"></div>
+    </div>
+
+    <!-- Page content area -->
+    <div data-sc="layout-page-container" id="app-content">
+      <div class="welcome-state">
+        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--muted-foreground)"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/><path d="m14 9 3 3-3 3"/></svg>
+        <h2>Select a page</h2>
+        <p>Choose a demo page from the sidebar to load its content here.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── Scripts ── -->
+<script src="../components/scooter-core.js"></script>
+<script src="../components/sidebar.js"></script>
+<!-- Layout components -->
+<script src="../components/layout/header.js"></script>
+<script src="../components/layout/sidebar.js"></script>
+<script src="../components/layout/page-container.js"></script>
+<script src="../components/layout/page-loader.js"></script>
+
+<!-- Toggle helper for dynamically loaded demo pages -->
+<script>
+function toggleCode(btn, cls) {
+  var card = btn.closest('.demo-card');
+  var block = card.querySelector(cls);
+  if (!block) return;
+  var expanded = btn.getAttribute('aria-expanded') === 'true' ? 'false' : 'true';
+  btn.setAttribute('aria-expanded', expanded);
+  block.dataset.visible = expanded;
+}
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var sidebarEl   = document.getElementById('app-sidebar');
+  var contentEl   = document.getElementById('app-content');
+  var currentPage = null;
+
+  Scooter.observe();
+
+  // ── Icons (Lucide SVGs, 16×16) ──
+  var ICONS = {
+    file:     '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>',
+    sparkles: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/></svg>',
+    code:     '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>',
+    table:    '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M3 15h18"/><path d="M9 3v18"/></svg>'
+  };
+
+  // ── Navigation data (matching demo-sidebar-dynamic.html) ──
+  var navigation = [
+    {
+      label: 'Demo Pages',
+      items: [
+        { name: 'Light JS Components', page: 'demo-light-js.html',     icon: ICONS.file },
+        { name: 'CSS-Only',            page: 'demo-css-only.html',      icon: ICONS.file },
+        { name: 'Patterns & Combos',   page: 'demo-patterns.html',     icon: ICONS.sparkles },
+        { name: 'Dashboard examples',  page: 'demo-dashboard.html',    icon: ICONS.sparkles },
+        { name: 'Monaco Editor',       page: 'demo-monaco-editor.html', icon: ICONS.code },
+        { name: 'DivTable',            page: 'demo-div-table.html',    icon: ICONS.table }
+      ]
+    }
+  ];
+
+  // Feed nav data into the layout-sidebar component
+  sidebarEl._layoutSidebar.setNavigation(navigation);
+
+  // Handle navigation clicks
+  sidebarEl.addEventListener('sc:navigate', function (e) {
+    var page = e.detail.page;
+    if (page === currentPage) return;
+    loadPage(page, e.detail.name);
+  });
+
+  function loadPage(page, title) {
+    currentPage = page;
+    var inner = contentEl._layoutPageContainer.getInner();
+    inner.innerHTML = '<div class="loading-placeholder">Loading\u2026</div>';
+
+    PageLoader.load(page, inner)
+      .then(function (result) {
+        // title already set by navigation
+      })
+      .catch(function (err) {
+        inner.innerHTML =
+          '<div class="loading-placeholder" style="color:var(--destructive)">' +
+            'Error: ' + err.message +
+          '</div>';
+      });
+  }
+});
+</script>
+
+</body>
+</html>

@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Scooter Pages — Sidebar Dynamic Loading</title>
   <link rel="stylesheet" href="../components.css" />
+  <link rel="stylesheet" href="../components/custom/monaco-editor/style.css" />
+  <link rel="stylesheet" href="../components/custom/div-table/div-table.css" />
   <link rel="stylesheet" href="demo.css" />
   <style>
     /* Full-viewport sidebar layout */
@@ -110,10 +112,42 @@
 
     /* Show panel collapse button only when sidebar is open */
     [data-sc="sidebar"][data-state="collapsed"] .sidebar-header-toggle { display: none; }
-    /* Show inset toggle button only when sidebar is collapsed */
-    [data-sc="sidebar"][data-state="expanded"] .inset-header-toggle { display: none; }
+    /* Hide entire inset header bar when sidebar is expanded (sidebar-header suffices) */
+    [data-sc="sidebar"][data-state="expanded"] .inset-header { display: none; }
 
-    /* Inset header bar with toggle */
+    /* ── Sidebar hover trigger (visible when sidebar collapsed) ── */
+    .sidebar-hover-trigger {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 6px;
+      height: 100%;
+      z-index: 20;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: width 200ms ease, background 200ms ease, box-shadow 200ms ease;
+    }
+    .sidebar-hover-trigger .trigger-icon {
+      opacity: 0;
+      transition: opacity 200ms ease;
+      color: var(--muted-foreground);
+      flex-shrink: 0;
+    }
+    .sidebar-hover-trigger:hover {
+      width: 36px;
+      background: var(--secondary);
+      box-shadow: var(--shadow-sm, 0 2px 8px rgba(0,0,0,0.06));
+    }
+    .sidebar-hover-trigger:hover .trigger-icon {
+      opacity: 1;
+    }
+    /* Only show when sidebar is collapsed */
+    [data-sc="sidebar"][data-state="expanded"] .sidebar-hover-trigger { display: none; }
+    [data-sc="sidebar"][data-state="collapsed"] .sidebar-hover-trigger { display: flex; }
+
+    /* Inset header bar with toggle (visible only when sidebar collapsed) */
     .inset-header {
       display: flex;
       align-items: center;
@@ -131,26 +165,67 @@
       margin: 0;
     }
 
-    /* Sticky h1 inside loaded content */
+    /* Brand + title hidden until user scrolls */
+    .inset-brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      font-size: var(--text-callout, 14px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 200ms ease;
+    }
+    .inset-separator {
+      color: var(--muted-foreground);
+      opacity: 0;
+      transition: opacity 200ms ease;
+    }
+    .inset-header:not(.is-scrolled) #inset-title {
+      opacity: 0;
+      pointer-events: none;
+    }
+    #inset-title { transition: opacity 200ms ease; }
+    .inset-header.is-scrolled .inset-brand,
+    .inset-header.is-scrolled .inset-separator { opacity: 1; pointer-events: auto; }
+
+    /* Sticky h1 inside loaded content — styled like sidebar-header */
     #inset-body > h1,
     #inset-body > .header {
       position: sticky;
       top: 0;
-      background: var(--background);
+      background: var(--secondary);
       z-index: 4;
-      padding-top: 12px;
-      padding-bottom: 8px;
-      margin-bottom: 0.5rem;
+      padding: 10px 16px;
+      margin: 0 -10px 0.5rem;
+      font-size: var(--text-callout, 14px);
+      font-weight: 600;
+      border-bottom: 1px solid var(--border);
     }
 
-    /* Sticky h2 section headers below h1 */
+    /* Sticky h2 section headers below h1 — smaller content-header */
     #inset-body .demo-section > h2 {
       position: sticky;
-      top: 48px;
-      background: var(--background);
+      top: 40px;
+      background: var(--secondary);
       z-index: 3;
-      padding-top: 8px;
-      padding-bottom: 4px;
+      padding: 8px 16px;
+      margin: 0 -10px 0.5rem;
+      font-size: var(--text-footnote, 12px);
+      font-weight: 600;
+      border-bottom: 1px solid var(--border);
+      color: var(--muted-foreground);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    /* When sidebar collapsed the inset-header is visible (~41px), push sticky headings below it */
+    [data-sc="sidebar"][data-state="collapsed"] #inset-body > h1,
+    [data-sc="sidebar"][data-state="collapsed"] #inset-body > .header {
+      top: 41px;
+    }
+    [data-sc="sidebar"][data-state="collapsed"] #inset-body .demo-section > h2 {
+      top: 81px;
     }
 
     /* Shadow appears only when stuck */
@@ -269,7 +344,10 @@
   <!-- ── Sidebar Panel ── -->
   <aside data-slot="sidebar-panel">
     <div data-slot="sidebar-header">
-      <span>Scooter Pages</span>
+      <span style="display:flex;align-items:center;gap:8px;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="sidebar-brand-icon"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/></svg>
+        Scooter Pages
+      </span>
       <button class="sidebar-trigger-btn sidebar-header-toggle" aria-label="Collapse sidebar" onclick="document.querySelector('[data-sc=sidebar]')._sidebar.toggle()">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/></svg>
       </button>
@@ -305,6 +383,24 @@
               Dashboard examples
             </a>
           </li>
+          <li data-slot="sidebar-menu-item">
+            <a data-slot="sidebar-menu-button" href="#" data-page="demo-monaco-editor.html">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+              Monaco Editor
+            </a>
+          </li>
+          <li data-slot="sidebar-menu-item">
+            <a data-slot="sidebar-menu-button" href="#" data-page="demo-div-table.html">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M3 15h18"/><path d="M9 3v18"/></svg>
+              DivTable
+            </a>
+          </li>
+          <li data-slot="sidebar-menu-item">
+            <a data-slot="sidebar-menu-button" href="demo-sidebar-dynamic-app.html">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/><path d="M15 3v18"/></svg>
+              App Layout
+            </a>
+          </li>
           
         </ul>
       </div>
@@ -316,12 +412,22 @@
   <!-- Trigger outside the panel — sidebar.js binds to this -->
   <button data-slot="sidebar-trigger" style="display:none"></button>
 
+  <!-- ── Hover trigger to re-open collapsed sidebar ── -->
+  <div class="sidebar-hover-trigger" aria-label="Expand sidebar" onclick="document.querySelector('[data-sc=sidebar]')._sidebar.toggle()">
+    <svg class="trigger-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/><path d="m14 9 3 3-3 3"/></svg>
+  </div>
+
   <!-- ── Main Content Area ── -->
   <main data-slot="sidebar-inset" id="main-content">
     <div class="inset-header">
       <button class="sidebar-trigger-btn inset-header-toggle" aria-label="Expand sidebar" onclick="document.querySelector('[data-sc=sidebar]')._sidebar.toggle()">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/><path d="m14 9 3 3-3 3"/></svg>
       </button>
+      <span class="inset-brand">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/></svg>
+        Scooter Pages
+      </span>
+      <span class="inset-separator">/</span>
       <h1 id="inset-title">Scooter Pages</h1>
     </div>
     <div id="inset-body">
@@ -335,29 +441,10 @@
 
 </div>
 
-<!-- Scripts: core + all component scripts (superset for both pages) -->
-<script src="../components/accordion.js"></script>
-<script src="../components/avatar.js"></script>
-<script src="../components/chart.js"></script>
-<script src="../components/checkbox.js"></script>
-<script src="../components/collapsible.js"></script>
-<script src="../components/command.js"></script>
-<script src="../components/dialog.js"></script>
-<script src="../components/dropdown-menu.js"></script>
-<script src="../components/form.js"></script>
-<script src="../components/hover-card.js"></script>
-<script src="../components/image-with-fallback.js"></script>
-<script src="../components/radio-group.js"></script>>
+<!-- Scripts: core + sidebar + page-loader -->
 <script src="../components/scooter-core.js"></script>
-<script src="../components/select.js"></script>
 <script src="../components/sidebar.js"></script>
-<script src="../components/slider.js"></script>
-<script src="../components/switch.js"></script>
-<script src="../components/tabs.js"></script>
-<script src="../components/toast.js"></script>
-<script src="../components/toggle-group.js"></script>
-<script src="../components/toggle.js"></script>
-<script src="../components/tooltip.js"></script>
+<script src="../components/layout/page-loader.js"></script>
 
 <!-- Toggle helper used by dynamically loaded demo pages (Show HTML / Show JS buttons) -->
 <script>
@@ -382,6 +469,12 @@ document.addEventListener('DOMContentLoaded', () => {
   Scooter.observe();
 
   const scrollContainer = document.getElementById('main-content');
+  const insetHeader = document.querySelector('.inset-header');
+
+  // Toggle .is-scrolled on the inset header when the user scrolls
+  scrollContainer.addEventListener('scroll', () => {
+    insetHeader.classList.toggle('is-scrolled', scrollContainer.scrollTop > 0);
+  });
 
   function initStickyObservers() {
     // Insert 1px sentinel elements before each sticky heading.
@@ -420,202 +513,17 @@ document.addEventListener('DOMContentLoaded', () => {
     if (insetTitle) insetTitle.textContent = title || 'Scooter Pages';
     insetBody.innerHTML = '<div class="loading-placeholder">Loading…</div>';
 
-    fetch(page)
-      .then(r => {
-        if (!r.ok) throw new Error('Failed to load ' + page);
-        return r.text();
-      })
-      .then(html => {
-        // Parse the fetched HTML and extract the <main> content
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, 'text/html');
-        const pageMain = doc.querySelector('main.scooter-page, main.demo-page');
-
-        if (pageMain) {
-          insetBody.innerHTML = pageMain.innerHTML;
-        } else {
-          insetBody.innerHTML = '<div class="loading-placeholder">No content found.</div>';
-          return;
-        }
-
-        // Re-initialize all Scooter components in the newly loaded content
-        Scooter.init(insetBody);
-
-        // Run page-specific setup
-        if (page === 'demo-patterns.html') {
-          initPatternScripts();
-        }
-        if (page === 'demo-dashboard.html') {
-          initDashboardScripts();
-        }
-
+    PageLoader.load(page, insetBody)
+      .then(function (result) {
+        if (result.title && insetTitle) insetTitle.textContent = result.title;
         initStickyObservers();
       })
-      .catch(err => {
+      .catch(function (err) {
         insetBody.innerHTML =
           '<div class="loading-placeholder" style="color:var(--destructive)">' +
             'Error: ' + err.message +
           '</div>';
       });
-  }
-
-  function initPatternScripts() {
-    // Cmd+K dialog
-    const cmdKDialog = document.getElementById('cmd-k-dialog');
-    const cmdKTrigger = document.getElementById('cmd-k-trigger');
-
-    if (cmdKTrigger && cmdKDialog) {
-      cmdKTrigger.addEventListener('click', () => {
-        if (cmdKDialog._dialog) cmdKDialog._dialog.open();
-      });
-    }
-
-    if (cmdKDialog) {
-      cmdKDialog.addEventListener('sc:select', e => {
-        if (cmdKDialog._dialog) cmdKDialog._dialog.close();
-        if (typeof Scooter !== 'undefined' && Scooter.toast) {
-          Scooter.toast('Command', { description: 'Selected: ' + e.detail.value });
-        }
-      });
-    }
-
-    // Slider value display
-    const expSlider = insetBody.querySelector('#registration-form [data-sc="slider"]');
-    const expValue = document.getElementById('exp-value');
-    if (expSlider && expValue) {
-      expSlider.addEventListener('sc:change', e => {
-        expValue.textContent = e.detail.value;
-      });
-    }
-
-    // Form submit
-    const regForm = document.getElementById('registration-form');
-    if (regForm) {
-      regForm.addEventListener('sc:action', e => {
-        if (typeof Scooter !== 'undefined' && Scooter.toast) {
-          Scooter.toast('Registration Complete', {
-            description: 'Welcome, ' + (e.detail.data.get?.('firstName') || 'User') + '!',
-            variant: 'success'
-          });
-        }
-      });
-    }
-
-    // Event Logger
-    const logEl = document.getElementById('event-log');
-    if (logEl) {
-      const scEvents = [
-        'sc:change','sc:toggle','sc:select','sc:slide',
-        'sc:open','sc:close','sc:action','sc:complete',
-        'sc:press','sc:resize'
-      ];
-      scEvents.forEach(type => {
-        document.addEventListener(type, e => {
-          const time = new Date().toLocaleTimeString('en-US', { hour12: false });
-          const detail = e.detail ? JSON.stringify(e.detail) : '{}';
-          const line = document.createElement('div');
-          line.innerHTML =
-            '<span style="color:var(--gray-500)">[' + time + ']</span> ' +
-            '<span style="color:var(--primary)">' + type + '</span> ' + detail;
-          logEl.appendChild(line);
-          logEl.scrollTop = logEl.scrollHeight;
-        });
-      });
-    }
-
-    // Viewport info
-    const vw = document.getElementById('viewport-width');
-    const bp = document.getElementById('viewport-bp');
-    const dpr = document.getElementById('viewport-dpr');
-
-    function updateViewport() {
-      if (vw) vw.textContent = window.innerWidth + 'px';
-      if (bp) {
-        const w = window.innerWidth;
-        bp.textContent = w <= 480 ? 'Mobile' : w <= 768 ? 'Tablet' : 'Desktop';
-      }
-      if (dpr) dpr.textContent = window.devicePixelRatio + 'x';
-    }
-    updateViewport();
-    window.addEventListener('resize', updateViewport);
-  }
-
-  function initDashboardScripts() {
-    var chartKeys = ['revenue', 'users', 'traffic', 'plan', 'perf', 'browser', 'api'];
-    var arrowUp = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>';
-    var arrowDown = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>';
-
-    var periods = {
-      current: {
-        kpis: [
-          { value: '$45,231', change: '+20.1% from last month', dir: 'positive' },
-          { value: '+2,350', change: '+12.5% from last month', dir: 'positive' },
-          { value: '1,429',  change: '-3.2% from last month',  dir: 'negative' },
-          { value: '3.24%',  change: '+0.8% from last month',  dir: 'positive' }
-        ],
-        charts: {
-          revenue: { labels:['Jan','Feb','Mar','Apr','May','Jun'], datasets:[{label:'Revenue',values:[4200,6500,5100,8000,6200,9100]},{label:'Expenses',values:[3100,4200,3500,5000,4500,5500]}] },
-          users:   { labels:['Jan','Feb','Mar','Apr','May','Jun'], datasets:[{label:'Users',values:[820,932,1100,1250,1340,1429]}] },
-          traffic: { labels:['Jan','Feb','Mar','Apr','May','Jun'], datasets:[{label:'Organic',values:[1200,1300,1400,1600,1500,1800]},{label:'Direct',values:[800,900,700,1000,950,1100]},{label:'Referral',values:[400,500,600,550,700,650]}] },
-          plan:    { labels:['Enterprise','Pro','Starter','Free'], datasets:[{label:'Revenue',values:[22000,14000,6500,2731]}] },
-          perf:    { labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'], datasets:[{label:'Load Time (ms)',values:[320,280,310,290,350,260,240]},{label:'Error Rate',values:[12,8,15,10,18,6,5]}] },
-          browser: { labels:['Chrome','Safari','Firefox','Edge','Other'], datasets:[{label:'Users',values:[62,19,8,7,4]}] },
-          api:     { labels:['/api/users','/api/orders','/api/products','/api/auth','/api/search'], datasets:[{label:'Avg Response (ms)',values:[45,120,85,32,210]}] }
-        }
-      },
-      previous: {
-        kpis: [
-          { value: '$37,642', change: '+11.4% from prior month', dir: 'positive' },
-          { value: '+2,090', change: '+8.3% from prior month',  dir: 'positive' },
-          { value: '1,476',  change: '+5.1% from prior month',  dir: 'positive' },
-          { value: '2.44%',  change: '-0.3% from prior month',  dir: 'negative' }
-        ],
-        charts: {
-          revenue: { labels:['Jul','Aug','Sep','Oct','Nov','Dec'], datasets:[{label:'Revenue',values:[3800,4100,4600,5200,5800,6000]},{label:'Expenses',values:[2900,3200,3100,3800,4100,4300]}] },
-          users:   { labels:['Jul','Aug','Sep','Oct','Nov','Dec'], datasets:[{label:'Users',values:[620,680,740,780,800,820]}] },
-          traffic: { labels:['Jul','Aug','Sep','Oct','Nov','Dec'], datasets:[{label:'Organic',values:[900,980,1050,1100,1150,1200]},{label:'Direct',values:[600,650,620,700,750,800]},{label:'Referral',values:[250,300,320,350,380,400]}] },
-          plan:    { labels:['Enterprise','Pro','Starter','Free'], datasets:[{label:'Revenue',values:[18000,11500,5200,2942]}] },
-          perf:    { labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'], datasets:[{label:'Load Time (ms)',values:[380,340,360,330,410,300,290]},{label:'Error Rate',values:[16,12,19,14,22,9,7]}] },
-          browser: { labels:['Chrome','Safari','Firefox','Edge','Other'], datasets:[{label:'Users',values:[58,21,10,7,4]}] },
-          api:     { labels:['/api/users','/api/orders','/api/products','/api/auth','/api/search'], datasets:[{label:'Avg Response (ms)',values:[52,145,98,38,240]}] }
-        }
-      }
-    };
-
-    function applyPeriod(key) {
-      var p = periods[key];
-      var cards = insetBody.querySelectorAll('.dashboard-grid [data-slot="card"]');
-      cards.forEach(function (card, i) {
-        var kpi = p.kpis[i];
-        if (!kpi) return;
-        card.querySelector('.stat-value').textContent = kpi.value;
-        var span = card.querySelector('.stat-change');
-        span.className = 'stat-change ' + kpi.dir;
-        span.innerHTML = (kpi.dir === 'positive' ? arrowUp : arrowDown) + ' ' + kpi.change;
-      });
-      var allCharts = insetBody.querySelectorAll('[data-sc="chart"]');
-      allCharts.forEach(function (el, i) {
-        var chartKey = chartKeys[i];
-        if (chartKey && p.charts[chartKey] && el._chart) {
-          el._chart.setData(p.charts[chartKey]);
-        }
-      });
-    }
-
-    var btnCurrent = insetBody.querySelector('#btn-current');
-    var btnPrevious = insetBody.querySelector('#btn-previous');
-    if (btnCurrent && btnPrevious) {
-      btnCurrent.addEventListener('click', function () {
-        btnCurrent.setAttribute('aria-pressed', 'true');
-        btnPrevious.setAttribute('aria-pressed', 'false');
-        applyPeriod('current');
-      });
-      btnPrevious.addEventListener('click', function () {
-        btnPrevious.setAttribute('aria-pressed', 'true');
-        btnCurrent.setAttribute('aria-pressed', 'false');
-        applyPeriod('previous');
-      });
-    }
   }
 });
 </script>

@@ -47,6 +47,8 @@ scooter-pages/                ← project root
     toggle.js
     toggle-group.js
     tooltip.js
+    layout/
+      page-loader.js          ← dynamic page loading utility (used by sidebar hosts)
   demo-pages/                 ← built-in demo / example pages
     demo.css                  ← shared demo-page styles (optional for new pages)
     demo-css-only.html
@@ -75,6 +77,8 @@ scooter-pages/                ← project root
 | Sidebar-compatible | Wrap content in `<main class="scooter-page">` — required for dynamic loading |
 | Styling | Use CSS custom properties (`var(--primary)`) — never hardcode colors |
 | Scripts | `scooter-core.js` first, then only the component scripts the page uses |
+| Page metadata | `<script type="scooter/page-meta">` JSON declares scripts + init function |
+| Init function | `ScooterPageInit_<camelCaseName>(root)` — global, receives container element |
 
 ---
 
@@ -91,53 +95,131 @@ Copy `pages/_template/` to `pages/<your-page-name>/` and edit `index.html`.
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Page Title — Scooter Pages</title>
   <link rel="stylesheet" href="../../components.css" />
-  <!-- base.css auto-imports custom.css — no extra link needed -->
   <style>
-    /* Page-specific styles go here (not in base.css) */
+    /* Page-specific styles go here */
   </style>
 </head>
 <body>
 
-<!--
-  IMPORTANT: The sidebar-dynamic page extracts content via
-  doc.querySelector('main.scooter-page') — keep this wrapper.
--->
+<!-- Page metadata: scripts are relative to project root -->
+<script type="scooter/page-meta">
+{
+  "scripts": [],
+  "init": "ScooterPageInit_myPage"
+}
+</script>
+
 <main class="scooter-page">
   <h1>Page Title</h1>
-  <p>Short description.</p>
+  <p>Short description of this page.</p>
 
-  <section id="example">
-    <h2>Section</h2>
-    <!-- page content -->
+  <section id="example-section">
+    <h2>Section Title</h2>
+    <!-- Component / page content goes here -->
   </section>
 </main>
 
-<!-- Scripts: always load scooter-core FIRST, then only components used -->
+<!-- Scripts: scooter-core FIRST, then only the component scripts this page uses -->
 <script src="../../components/scooter-core.js"></script>
-<!-- <script src="../../components/tabs.js"></script> -->
+<!-- <script src="../../components/accordion.js"></script> -->
+
+<script>
+/**
+ * Page init function — wires up interactive elements.
+ * Called by PageLoader when loaded dynamically, or by DOMContentLoaded standalone.
+ * @param {HTMLElement} root - the container holding the page content
+ */
+function ScooterPageInit_myPage(root) {
+  // Page-specific wiring goes here
+}
+
+// Standalone mode: run init when page is opened directly in the browser
+document.addEventListener('DOMContentLoaded', function () {
+  var main = document.querySelector('main.scooter-page');
+  if (main) {
+    Scooter.init(main);
+    ScooterPageInit_myPage(main);
+  }
+});
+</script>
 </body>
 </html>
 ```
 
-> **Why `<main class="scooter-page">`?** The sidebar-dynamic loader (`demo-pages/demo-sidebar-dynamic.html`) fetches the full HTML, then runs `doc.querySelector('main.scooter-page, main.demo-page')` to extract only the content. Without this wrapper, the page will show *"No content found"* when loaded dynamically. Scripts outside `<main>` are intentionally excluded — the sidebar page pre-loads all component scripts. Existing demo pages use `demo-page`; new pages under `pages/` must use `scooter-page`.
+### Page Contract for Dynamic Loading
 
-> **Note**: The `demo-*` CSS classes (`demo-card`, `demo-preview`, `demo-code-block`, `demo-code-toggle`, `demo-section`, `demo-subtitle`, `demo-desc`) and the `toggleCode` function are **only for demo pages** in the `demo-pages/` folder. Do not use them in new pages under `pages/`. New pages should use plain semantic HTML with Scooter components directly.
+Each page provides three things — this is the contract that `PageLoader` depends on:
+
+| Part | What | Required? |
+|---|---|---|
+| `<main class="scooter-page">` | Wrapper around all visible content | **Yes** |
+| `<script type="scooter/page-meta">` | JSON declaring script deps + init function name | **Yes** (can be empty: `{"scripts":[],"init":null}`) |
+| `ScooterPageInit_<name>(root)` | Global init function, receives container element | No (set `"init": null` if pure CSS page) |
+
+**How it works**: The sidebar host pages use `PageLoader.load(url, container)` to fetch a page. PageLoader parses the HTML, extracts `<main>`, loads declared scripts (deduplicated), executes inline `<script>` blocks, calls `Scooter.init(container)`, then calls the declared init function with the container. Pages also work standalone — the `DOMContentLoaded` listener at the bottom calls the same init function.
+
+> **Why `<main class="scooter-page">`?** `PageLoader` runs `doc.querySelector('main.scooter-page, main.demo-page')` to extract content. Without this wrapper, the page shows *"No content found"*. Existing demo pages use `demo-page`; new pages under `pages/` must use `scooter-page`.
+
+> **Note**: The `demo-*` CSS classes (`demo-card`, `demo-preview`, `demo-code-block`, `demo-code-toggle`, `demo-section`, `demo-subtitle`, `demo-desc`) and the `toggleCode` function are **only for demo pages** in the `demo-pages/` folder. Do not use them in new pages under `pages/`.
+
+### The `<script type="scooter/page-meta">` Block
+
+Placed immediately after `<body>`, before `<main>`. Contains a JSON object with:
+
+| Key | Type | Description |
+|---|---|---|
+| `scripts` | `string[]` | Script paths relative to the **project root** (e.g. `"components/chart.js"`, `"components/custom/div-table/div-table.js"`). PageLoader loads them sequentially, skipping duplicates. |
+| `init` | `string\|null` | Name of the global init function (e.g. `"ScooterPageInit_demoDashboard"`), or `null` for pages with no JS initialization. |
+
+**Example for a page using chart + tabs:**
+```html
+<script type="scooter/page-meta">
+{
+  "scripts": ["components/chart.js", "components/tabs.js"],
+  "init": "ScooterPageInit_myDashboard"
+}
+</script>
+```
+
+### Init Function Convention
+
+- **Name**: `ScooterPageInit_<camelCaseName>(root)` — global function.
+- **Parameter**: `root` is the container element (the `<main>` when standalone, the host's content area when loaded dynamically).
+- **Scope all queries to `root`**: Use `root.querySelector(...)` instead of `document.querySelector(...)` so the page works in both modes.
+- **No optional chaining or template literals**: Inline scripts are executed via `new Function()` — use `&&` checks and string concatenation instead.
+- **Standalone guard**: Always include a `DOMContentLoaded` listener at the bottom that calls `Scooter.init(main)` then the init function. This is ignored when loaded dynamically (PageLoader calls init directly).
+
+### PageLoader API
+
+`components/layout/page-loader.js` exposes `window.PageLoader`:
+
+```js
+PageLoader.load(url, container, options)
+  // url       — path to the HTML file
+  // container — DOM element to inject content into
+  // options   — { mainSelector: 'main.scooter-page, main.demo-page' } (default)
+  // Returns Promise<{ title: string, meta: object|null }>
+```
+
+**Script path resolution**: PageLoader looks at existing `<script src="...components/...">` tags in the DOM to determine the relative prefix from the current host page to the project root. This means you always write paths in page-meta relative to the project root, and PageLoader resolves them at runtime.
 
 ### Rules for New Pages
 
 1. **Create a subfolder** under `pages/` — e.g. `pages/my-page/index.html`.  
    Copy `pages/_template/index.html` as your starting point.
-2. **Wrap all visible content** in `<main class="scooter-page">`.  
-   The sidebar-dynamic page extracts content via `doc.querySelector('main.scooter-page')` — if this wrapper is missing, the page will show "No content found" when loaded dynamically. (Existing demo pages use `main.demo-page` which is also supported.)
-3. Only include `<script>` tags for components **actually used** on the page.
-4. `scooter-core.js` must always come **before** any component script.
-5. Add page-specific CSS in a `<style>` block — **never modify `base.css`**.
-6. For theming changes, edit `custom.css` instead.
-7. Use semantic HTML (`<nav>`, `<main>`, `<section>`, `<button>`, `<dialog>`).
-8. Paths from `pages/<name>/index.html`: use `../../components.css` and `../../components/*.js`.
-9. **Standalone + sidebar dual-mode**: Each page must work when opened directly in the browser *and* when loaded into `demo-sidebar-dynamic.html`. No special scaffolding is needed — just keep the `<main class="scooter-page">` wrapper and use Scooter components directly.
-10. **Do not use demo-specific patterns**: The `demo-*` CSS classes (`demo-card`, `demo-preview`, `demo-code-block`, `demo-section`, etc.), `toggleCode`, and `demo.css` are **only for pages in `demo-pages/`**. New pages should use plain semantic HTML.
-10. **To register a page in the sidebar**, add a `<li>` entry in `demo-pages/demo-sidebar-dynamic.html` with a `data-page` attribute pointing to `../pages/<name>/index.html`.
+2. **Wrap all visible content** in `<main class="scooter-page">`.
+3. **Add a `<script type="scooter/page-meta">` block** after `<body>` declaring scripts and init function.
+4. **Create a global init function** named `ScooterPageInit_<camelCaseName>(root)` — scope all queries to `root`.
+5. **Add a DOMContentLoaded standalone guard** at the bottom.
+6. Only include `<script>` tags for components **actually used** on the page.
+7. `scooter-core.js` must always come **before** any component script.
+8. Add page-specific CSS in a `<style>` block — **never modify `base.css`**.
+9. For theming changes, edit `custom.css` instead.
+10. Use semantic HTML (`<nav>`, `<main>`, `<section>`, `<button>`, `<dialog>`).
+11. Paths from `pages/<name>/index.html`: use `../../components.css` and `../../components/*.js`.
+12. **Standalone + sidebar dual-mode**: Each page must work when opened directly in the browser *and* when loaded dynamically via PageLoader.
+13. **Do not use demo-specific patterns**: The `demo-*` CSS classes and `demo.css` are **only for pages in `demo-pages/`**.
+14. **To register a page in the sidebar**, add a `<li>` entry in `demo-pages/demo-sidebar-dynamic.html` with a `data-page` attribute pointing to `../pages/<name>/index.html`.
 
 ---
 
@@ -1261,7 +1343,8 @@ The `demo-pages/` folder contains working demos. The `pages/` folder is for new 
 | `demo-pages/demo-complex-js.html` | Advanced JS (command palette, menubar, carousel, OTP, form validation) |
 | `demo-pages/demo-patterns.html` | Integration patterns: forms, token gallery, card grids, event logger |
 | `demo-pages/demo-dashboard.html` | Dashboard with KPI cards, charts, tables, period toggle |
-| `demo-pages/demo-sidebar-dynamic.html` | Sidebar shell with dynamic page loading |
+| `demo-pages/demo-sidebar-dynamic.html` | Sidebar shell with dynamic page loading via `PageLoader` |
+| `demo-pages/demo-sidebar-dynamic-app.html` | Sidebar shell using layout components + `PageLoader` |
 | `demo-pages/demo.css` | Shared styles for demo pages (optional — not required for production pages) |
 | `pages/_template/index.html` | **Starter template** — copy this folder for new pages |
 
@@ -1277,10 +1360,19 @@ Use these as living references. Open them in a browser to see the components in 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dashboard</title>
+  <title>Dashboard — Scooter Pages</title>
   <link rel="stylesheet" href="../components.css" />
 </head>
 <body>
+
+<script type="scooter/page-meta">
+{
+  "scripts": ["components/tabs.js", "components/chart.js"],
+  "init": "ScooterPageInit_dashboard"
+}
+</script>
+
+<main class="scooter-page">
   <div class="page">
     <header class="header">
       <h1>Dashboard</h1>
@@ -1341,10 +1433,25 @@ Use these as living references. Open them in a browser to see the components in 
 
     </main>
   </div>
+</main>
 
-  <script src="../components/scooter-core.js"></script>
-  <script src="../components/tabs.js"></script>
-  <script src="../components/chart.js"></script>
+<script src="../components/scooter-core.js"></script>
+<script src="../components/tabs.js"></script>
+<script src="../components/chart.js"></script>
+
+<script>
+function ScooterPageInit_dashboard(root) {
+  // Wire up interactive elements using root.querySelector(...)
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  var main = document.querySelector('main.scooter-page');
+  if (main) {
+    Scooter.init(main);
+    ScooterPageInit_dashboard(main);
+  }
+});
+</script>
 </body>
 </html>
 ```
@@ -1361,6 +1468,9 @@ Use these as living references. Open them in a browser to see the components in 
 - Edit `custom.css` for theming — it's the single source for visual tokens
 - Use semantic HTML elements
 - Check the demo pages for working examples before building new ones
+- Add a `<script type="scooter/page-meta">` block declaring scripts and init function
+- Scope all queries in init functions to `root.querySelector(...)` (not `document`)
+- Include a `DOMContentLoaded` standalone guard at the bottom of every page
 
 ### Don't
 - Don't use Tailwind utility classes — this system uses semantic CSS
@@ -1368,4 +1478,6 @@ Use these as living references. Open them in a browser to see the components in 
 - Don't modify `base.css` for per-page styling — use a `<style>` block
 - Don't hardcode colors — always use CSS variables from `custom.css`
 - Don't forget `scooter-core.js` before other component scripts
+- Don't use optional chaining (`?.`) or template literals in init functions — they run via `new Function()`
+- Don't use `document.querySelector` in init functions — use `root.querySelector` for sidebar compatibility
 - Don't place `sidebar-trigger` inside `sidebar-panel` (it will disappear when collapsed)

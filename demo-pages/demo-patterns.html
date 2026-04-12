@@ -9,6 +9,32 @@
 </head>
 <body>
 
+<!-- Page metadata for dynamic loading -->
+<script type="scooter/page-meta">
+{
+  "scripts": [
+    "components/accordion.js",
+    "components/tabs.js",
+    "components/toggle.js",
+    "components/toggle-group.js",
+    "components/checkbox.js",
+    "components/radio-group.js",
+    "components/switch.js",
+    "components/tooltip.js",
+    "components/hover-card.js",
+    "components/dialog.js",
+    "components/dropdown-menu.js",
+    "components/select.js",
+    "components/slider.js",
+    "components/command.js",
+    "components/form.js",
+    "components/toast.js",
+    "components/sidebar.js"
+  ],
+  "init": "ScooterPageInit_demoPatterns"
+}
+</script>
+
 <!-- Navigation -->
 <nav class="demo-nav">
   <span class="demo-nav-title">Scooter Pages</span>
@@ -17,6 +43,9 @@
   <a href="demo-medium-js.html">Medium JS</a>
   <a href="demo-complex-js.html">Complex JS</a>
   <a href="demo-patterns.html" aria-current="page">Patterns</a>
+  <a href="demo-service-registry.html">Service Registry</a>
+  <a href="demo-monaco-editor.html">Monaco Editor</a>
+  <a href="demo-div-table.html">DivTable</a>
 </nav>
 
 <main class="demo-page">
@@ -844,30 +873,33 @@
 <script src="../components/toast.js"></script>
 <script src="../components/sidebar.js"></script>
 
-<!-- Pattern scripts -->
 <script>
-document.addEventListener('DOMContentLoaded', () => {
+/**
+ * Page init — wires up Cmd+K dialog, form, slider, event logger, viewport info.
+ * Called by PageLoader (dynamic) or DOMContentLoaded (standalone).
+ * @param {HTMLElement} root - container holding the page content
+ */
+function ScooterPageInit_demoPatterns(root) {
 
   // ── Cmd+K dialog ────────────────────────────
-  const cmdKDialog = document.getElementById('cmd-k-dialog');
-  const cmdKTrigger = document.getElementById('cmd-k-trigger');
+  var cmdKDialog = root.querySelector('#cmd-k-dialog');
+  var cmdKTrigger = root.querySelector('#cmd-k-trigger');
 
   if (cmdKTrigger && cmdKDialog) {
-    cmdKTrigger.addEventListener('click', () => {
+    cmdKTrigger.addEventListener('click', function() {
       if (cmdKDialog._dialog) cmdKDialog._dialog.open();
     });
   }
 
-  document.addEventListener('keydown', e => {
+  document.addEventListener('keydown', function(e) {
     if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
       e.preventDefault();
       if (cmdKDialog && cmdKDialog._dialog) cmdKDialog._dialog.open();
     }
   });
 
-  // Close dialog on command select
   if (cmdKDialog) {
-    cmdKDialog.addEventListener('sc:select', e => {
+    cmdKDialog.addEventListener('sc:select', function(e) {
       if (cmdKDialog._dialog) cmdKDialog._dialog.close();
       if (typeof Scooter !== 'undefined' && Scooter.toast) {
         Scooter.toast('Command', { description: 'Selected: ' + e.detail.value });
@@ -876,21 +908,21 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ── Slider value display ────────────────────
-  const expSlider = document.querySelector('#registration-form [data-sc="slider"]');
-  const expValue = document.getElementById('exp-value');
+  var expSlider = root.querySelector('#registration-form [data-sc="slider"]');
+  var expValue = root.querySelector('#exp-value');
   if (expSlider && expValue) {
-    expSlider.addEventListener('sc:change', e => {
+    expSlider.addEventListener('sc:change', function(e) {
       expValue.textContent = e.detail.value;
     });
   }
 
   // ── Form submit ─────────────────────────────
-  const regForm = document.getElementById('registration-form');
+  var regForm = root.querySelector('#registration-form');
   if (regForm) {
-    regForm.addEventListener('sc:action', e => {
+    regForm.addEventListener('sc:action', function(e) {
       if (typeof Scooter !== 'undefined' && Scooter.toast) {
         Scooter.toast('Registration Complete', {
-          description: 'Welcome, ' + (e.detail.data.get?.('firstName') || 'User') + '!',
+          description: 'Welcome, ' + (e.detail.data.get && e.detail.data.get('firstName') || 'User') + '!',
           variant: 'success'
         });
       }
@@ -898,19 +930,19 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ── Event Logger ────────────────────────────
-  const logEl = document.getElementById('event-log');
+  var logEl = root.querySelector('#event-log');
   if (logEl) {
-    const scEvents = [
+    var scEvents = [
       'sc:change','sc:toggle','sc:select','sc:slide',
       'sc:open','sc:close','sc:action','sc:complete',
       'sc:press','sc:resize'
     ];
-    scEvents.forEach(type => {
-      document.addEventListener(type, e => {
-        const time = new Date().toLocaleTimeString('en-US', { hour12: false });
-        const detail = e.detail ? JSON.stringify(e.detail) : '{}';
-        const line = document.createElement('div');
-        line.innerHTML = `<span style="color:var(--gray-500)">[${time}]</span> <span style="color:var(--primary)">${type}</span> ${detail}`;
+    scEvents.forEach(function(type) {
+      document.addEventListener(type, function(e) {
+        var time = new Date().toLocaleTimeString('en-US', { hour12: false });
+        var detail = e.detail ? JSON.stringify(e.detail) : '{}';
+        var line = document.createElement('div');
+        line.innerHTML = '<span style="color:var(--gray-500)">[' + time + ']</span> <span style="color:var(--primary)">' + type + '</span> ' + detail;
         logEl.appendChild(line);
         logEl.scrollTop = logEl.scrollHeight;
       });
@@ -918,14 +950,14 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ── Viewport info ───────────────────────────
-  const vw = document.getElementById('viewport-width');
-  const bp = document.getElementById('viewport-bp');
-  const dpr = document.getElementById('viewport-dpr');
+  var vw = root.querySelector('#viewport-width');
+  var bp = root.querySelector('#viewport-bp');
+  var dpr = root.querySelector('#viewport-dpr');
 
   function updateViewport() {
     if (vw) vw.textContent = window.innerWidth + 'px';
     if (bp) {
-      const w = window.innerWidth;
+      var w = window.innerWidth;
       bp.textContent = w <= 480 ? 'Mobile' : w <= 768 ? 'Tablet' : 'Desktop';
     }
     if (dpr) dpr.textContent = window.devicePixelRatio + 'x';
@@ -933,7 +965,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   updateViewport();
   window.addEventListener('resize', updateViewport);
+}
 
+// Standalone mode
+document.addEventListener('DOMContentLoaded', function() {
+  var main = document.querySelector('main.demo-page');
+  if (main) ScooterPageInit_demoPatterns(main);
 });
 </script>
 </body>

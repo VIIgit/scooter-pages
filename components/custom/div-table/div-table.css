@@ -1,0 +1,1541 @@
+/**
+ * DivTable Widget Component Styles
+ * All styles for the .div-table-widget component and its children
+ */
+
+/* ============================================
+   CSS Variables for Theme Customization
+   Override these in your custom stylesheet
+   ============================================ */
+:root {
+  /* === Primary/Accent Colors === */
+  --dt-primary: var(--primary, #007bff);
+  --dt-primary-hover: var(--primary-dark, #0056b3);
+  --dt-primary-light: rgba(0, 123, 255, 0.1);
+  --dt-primary-lighter: rgba(0, 123, 255, 0.05);
+  --dt-focus-ring: rgba(3, 102, 214, 0.1);
+  
+  /* === Background Colors === */
+  --dt-bg-base: var(--card, #ffffff);
+  --dt-bg-light: var(--secondary, #f9f9f7);
+  --dt-bg-hover: var(--accent, rgb(240, 247, 255));
+  --dt-bg-selected: rgba(0, 123, 255, 0.1);
+  --dt-bg-header: var(--secondary, #f9f9f7);
+  --dt-bg-summary: var(--secondary, #f9f9f7);
+  --dt-bg-disabled: var(--muted, #f0f0f0);
+  
+  /* === Border Colors === */
+  --dt-border-light: var(--border, #e9ecef);
+  --dt-border-medium: var(--border, #e1e5e9);
+  --dt-border-dark: var(--gray-300, #ced4da);
+  --dt-border-row: var(--gray-100, #f1f3f4);
+  --dt-border-focus: var(--ring, #123a67);
+  --dt-border-hover: var(--gray-400, #b0b8c1);
+  
+  /* === Text Colors === */
+  --dt-text-primary: var(--foreground, #374151);
+  --dt-text-secondary: var(--foreground, #495057);
+  --dt-text-muted: var(--muted-foreground, #6b7280);
+  --dt-text-light: var(--muted-foreground, #666666);
+  --dt-text-disabled: var(--gray-400, #999999);
+  --dt-text-inverse: var(--primary-foreground, #ffffff);
+  
+  /* === Shadow === */
+  --dt-shadow: rgba(0, 0, 0, 0.06);
+  --dt-shadow-medium: rgba(0, 0, 0, 0.08);
+  --dt-shadow-heavy: rgba(0, 0, 0, 0.12);
+  
+  /* === Error State === */
+  --dt-error: var(--destructive, #dc3545);
+  --dt-error-light: rgba(220, 53, 69, 0.6);
+  --dt-error-hover: #c82333;
+  --dt-error-active: #bd2130;
+  --dt-error-bg: #fff5f5;
+  --dt-error-border: #fed7d7;
+  --dt-error-text: #c53030;
+  --dt-error-border-hover: rgba(200, 35, 51, 0.6);
+  --dt-error-focus-ring: rgba(220, 53, 69, 0.25);
+  
+  /* === Success State === */
+  --dt-success: var(--success, #28a745);
+  --dt-success-bg: #e8f5e9;
+  --dt-success-bg-hover: #c8e6c9;
+  
+  /* === Warning State === */
+  --dt-warning: #ffc107;
+  --dt-warning-bg: #fff8e1;
+  --dt-warning-bg-hover: #ffecb3;
+  
+  /* === Info State === */
+  --dt-info: #0ea5e9;
+  --dt-info-bg: #e0f2fe;
+  --dt-info-bg-hover: #bae6fd;
+  
+  /* === Button Colors === */
+  --dt-button-bg: var(--secondary, #f0f0f0);
+  --dt-button-bg-hover: var(--muted, #e0e0e0);
+  --dt-button-text: var(--foreground, #333333);
+  
+  /* === Scrollbar Colors === */
+  --dt-scrollbar-track: var(--gray-100, #f1f1f1);
+  --dt-scrollbar-thumb: var(--gray-300, #c1c1c1);
+  --dt-scrollbar-thumb-hover: var(--gray-400, #a8a8a8);
+  
+  /* === Spinner Colors === */
+  --dt-spinner-track: var(--gray-200, #e3e3e3);
+  --dt-spinner-active: var(--gray-600, #666666);
+  
+  /* === Skeleton Loading === */
+  --dt-skeleton-base: var(--muted, #e9ecef);
+  --dt-skeleton-shine: var(--gray-100, #f8f9fa);
+  
+  /* === Group Row === */
+  --dt-group-bg: var(--gray-50, rgba(249, 249, 247, 0.5));
+  
+  /* === Summary Row === */
+  --dt-summary-border: var(--gray-400, #adb5bd);
+}
+
+/* Table widget container */
+.div-table-widget {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  background: var(--dt-bg-base);
+  border-radius: var(--radius, 8px);
+  box-shadow: var(--shadow-sm, 0 2px 8px var(--dt-shadow));
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Shadow utility classes (aligned with components.css --shadow-* scale) ── */
+.div-table-widget.dt-shadow-none { box-shadow: none; }
+.div-table-widget.dt-shadow-xs   { box-shadow: var(--shadow-xs, 0 1px 2px rgba(0,0,0,0.05)); }
+.div-table-widget.dt-shadow-sm   { box-shadow: var(--shadow-sm, 0 2px 8px rgba(0,0,0,0.06)); }
+.div-table-widget.dt-shadow-md   { box-shadow: var(--shadow-md, 0 4px 24px rgba(0,0,0,0.06)); }
+.div-table-widget.dt-shadow-lg   { box-shadow: var(--shadow-lg, 0 8px 32px rgba(0,0,0,0.08)); }
+.div-table-widget.dt-shadow-xl   { box-shadow: var(--shadow-xl, 0 12px 48px rgba(0,0,0,0.12)); }
+
+/* ── Background utility classes (override --dt-bg-base) ── */
+.div-table-widget.dt-bg-card      { --dt-bg-base: var(--card, #ffffff); }
+.div-table-widget.dt-bg-secondary { --dt-bg-base: var(--secondary, #f5f5f7); }
+.div-table-widget.dt-bg-muted     { --dt-bg-base: var(--muted, #ececf0); }
+.div-table-widget.dt-bg-accent    { --dt-bg-base: var(--accent, #e9ebef); }
+
+/* Toolbar */
+.div-table-toolbar {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 16px;
+  background: var(--dt-bg-light);
+  border-bottom: 1px solid var(--dt-border-light);
+  flex-shrink: 0;
+}
+
+/* Query input field */
+.query-inputfield {
+  padding: 10px 5px 4px 10px;
+  border: 2px solid var(--dt-border-medium);
+  border-radius: var(--radius-md, 8px);
+  background: var(--dt-bg-base);
+  box-shadow: 0 1px 3px var(--dt-shadow);
+  transition: all 0.2s ease-in-out;
+  flex: 1;
+  min-width: 50%;
+  overflow: hidden;
+}
+
+.query-inputfield:hover {
+  border-color: var(--dt-border-hover);
+  box-shadow: 0 2px 4px var(--dt-shadow-medium);
+}
+
+.query-inputfield.focused {
+  border-color: var(--dt-border-focus);
+  box-shadow: 0 0 0 3px var(--dt-focus-ring), 0 1px 3px var(--dt-shadow);
+  outline: none;
+}
+
+.query-inputfield.error {
+  border-color: var(--dt-error-light);
+}
+
+.query-inputfield.error:hover {
+  border-color: var(--dt-error-border-hover);
+}
+
+.query-inputfield.error.focused {
+  border-color: var(--dt-error-light);
+  box-shadow: 0 0 0 3px var(--dt-error-focus-ring), 0 1px 3px var(--dt-shadow);
+}
+
+.query-inputfield .monaco-editor {
+  height: 22px !important;
+  --vscode-focusBorder: rgba(0, 0, 0, 0);
+}
+
+/* Toolbar elements */
+.div-table-toolbar select {
+  padding: 10px 12px;
+  border: 2px solid var(--dt-border-medium);
+  border-radius: var(--radius-md, 8px);
+  background: var(--dt-bg-base);
+  box-shadow: 0 1px 3px var(--dt-shadow);
+  transition: all 0.2s ease-in-out;
+  min-width: 150px;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--dt-text-secondary);
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 8px center;
+  background-repeat: no-repeat;
+  background-size: 16px;
+  padding-right: 32px;
+}
+
+.div-table-toolbar select:hover {
+  border-color: var(--dt-border-hover);
+  box-shadow: 0 2px 4px var(--dt-shadow-medium);
+}
+
+.div-table-toolbar select:focus {
+  border-color: var(--dt-border-focus);
+  box-shadow: 0 0 0 3px var(--dt-focus-ring), 0 1px 3px var(--dt-shadow);
+  outline: none;
+}
+
+.div-table-toolbar select:disabled {
+  background-color: var(--dt-bg-light);
+  border-color: var(--dt-border-light);
+  color: var(--dt-text-muted);
+  cursor: not-allowed;
+}
+
+/* Info section */
+.info-section {
+  margin-left: auto;
+  text-align: right;
+  font-size: 0.9em;
+  color: var(--dt-text-light);
+  padding: 0;
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.info-line-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+}
+
+.info-line {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.info-line.secondary {
+  font-size: 0.8em;
+  color: var(--dt-text-disabled);
+}
+
+/* Refresh button in info section */
+.refresh-button {
+  background: none;
+  border: none;
+  color: var(--dt-text-light);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  min-height: 22px;
+}
+
+.refresh-button:hover {
+  background-color: var(--dt-button-bg);
+  color: var(--dt-button-text);
+}
+
+.refresh-button:active {
+  background-color: var(--dt-button-bg-hover);
+}
+
+.refresh-button.refreshing {
+  color: var(--dt-primary);
+}
+
+.refresh-button.refreshing svg {
+  animation: spin 1s linear infinite;
+}
+
+.refresh-button svg {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.2s ease;
+}
+
+/* Auto-fetch button in info section */
+.auto-fetch-button {
+  background: none;
+  border: none;
+  color: var(--dt-text-light);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  margin-left: 4px;
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  min-height: 22px;
+}
+
+.auto-fetch-button:hover {
+  background-color: var(--dt-button-bg);
+  color: var(--dt-button-text);
+}
+
+.auto-fetch-button:active {
+  background-color: var(--dt-button-bg-hover);
+}
+
+.auto-fetch-button.active {
+  color: var(--dt-success);
+  background-color: var(--dt-success-bg);
+}
+
+.auto-fetch-button.active:hover {
+  background-color: var(--dt-success-bg-hover);
+}
+
+.auto-fetch-button.paused {
+  color: var(--dt-warning);
+  background-color: var(--dt-warning-bg);
+}
+
+.auto-fetch-button.paused:hover {
+  background-color: var(--dt-warning-bg-hover);
+}
+
+.auto-fetch-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.auto-fetch-button svg {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.2s ease;
+}
+
+/* Filter selected only toggle button for showing only selected rows */
+.filter-selected-only-toggle-button {
+  background: none;
+  border: none;
+  color: var(--dt-text-light);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  margin-right: 6px;
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  min-height: 22px;
+}
+
+.filter-selected-only-toggle-button:hover {
+  background-color: var(--dt-button-bg);
+  color: var(--dt-button-text);
+}
+
+.filter-selected-only-toggle-button:active {
+  background-color: var(--dt-button-bg-hover);
+}
+
+.filter-selected-only-toggle-button.active {
+  color: var(--dt-info);
+  background-color: var(--dt-info-bg);
+}
+
+.filter-selected-only-toggle-button.active:hover {
+  background-color: var(--dt-info-bg-hover);
+}
+
+.filter-selected-only-toggle-button svg {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.2s ease;
+}
+
+.info-selection {
+  font-weight: 600;
+}
+
+.info-stats {
+  color: var(--dt-text-light);
+}
+
+.progress-line {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 2px;
+}
+
+.loading-progress {
+  width: 120px;
+  height: 4px;
+  background: var(--dt-border-light);
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+}
+
+.loading-progress-bar {
+  height: 100%;
+  background: var(--dt-text-secondary);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+  position: relative;
+}
+
+/* Only animate shimmer when actually loading */
+.loading-progress-bar.loading::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+  animation: loading-shimmer 1.5s infinite;
+}
+
+/* Sequential loading progress segments */
+.progress-segment {
+  height: 100%;
+  border-radius: 2px;
+  position: absolute;
+  top: 0;
+  transition: width 0.3s ease, left 0.3s ease;
+}
+
+.filtered-segment {
+  background: var(--dt-error);
+  z-index: 3;
+}
+
+.loaded-segment {
+  background: var(--dt-text-secondary);
+  z-index: 2;
+}
+
+.loading-segment {
+  background: var(--dt-primary);
+  z-index: 1;
+}
+
+.loading-segment::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+  animation: loading-shimmer 1.5s infinite;
+}
+
+/* Different states for sequential progress bar */
+.loading-progress[data-state="sequential-loading"] {
+  position: relative;
+}
+
+.loading-progress[data-state="filtered-loading"] {
+  position: relative;
+}
+
+.loading-progress[data-state="filtered"] .loaded-segment {
+  background: var(--dt-text-light);
+}
+
+/* Legacy support for old progress bars */
+.loading-progress-bar {
+  height: 100%;
+  background: var(--dt-text-secondary);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+  position: relative;
+}
+
+/* Only animate shimmer when actually loading */
+.loading-progress-bar.loading::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+  animation: loading-shimmer 1.5s infinite;
+}
+
+/* Different states for progress bar */
+.loading-progress[data-state="filtered"] .loading-progress-bar {
+  background: var(--dt-text-light);
+}
+
+.loading-progress[data-state="filtered"] .loading-progress-bar.loading::after {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation: filtered-shimmer 2s infinite;
+}
+
+.loading-progress[data-state="loading"] .loading-progress-bar {
+  background: var(--dt-text-secondary);
+}
+
+@keyframes loading-shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes filtered-shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Table container using CSS Grid */
+.div-table-container {
+  width: 100%;
+  background: var(--dt-bg-base);
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Header container - sticky */
+.div-table-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--dt-bg-header);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--dt-border-light);
+  display: grid;
+  min-height: 48px;
+  align-items: auto;
+  color: var(--dt-text-primary);
+  transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0;
+}
+
+/* Scrollbar spacer to align header with body when scrollbar is present */
+.scrollbar-spacer {
+  background: transparent;
+  pointer-events: none;
+}
+
+/* Add shadow when scrolling */
+.div-table-header.scrolled {
+  box-shadow: 0 2px 8px var(--dt-shadow);
+}
+
+/* Body container - scrollable */
+.div-table-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  background: var(--dt-bg-base);
+}
+
+/* Row styling - CSS Grid based */
+.div-table-row {
+  color: var(--dt-text-primary);
+  display: grid;
+  min-height: 40px;
+  align-items: stretch;
+  border-bottom: 1px solid var(--dt-border-row);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  gap: 0;
+  box-sizing: border-box; /* Include border in height calculation */
+}
+
+.div-table-row:hover {
+  background-color: var(--dt-bg-hover);
+}
+
+.div-table-row:last-child {
+  border-bottom: none;
+}
+
+/* Cell styling */
+.div-table-cell {
+  padding: 8px 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: flex;
+  align-items: flex-start;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+/* Cell content wrapper for proper alignment */
+.div-table-cell .cell-content {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Header cell styling */
+.div-table-header-cell {
+  padding: 8px 12px;
+  color: var(--dt-text-primary);
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  transition: background-color 0.2s ease;
+  overflow: hidden;
+}
+
+.header-left-content {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  font-weight: 600;
+}
+
+.header-left-content > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.header-right-content {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 0 0 auto;
+  margin-left: 8px;
+}
+
+.div-table-header-cell:hover {
+  background-color: var(--dt-shadow);
+}
+
+/* Group indicator styling - hidden by default */
+.group-indicator {
+  font-size: 12px;
+  width: 14px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+/* Show group indicator on hover of header cell */
+.div-table-header-cell:hover .group-indicator {
+  opacity: 0.5;
+}
+
+.group-indicator:hover {
+  opacity: 1 !important;
+}
+
+/* When column is grouped, always show indicator at full opacity */
+.group-indicator.grouped {
+  opacity: 1 !important;
+  color: inherit;
+}
+
+/* Sort indicator styling - hidden by default */
+.sort-indicator {
+  width: 14px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+/* Show sort indicator on hover of header cell */
+.div-table-header-cell:hover .sort-indicator {
+  opacity: 0.5;
+}
+
+/* Always show active sort indicator */
+.sort-indicator.active {
+  opacity: 1 !important;
+}
+
+/* Legacy: Sort indicator in header-right-content - hidden by default */
+.header-right-content > span:last-child:not(.group-indicator):not(.sort-indicator) {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+/* Show sort indicator on hover */
+.div-table-header-cell:hover .header-right-content > span:last-child:not(.group-indicator):not(.sort-indicator) {
+  opacity: 0.5;
+}
+
+/* Always show active sort indicator */
+.div-table-header-cell.sorted .header-right-content > span:last-child:not(.sort-indicator) {
+  opacity: 1 !important;
+}
+
+/* Composite header sub-sort indicator - hidden by default */
+.sub-sort-indicator {
+  width: 14px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+/* Show sub-sort indicator on hover of the composite header cell */
+.composite-header:hover .sub-sort-indicator {
+  opacity: 0.5;
+}
+
+/* Show sub-sort indicator on hover of the sub-header itself */
+.composite-sub-header:hover .sub-sort-indicator {
+  opacity: 0.5;
+}
+
+/* Always show active sub-sort indicator */
+.sub-sort-indicator.active {
+  opacity: 1 !important;
+}
+
+/* Checkbox column */
+.div-table-cell.checkbox-column,
+.div-table-header-cell.checkbox-column {
+  width: 40px;
+  min-width: 40px;
+  max-width: 40px;
+  justify-content: center;
+  padding: 8px 4px;
+}
+
+.div-table-cell.checkbox-column input[type="checkbox"],
+.div-table-header-cell.checkbox-column input[type="checkbox"] {
+  margin: 0;
+  cursor: pointer;
+  accent-color: var(--dt-primary);
+  width: 15px;
+  height: 15px;
+}
+
+/* Three-state checkbox styling */
+input[type="checkbox"]:indeterminate {
+  background-color: var(--dt-primary);
+  border-color: var(--dt-primary);
+  position: relative;
+}
+
+input[type="checkbox"]:indeterminate::after {
+  content: '━';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--dt-text-inverse);
+  font-size: 10px;
+  font-weight: bold;
+}
+
+.div-table-header-cell.checkbox-column input[type="checkbox"]:indeterminate {
+  background-color: var(--dt-primary);
+  border-color: var(--dt-primary);
+}
+
+/* Row states */
+.div-table-row.selected {
+  background-color: var(--dt-bg-selected) !important;
+}
+
+.div-table-row.focused {
+  background-color: var(--dt-bg-base);
+  box-shadow: inset 3px 0 0 var(--dt-primary);
+}
+
+.div-table-row.focused:hover {
+  background-color: var(--dt-primary-lighter) !important;
+}
+
+/* Ensure group headers also get proper focus styling */
+.div-table-row.group-header.focused {
+  background-color: var(--dt-bg-base) !important;
+  box-shadow: inset 3px 0 0 var(--dt-primary) !important;
+}
+
+.div-table-row.group-header.focused:hover {
+  background-color: var(--dt-bg-hover) !important;
+}
+
+/* Group header styling */
+.div-table-row.group-header {
+  background: var(--dt-bg-base);
+  font-weight: normal;
+  color: var(--dt-text-secondary);
+  border-bottom: 1px solid var(--dt-border-row);
+  border-top: 1px solid var(--dt-border-row);
+  position: sticky;
+  top: 0px;
+  z-index: 9;
+  box-shadow: none;
+  isolation: isolate;
+}
+
+/* First group header doesn't need top border */
+.div-table-row.group-header:first-of-type {
+  border-top: none;
+}
+
+.div-table-row.group-header:hover {
+  background-color: var(--dt-bg-hover);
+}
+
+/* Add shadow only to the first group header (when sticky) */
+.div-table-row.group-header:first-of-type {
+  box-shadow: 0 2px 8px var(--dt-shadow-heavy);
+}
+
+/* Make only the group name text bold */
+.div-table-row.group-header .div-table-cell span {
+  font-weight: 600;
+}
+
+/* Group header checkbox styling */
+.div-table-row.group-header .checkbox-column {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.div-table-row.group-header .checkbox-column input[type="checkbox"] {
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+  accent-color: var(--dt-primary);
+}
+
+.div-table-row.group-header .checkbox-column input[type="checkbox"]:indeterminate {
+  background-color: var(--dt-primary);
+}
+
+/* Group toggle button styling */
+.group-toggle,
+.group-toggle-all {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: transform 0.2s ease;
+  transform: rotate(90deg);
+  min-width: 20px;
+  min-height: 20px;
+  padding: 2px;
+  border-radius: 3px;
+}
+
+.group-toggle.collapsed,
+.group-toggle-all.collapsed {
+  transform: rotate(0deg);
+}
+
+.group-toggle-all {
+  font-size: 1em;
+  font-weight: bold;
+  margin-right: 6px;
+}
+
+.group-toggle:hover,
+.group-toggle-all:hover {
+  opacity: 0.7;
+  background-color: var(--dt-shadow);
+}
+
+/* Grouped column styling */
+.div-table-cell.grouped-column {
+  color: var(--dt-text-disabled);
+  font-style: italic;
+}
+
+/* Composite column styling - for stacked fields in one column (subField) */
+.div-table-cell.composite-column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 6px 12px;
+  white-space: normal;
+}
+
+/* First child (.composite-main) renders like normal cell - no special styling */
+
+.composite-sub {
+  color: var(--dt-text-muted);
+  line-height: 1.2;
+}
+
+/* Composite cell styling - for stacked rows (fieldCompositeName) */
+.div-table-cell.composite-cell {
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  align-items: stretch;
+}
+
+.composite-sub-cell {
+  min-width: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.composite-sub-cell:first-child {
+  margin-bottom: 4px;
+}
+
+.composite-sub-cell:not(:first-child) {
+  color: var(--dt-text-muted);
+}
+
+/* Composite header styling */
+.div-table-header-cell.composite-header {
+  padding: 8px 12px;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 4px;
+}
+
+.composite-sub-header {
+  cursor: pointer;
+  user-select: none;
+  padding: 0;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+  min-width: 0;
+  width: 100%;
+}
+
+.composite-sub-header:first-child {
+  font-weight: 600;
+  color: var(--dt-text-primary);
+  margin-bottom: 4px;
+}
+
+/* Legacy composite header styling (for subLabel pattern) */
+.composite-main-header {
+  color: var(--dt-text-primary);
+}
+
+.composite-sub-header:hover {
+  background-color: var(--dt-bg-disabled);
+}
+
+/* Composite toggle button styling */
+.composite-toggle {
+  display: inline-block;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: transform 0.2s ease;
+  user-select: none;
+}
+
+.composite-toggle:hover {
+  opacity: 0.7;
+}
+
+/* Hide collapsed group rows */
+.div-table-row.group-collapsed {
+  display: none;
+}
+
+/* Responsive column sizes */
+.col-fixed-narrow {
+  grid-column: span 1;
+  min-width: 60px;
+  max-width: 80px;
+}
+
+.col-fixed-medium {
+  grid-column: span 1;
+  min-width: 100px;
+  max-width: 140px;
+}
+
+.col-flexible-small {
+  grid-column: span 1;
+  min-width: 120px;
+  flex: 1;
+}
+
+.col-flexible-medium {
+  grid-column: span 2;
+  min-width: 150px;
+  flex: 2;
+}
+
+.col-flexible-large {
+  grid-column: span 3;
+  min-width: 200px;
+  flex: 3;
+}
+
+/* Dynamic grid template - will be set by JavaScript */
+.div-table-header.grid-5-cols,
+.div-table-row.grid-5-cols {
+  grid-template-columns: 40px 1fr 100px 200px 100px;
+}
+
+.div-table-header.grid-4-cols,
+.div-table-row.grid-4-cols {
+  grid-template-columns: 40px 2fr 200px 100px;
+}
+
+/* Default grid when no specific column count */
+.div-table-header,
+.div-table-row {
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+}
+
+/* Hide columns on mobile */
+@media (max-width: 768px) {
+  .div-table-toolbar {
+    flex-direction: column;
+    gap: 8px;
+    align-items: stretch;
+  }
+
+  .query-inputfield {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .div-table-cell.hidden-mobile,
+  .div-table-header-cell.hidden-mobile {
+    display: none;
+  }
+
+  /* Adjust grid for mobile */
+  .div-table-header.grid-5-cols,
+  .div-table-row.grid-5-cols {
+    grid-template-columns: 40px 2fr 1fr;
+  }
+
+  .div-table-header.grid-4-cols,
+  .div-table-row.grid-4-cols {
+    grid-template-columns: 40px 2fr 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+
+  .div-table-cell.hidden-small,
+  .div-table-header-cell.hidden-small {
+    display: none;
+  }
+
+  /* Further reduce columns on small screens */
+  .div-table-header.grid-5-cols,
+  .div-table-row.grid-5-cols,
+  .div-table-header.grid-4-cols,
+  .div-table-row.grid-4-cols {
+    grid-template-columns: 40px 1fr;
+  }
+}
+
+/* Conditional checkbox styles */
+.div-table-widget.no-checkboxes .checkbox-column {
+  display: none;
+}
+
+.div-table-widget.no-checkboxes .div-table-header.grid-5-cols,
+.div-table-widget.no-checkboxes .div-table-row.grid-5-cols {
+  grid-template-columns: 1fr 2fr 2fr 1fr;
+}
+
+.div-table-widget.no-checkboxes .div-table-header.grid-4-cols,
+.div-table-widget.no-checkboxes .div-table-row.grid-4-cols {
+  grid-template-columns: 2fr 2fr 1fr;
+}
+
+/* Scrollbar styling */
+.div-table-body::-webkit-scrollbar {
+  width: 8px;
+}
+
+.div-table-body::-webkit-scrollbar-track {
+  background: var(--dt-scrollbar-track);
+  border-radius: 4px;
+}
+
+.div-table-body::-webkit-scrollbar-thumb {
+  background: var(--dt-scrollbar-thumb);
+  border-radius: 4px;
+}
+
+.div-table-body::-webkit-scrollbar-thumb:hover {
+  background: var(--dt-scrollbar-thumb-hover);
+}
+
+/* Loading state */
+.div-table-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  color: var(--dt-text-light);
+  font-style: italic;
+}
+
+/* Empty state */
+.div-table-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  color: var(--dt-text-disabled);
+  font-style: italic;
+}
+
+/* Loading placeholder state */
+.div-table-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  color: var(--dt-text-light);
+  font-style: italic;
+  position: relative;
+}
+
+.div-table-loading::before {
+  content: '';
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--dt-spinner-track);
+  border-top: 2px solid var(--dt-spinner-active);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-right: 10px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Virtual Scrolling Indicators */
+.error-indicator {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 3px;
+  font-size: 14px;
+  background: var(--dt-error-bg);
+  border: 1px solid var(--dt-error-border);
+  color: var(--dt-error-text);
+}
+
+/* Loading Placeholder Rows */
+.div-table-row.loading-placeholder {
+  background: var(--dt-group-bg);
+  border-bottom: 1px solid var(--dt-border-row);
+  pointer-events: none;
+  cursor: default;
+}
+
+.div-table-row.loading-placeholder:hover {
+  background: var(--dt-group-bg) !important;
+}
+
+.div-table-cell.loading-cell {
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+}
+
+.loading-shimmer-content {
+  height: 16px;
+  background: linear-gradient(90deg, var(--dt-skeleton-base) 25%, var(--dt-skeleton-shine) 50%, var(--dt-skeleton-base) 75%);
+  background-size: 200% 100%;
+  border-radius: 4px;
+  animation: loading-shimmer 1.5s infinite;
+}
+
+.retry-button {
+  background: var(--dt-error);
+  color: var(--dt-text-inverse);
+  border: none;
+  border-radius: 4px;
+  padding: 8px 12px;
+  flex-direction: column;
+  gap: 0;
+  align-items: stretch;
+}
+
+/* Top-align composite-sub-cell only within composite-cell */
+.div-table-cell.composite-cell .composite-sub-cell {
+  align-items: flex-start;
+}
+
+.retry-button:hover {
+  background: var(--dt-error-hover);
+}
+
+.retry-button:active {
+  background: var(--dt-error-active);
+}
+
+/* ============================================
+   Fixed Columns Layout
+   ============================================ */
+
+/* Container with fixed columns enabled */
+.div-table-container.has-fixed-columns {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Wrapper for the two column sections */
+.div-table-columns-wrapper {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Fixed (frozen) section */
+.div-table-fixed-section {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--dt-border-light);
+  z-index: 5;
+  background: var(--dt-bg-base);
+}
+
+/* Shadow only when horizontal scrolling is needed */
+.div-table-fixed-section.has-scroll-shadow {
+  box-shadow: 2px 0 8px var(--dt-shadow);
+}
+
+/* Scrollable section */
+.div-table-scroll-section {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+}
+
+/* Fixed header */
+.div-table-fixed-header {
+  position: relative;
+  z-index: 11;
+  flex-shrink: 0;
+  display: grid;
+  box-sizing: border-box;
+}
+
+/* Scrollable header - synced horizontally with body via JS */
+.div-table-scroll-header {
+  position: relative;
+  z-index: 10;
+  flex-shrink: 0;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  box-sizing: border-box;
+  /* Hide scrollbar but allow scrolling */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+.div-table-scroll-header::-webkit-scrollbar {
+  display: none; /* Chrome/Safari/Opera */
+}
+
+/* Inner wrapper for scroll header grid content */
+.div-table-scroll-header-inner {
+  display: grid;
+  width: max-content;
+  min-width: 100%;
+}
+
+/* Fixed body - vertical scroll only */
+.div-table-fixed-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Hide scrollbar on fixed body (synced with scroll body) */
+.div-table-fixed-body::-webkit-scrollbar {
+  display: none;
+}
+.div-table-fixed-body {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Scrollable body - both scrolls */
+.div-table-scroll-body {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  /* Use overlay scrollbars to prevent layout shift */
+  overflow-y: overlay;
+  overflow-x: overlay;
+}
+
+/* For browsers that support scrollbar-gutter */
+@supports (scrollbar-gutter: stable) {
+  .div-table-scroll-body {
+    overflow-y: auto;
+    overflow-x: auto;
+    scrollbar-gutter: stable;
+  }
+  .div-table-fixed-body {
+    scrollbar-gutter: stable;
+  }
+}
+
+/* Row parts in fixed columns layout */
+.div-table-fixed-row,
+.div-table-scroll-row {
+  min-height: 40px;
+  box-sizing: border-box;
+  align-items: flex-start;
+}
+
+/* Ensure consistent row height between fixed and scroll sections */
+.div-table-fixed-row {
+  background: var(--dt-bg-base);
+  display: grid;
+}
+
+.div-table-scroll-row {
+  background: var(--dt-bg-base);
+  display: grid;
+}
+
+/* Hover state for split rows */
+.div-table-row.hover,
+.div-table-row:hover {
+  background-color: var(--dt-bg-hover);
+}
+
+/* Selected state for split rows */
+.div-table-fixed-row.selected,
+.div-table-scroll-row.selected {
+  background-color: var(--dt-bg-selected) !important;
+}
+
+/* Focused state for split rows — only the fixed side shows the inset indicator */
+.div-table-fixed-row.focused {
+  box-shadow: inset 3px 0 0 var(--dt-primary);
+}
+
+.div-table-scroll-row.focused {
+  box-shadow: none !important;
+}
+
+.div-table-fixed-row.focused:hover,
+.div-table-scroll-row.focused:hover,
+.div-table-fixed-row.focused.hover,
+.div-table-scroll-row.focused.hover {
+  background-color: var(--dt-primary-lighter) !important;
+}
+
+/* Group header in fixed columns layout */
+.div-table-fixed-row.group-header,
+.div-table-scroll-row.group-header {
+  background: var(--dt-bg-base);
+  border-bottom: 1px solid var(--dt-border-row);
+  border-top: 1px solid var(--dt-border-row);
+  position: sticky;
+  top: 0;
+  z-index: 4;
+}
+
+.div-table-fixed-row.group-header.focused,
+.div-table-scroll-row.group-header.focused {
+  background-color: var(--dt-bg-base) !important;
+  box-shadow: inset 3px 0 0 var(--dt-primary) !important;
+}
+
+/* Scroll section: allow full content width since we can scroll horizontally */
+.div-table-scroll-section .div-table-cell {
+  overflow: visible;
+  text-overflow: clip;
+  white-space: nowrap;
+}
+
+.div-table-scroll-section .div-table-header-cell {
+  overflow: visible;
+}
+
+.div-table-scroll-section .header-left-content {
+  overflow: visible;
+}
+
+.div-table-scroll-section .header-left-content > span {
+  overflow: visible;
+  text-overflow: clip;
+  white-space: nowrap;
+}
+
+/* Ensure scroll section rows don't constrain content */
+.div-table-scroll-row {
+  min-width: 100%;
+  width: max-content;
+}
+
+/* Mobile: disable fixed columns on small screens */
+@media (max-width: 768px) {
+  .div-table-container.has-fixed-columns {
+    /* Fallback to standard layout - reset flex direction */
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .div-table-columns-wrapper {
+    flex-direction: column;
+  }
+  
+  .div-table-fixed-section {
+    flex: 0 0 auto;
+    border-right: none;
+    border-bottom: 1px solid var(--dt-border-light);
+    box-shadow: 0 2px 8px var(--dt-shadow);
+  }
+  
+  .div-table-scroll-section {
+    flex: 1 1 auto;
+  }
+}
+
+/* =====================================
+   Summary Row Styles (Aggregate Totals)
+   ===================================== */
+
+/* Base summary row styling */
+.div-table-row.summary-row {
+  background-color: var(--dt-bg-base);
+  border-bottom: 2px solid var(--dt-border-dark);
+  font-weight: 600;
+  min-height: 32px;
+}
+
+/* Header summary row (grand total) */
+.div-table-row.header-summary {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background-color: var(--dt-bg-summary);
+  border-bottom: 1px solid var(--dt-summary-border);
+}
+
+/* Group summary row (subtotal) */
+.div-table-row.group-summary {
+  font-weight: 500;
+  font-size: 0.95em;
+  border-bottom: 1px solid var(--dt-summary-border);
+}
+
+/* Summary cell styling */
+.div-table-cell.summary-cell {
+  padding: 8px 12px;
+  color: var(--dt-text-secondary);
+}
+
+/* Aggregate value styling */
+.aggregate-value {
+  font-variant-numeric: tabular-nums;
+  color: var(--dt-text-primary);
+  font-weight: 700;
+}
+
+/* Summary row hover effect */
+.div-table-row.summary-row:hover {
+  background-color: var(--dt-bg-summary);
+}
+
+/* Summary row in fixed columns layout */
+.div-table-fixed-row.summary-row {
+  background-color: var(--dt-bg-base);
+  min-height: 32px;
+}
+
+.div-table-fixed-row.header-summary {
+  background-color: var(--dt-bg-summary);
+}
+
+/* Empty summary cells should not affect layout */
+.div-table-cell.summary-cell:empty {
+  min-height: 1em;
+}

@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scooter Pages — Monaco Editor Demo</title>
+  <link rel="stylesheet" href="../components.css">
+  <link rel="stylesheet" href="../components/custom/monaco-editor/style.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body>
+
+<!-- Page metadata for dynamic loading -->
+<script type="scooter/page-meta">
+{
+  "scripts": [
+    "components/custom/monaco-editor/monaco-editor.js"
+  ],
+  "init": "ScooterPageInit_demoMonaco"
+}
+</script>
+
+<!-- Navigation -->
+<nav class="demo-nav">
+  <span class="demo-nav-title">Scooter Pages</span>
+  <a href="demo-css-only.html">CSS-Only</a>
+  <a href="demo-light-js.html">Light JS</a>
+  <a href="demo-medium-js.html">Medium JS</a>
+  <a href="demo-complex-js.html">Complex JS</a>
+  <a href="demo-patterns.html">Patterns</a>
+  <a href="demo-service-registry.html">Service Registry</a>
+  <a href="demo-monaco-editor.html" aria-current="page">Monaco Editor</a>
+  <a href="demo-div-table.html">DivTable</a>
+</nav>
+
+<main class="demo-page">
+  <h1>Monaco Editor</h1>
+  <p class="demo-subtitle">A Scooter wrapper around Microsoft's Monaco Editor, loaded once from CDN with no race conditions.</p>
+
+  <!-- ═══════════════════════ STANDARD EDITOR ═══════════════════════ -->
+  <section class="demo-section" id="standard-editor">
+    <h2>Standard Editor</h2>
+    <p class="demo-desc">
+      A full-featured code editor with syntax highlighting, minimap, IntelliSense and more.
+      Use the controls below to change language and theme on the fly.
+    </p>
+
+    <div class="demo-card demo-card--full">
+      <!-- Controls -->
+      <div style="display:flex;gap:12px;padding:12px 16px;border-bottom:1px solid var(--border);flex-wrap:wrap;align-items:center">
+        <label class="text-xs text-muted" style="display:flex;flex-direction:column;gap:4px">
+          Language
+          <select data-slot="select" id="lang-select" style="min-width:140px">
+            <option value="javascript" selected>JavaScript</option>
+            <option value="typescript">TypeScript</option>
+            <option value="html">HTML</option>
+            <option value="css">CSS</option>
+            <option value="json">JSON</option>
+            <option value="python">Python</option>
+            <option value="markdown">Markdown</option>
+            <option value="sql">SQL</option>
+            <option value="xml">XML</option>
+            <option value="yaml">YAML</option>
+          </select>
+        </label>
+        <label class="text-xs text-muted" style="display:flex;flex-direction:column;gap:4px">
+          Theme
+          <select data-slot="select" id="theme-select" style="min-width:140px">
+            <option value="vs">Light (vs)</option>
+            <option value="vs-dark" selected>Dark (vs-dark)</option>
+            <option value="hc-black">High Contrast</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="demo-preview" style="padding:0">
+        <div data-sc="monaco-editor"
+             id="demo-editor"
+             data-language="javascript"
+             data-theme="vs-dark"
+             data-minimap="true"
+             data-word-wrap="on"
+             data-line-numbers="on"
+             style="height:400px">/**
+ * Example: Fibonacci sequence generator
+ * Try editing this code — the editor supports full IntelliSense!
+ */
+function* fibonacci(limit = Infinity) {
+  let a = 0, b = 1;
+  let count = 0;
+
+  while (count < limit) {
+    yield a;
+    [a, b] = [b, a + b];
+    count++;
+  }
+}
+
+// Generate first 20 Fibonacci numbers
+const fibs = [...fibonacci(20)];
+console.log('Fibonacci:', fibs);
+
+// Calculate the golden ratio approximation
+const ratio = fibs[fibs.length - 1] / fibs[fibs.length - 2];
+console.log('Golden ratio ≈', ratio.toFixed(10));
+</div>
+      </div>
+
+      <div class="demo-code-actions">
+        <button class="demo-code-toggle" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--html')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          Show HTML
+        </button>
+      </div>
+      <div class="demo-code-block demo-code-block--html"><pre><code>&lt;div data-sc="monaco-editor"
+     data-language="javascript"
+     data-theme="vs-dark"
+     data-minimap="true"
+     data-word-wrap="on"
+     style="height:400px"&gt;
+  // Your code here — text content becomes the initial value
+&lt;/div&gt;
+
+&lt;script&gt;
+const el = document.querySelector('[data-sc="monaco-editor"]');
+
+// Wait for editor to be ready
+el.addEventListener('sc:ready', () =&gt; {
+  console.log('Editor ready!');
+});
+
+// Listen for changes
+el.addEventListener('sc:change', (e) =&gt; {
+  console.log('Value changed:', e.detail.value.length, 'chars');
+});
+
+// API examples
+el._monacoEditor.getValue();          // get current value
+el._monacoEditor.setValue('new code'); // set value
+el._monacoEditor.setLanguage('python'); // change language
+el._monacoEditor.setTheme('vs-dark');  // change theme
+&lt;/script&gt;</code></pre></div>
+      <div class="demo-event-log" id="monaco-log"></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ LANGUAGE EXAMPLES ═══════════════════════ -->
+  <section class="demo-section" id="language-examples">
+    <h2>Language Examples</h2>
+    <p class="demo-desc">
+      Short read-only snippets demonstrating syntax highlighting for various languages.
+    </p>
+
+    <!-- Markdown -->
+    <div class="demo-card demo-card--full" style="margin-bottom:20px">
+      <h3 style="padding:12px 16px 0;margin:0;font-size:15px">Markdown</h3>
+      <div class="demo-preview" style="padding:0">
+        <div data-sc="monaco-editor"
+             id="demo-lang-markdown"
+             data-language="markdown"
+             data-theme="vs-dark"
+             data-readonly="true"
+             data-minimap="false"
+             data-line-numbers="on"
+             style="height:200px"># Project README
+
+## Getting Started
+
+Install dependencies and start the dev server:
+
+```bash
+npm install
+npm run dev
+```
+
+### Features
+
+- **Fast** — no build step required
+- **Declarative** — configure via data attributes
+- *Lightweight* — zero framework dependencies
+
+> Scooter Pages: just HTML, CSS, and vanilla JS.
+
+| Component | Tier | JS Required |
+|-----------|------|-------------|
+| Button    | CSS  | No          |
+| Accordion | Light| Yes         |
+| Dialog    | Heavy| Yes         |</div>
+      </div>
+    </div>
+
+    <!-- YAML -->
+    <div class="demo-card demo-card--full" style="margin-bottom:20px">
+      <h3 style="padding:12px 16px 0;margin:0;font-size:15px">YAML</h3>
+      <div class="demo-preview" style="padding:0">
+        <div data-sc="monaco-editor"
+             id="demo-lang-yaml"
+             data-language="yaml"
+             data-theme="vs-dark"
+             data-readonly="true"
+             data-minimap="false"
+             data-line-numbers="on"
+             style="height:200px">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scooter-app
+  labels:
+    app: scooter
+    tier: frontend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: scooter
+  template:
+    metadata:
+      labels:
+        app: scooter
+    spec:
+      containers:
+        - name: web
+          image: scooter-pages:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: NODE_ENV
+              value: "production"</div>
+      </div>
+    </div>
+
+    <!-- Python -->
+    <div class="demo-card demo-card--full" style="margin-bottom:20px">
+      <h3 style="padding:12px 16px 0;margin:0;font-size:15px">Python</h3>
+      <div class="demo-preview" style="padding:0">
+        <div data-sc="monaco-editor"
+             id="demo-lang-python"
+             data-language="python"
+             data-theme="vs-dark"
+             data-readonly="true"
+             data-minimap="false"
+             data-line-numbers="on"
+             style="height:200px">from dataclasses import dataclass
+from typing import Optional
+
+@dataclass
+class Component:
+    """A Scooter Pages component."""
+    name: str
+    tier: str  # "css" | "light" | "medium" | "heavy"
+    description: Optional[str] = None
+
+    def register(self) -> None:
+        print(f"Registered: {self.name} (tier={self.tier})")
+
+    @property
+    def requires_js(self) -> bool:
+        return self.tier != "css"
+
+components = [
+    Component("button", "css", "Clickable action element"),
+    Component("accordion", "light", "Collapsible content panels"),
+    Component("dialog", "heavy", "Modal overlay window"),
+]
+
+for comp in components:
+    if comp.requires_js:
+        comp.register()</div>
+      </div>
+    </div>
+
+    <!-- SQL -->
+    <div class="demo-card demo-card--full" style="margin-bottom:20px">
+      <h3 style="padding:12px 16px 0;margin:0;font-size:15px">SQL</h3>
+      <div class="demo-preview" style="padding:0">
+        <div data-sc="monaco-editor"
+             id="demo-lang-sql"
+             data-language="sql"
+             data-theme="vs-dark"
+             data-readonly="true"
+             data-minimap="false"
+             data-line-numbers="on"
+             style="height:180px">-- Components analytics query
+SELECT
+    c.name           AS component,
+    c.tier,
+    COUNT(p.id)      AS usage_count,
+    AVG(p.load_ms)   AS avg_load_time
+FROM components c
+LEFT JOIN page_components p ON p.component_id = c.id
+WHERE c.created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+GROUP BY c.name, c.tier
+HAVING usage_count > 10
+ORDER BY usage_count DESC
+LIMIT 20;</div>
+      </div>
+    </div>
+
+    <!-- JSON -->
+    <div class="demo-card demo-card--full" style="margin-bottom:20px">
+      <h3 style="padding:12px 16px 0;margin:0;font-size:15px">JSON</h3>
+      <div class="demo-preview" style="padding:0">
+        <div data-sc="monaco-editor"
+             id="demo-lang-json"
+             data-language="json"
+             data-theme="vs-dark"
+             data-readonly="true"
+             data-minimap="false"
+             data-line-numbers="on"
+             style="height:200px">{
+  "name": "scooter-pages",
+  "version": "1.0.0",
+  "components": {
+    "total": 34,
+    "tiers": {
+      "css-only": 12,
+      "light-js": 8,
+      "medium-js": 7,
+      "complex-js": 7
+    }
+  },
+  "features": [
+    "No build step",
+    "Zero dependencies",
+    "Declarative data attributes",
+    "Full accessibility (ARIA)"
+  ],
+  "cdn": {
+    "monaco": "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.55.1/min/"
+  }
+}</div>
+      </div>
+    </div>
+
+    <!-- CSS -->
+    <div class="demo-card demo-card--full" style="margin-bottom:20px">
+      <h3 style="padding:12px 16px 0;margin:0;font-size:15px">CSS</h3>
+      <div class="demo-preview" style="padding:0">
+        <div data-sc="monaco-editor"
+             id="demo-lang-css"
+             data-language="css"
+             data-theme="vs-dark"
+             data-readonly="true"
+             data-minimap="false"
+             data-line-numbers="on"
+             style="height:200px">/* Scooter Pages — custom component styling */
+:root {
+  --primary: oklch(0.21 0.006 285.88);
+  --radius: 0.625rem;
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-slot="card"] {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  transition: box-shadow var(--transition-fast);
+
+  &:hover {
+    box-shadow: 0 4px 12px oklch(0 0 0 / 0.08);
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary: oklch(0.92 0.004 286.32);
+  }
+}</div>
+      </div>
+    </div>
+
+    <!-- TypeScript -->
+    <div class="demo-card demo-card--full">
+      <h3 style="padding:12px 16px 0;margin:0;font-size:15px">TypeScript</h3>
+      <div class="demo-preview" style="padding:0">
+        <div data-sc="monaco-editor"
+             id="demo-lang-typescript"
+             data-language="typescript"
+             data-theme="vs-dark"
+             data-readonly="true"
+             data-minimap="false"
+             data-line-numbers="on"
+             style="height:220px">interface ScooterComponent {
+  name: string;
+  tier: 'css' | 'light' | 'medium' | 'complex';
+  init: (el: HTMLElement) => void;
+}
+
+type ComponentRegistry = Map&lt;string, ScooterComponent&gt;;
+
+const registry: ComponentRegistry = new Map();
+
+function register&lt;T extends ScooterComponent&gt;(component: T): void {
+  if (registry.has(component.name)) {
+    console.warn(`Component "${component.name}" already registered`);
+    return;
+  }
+  registry.set(component.name, component);
+}
+
+function initAll(root: HTMLElement = document.body): void {
+  registry.forEach((comp, name) =&gt; {
+    const elements = root.querySelectorAll&lt;HTMLElement&gt;(
+      `[data-sc="${name}"]`
+    );
+    elements.forEach(el =&gt; comp.init(el));
+  });
+}
+
+export { register, initAll, type ScooterComponent };</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ DIFF EDITOR ═══════════════════════ -->
+  <section class="demo-section" id="diff-editor">
+    <h2>Diff Editor</h2>
+    <p class="demo-desc">
+      Side-by-side diff viewer that highlights changes between an original and modified version.
+      Provide content via <code>data-slot="original"</code> and <code>data-slot="modified"</code> child elements.
+    </p>
+
+    <div class="demo-card demo-card--full">
+      <div class="demo-preview" style="padding:0">
+        <div data-sc="monaco-editor"
+             id="demo-diff-editor"
+             data-mode="diff"
+             data-language="javascript"
+             data-theme="vs-dark"
+             style="height:400px">
+          <pre data-slot="original">/**
+ * UserService — original version
+ */
+class UserService {
+  constructor(db) {
+    this.db = db;
+  }
+
+  async getUser(id) {
+    const user = await this.db.query('SELECT * FROM users WHERE id = ?', [id]);
+    return user;
+  }
+
+  async createUser(name, email) {
+    const result = await this.db.query(
+      'INSERT INTO users (name, email) VALUES (?, ?)',
+      [name, email]
+    );
+    return { id: result.insertId, name, email };
+  }
+
+  async deleteUser(id) {
+    await this.db.query('DELETE FROM users WHERE id = ?', [id]);
+  }
+}</pre>
+          <pre data-slot="modified">/**
+ * UserService — updated version
+ * Added validation, soft-delete, and caching.
+ */
+class UserService {
+  #cache = new Map();
+
+  constructor(db, logger) {
+    this.db = db;
+    this.logger = logger;
+  }
+
+  async getUser(id) {
+    if (this.#cache.has(id)) {
+      return this.#cache.get(id);
+    }
+
+    const user = await this.db.query('SELECT * FROM users WHERE id = ? AND deleted_at IS NULL', [id]);
+    if (user) this.#cache.set(id, user);
+    return user;
+  }
+
+  async createUser(name, email) {
+    if (!name || !email) {
+      throw new Error('Name and email are required');
+    }
+    if (!email.includes('@')) {
+      throw new Error('Invalid email address');
+    }
+
+    const result = await this.db.query(
+      'INSERT INTO users (name, email, created_at) VALUES (?, ?, NOW())',
+      [name, email]
+    );
+    const user = { id: result.insertId, name, email };
+    this.#cache.set(user.id, user);
+    this.logger.info('User created', { id: user.id });
+    return user;
+  }
+
+  async deleteUser(id) {
+    await this.db.query('UPDATE users SET deleted_at = NOW() WHERE id = ?', [id]);
+    this.#cache.delete(id);
+    this.logger.info('User soft-deleted', { id });
+  }
+}</pre>
+        </div>
+      </div>
+
+      <div class="demo-code-actions">
+        <button class="demo-code-toggle" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--diff-html')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          Show HTML
+        </button>
+      </div>
+      <div class="demo-code-block demo-code-block--diff-html"><pre><code>&lt;div data-sc="monaco-editor"
+     data-mode="diff"
+     data-language="javascript"
+     data-theme="vs-dark"
+     style="height:400px"&gt;
+  &lt;pre data-slot="original"&gt;// original code here&lt;/pre&gt;
+  &lt;pre data-slot="modified"&gt;// modified code here&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+const diffEl = document.querySelector('[data-mode="diff"]');
+
+// API for diff editor
+diffEl._monacoEditor.getOriginalValue();  // left pane
+diffEl._monacoEditor.getModifiedValue();  // right pane
+&lt;/script&gt;</code></pre></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ READONLY VIEWER ═══════════════════════ -->
+  <section class="demo-section" id="readonly-viewer">
+    <h2>Read-Only Viewer</h2>
+    <p class="demo-desc">
+      A lightweight read-only code viewer — perfect for documentation or code snippets.
+    </p>
+
+    <div class="demo-card demo-card--full">
+      <div class="demo-preview" style="padding:0">
+        <div data-sc="monaco-editor"
+             id="demo-readonly"
+             data-language="html"
+             data-theme="vs"
+             data-readonly="true"
+             data-minimap="false"
+             data-line-numbers="on"
+             style="height:220px">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;title&gt;Hello World&lt;/title&gt;
+  &lt;link rel="stylesheet" href="components.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;main class="scooter-page"&gt;
+    &lt;h1&gt;Welcome to Scooter Pages&lt;/h1&gt;
+    &lt;p&gt;No build step. No framework. Just HTML.&lt;/p&gt;
+  &lt;/main&gt;
+  &lt;script src="components/scooter-core.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ FEATURES ═══════════════════════ -->
+  <section class="demo-section" id="features">
+    <h2>Component Features</h2>
+    <p class="demo-desc">Overview of what the Monaco Editor wrapper provides.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview demo-preview--col" style="gap:24px">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;width:100%">
+          <div data-slot="card" style="padding:20px;margin:0">
+            <h4 style="font-size:16px;margin-bottom:8px">Singleton CDN Loader</h4>
+            <p class="text-sm text-muted">Monaco is loaded exactly once via a shared Promise — no race conditions even with multiple editors on the same page.</p>
+          </div>
+          <div data-slot="card" style="padding:20px;margin:0">
+            <h4 style="font-size:16px;margin-bottom:8px">Standard + Diff Modes</h4>
+            <p class="text-sm text-muted">Switch between a standard code editor and a side-by-side diff viewer with a single <code>data-mode</code> attribute.</p>
+          </div>
+          <div data-slot="card" style="padding:20px;margin:0">
+            <h4 style="font-size:16px;margin-bottom:8px">Declarative Config</h4>
+            <p class="text-sm text-muted">Language, theme, minimap, word-wrap, and more — all controlled via data attributes. No JavaScript setup needed.</p>
+          </div>
+          <div data-slot="card" style="padding:20px;margin:0">
+            <h4 style="font-size:16px;margin-bottom:8px">Full API Access</h4>
+            <p class="text-sm text-muted">Access the underlying Monaco instance via <code>el._monacoEditor.getEditor()</code> for advanced customization.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- Toggle helper -->
+<script>
+function toggleCode(btn, cls) {
+  var card = btn.closest('.demo-card');
+  var block = card.querySelector(cls);
+  if (!block) return;
+  var expanded = btn.getAttribute('aria-expanded') === 'true' ? 'false' : 'true';
+  btn.setAttribute('aria-expanded', expanded);
+  block.dataset.visible = expanded;
+}
+</script>
+
+<!-- Scripts -->
+<script src="../components/scooter-core.js"></script>
+<script src="../components/custom/monaco-editor/monaco-editor.js"></script>
+
+<!-- Wire up controls for standard editor -->
+<script>
+function ScooterPageInit_demoMonaco(root) {
+  var editorEl = root.querySelector('#demo-editor');
+
+  // Theme/language switching
+  root.querySelector('#lang-select').addEventListener('change', function () {
+    editorEl._monacoEditor.setLanguage(this.value);
+  });
+
+  root.querySelector('#theme-select').addEventListener('change', function () {
+    var theme = this.value;
+    editorEl._monacoEditor.setTheme(theme);
+    // Update data attribute so CSS can react
+    root.querySelectorAll('[data-sc="monaco-editor"]').forEach(function (el) {
+      el.dataset.theme = theme;
+    });
+  });
+
+  // Log editor events
+  editorEl.addEventListener('sc:ready', function () {
+    logTo('monaco-log', 'sc:ready', { id: 'demo-editor' });
+  });
+
+  editorEl.addEventListener('sc:change', function (e) {
+    logTo('monaco-log', 'sc:change', { id: 'demo-editor', chars: e.detail.value.length });
+  });
+
+  // Log events from diff editor and language examples too
+  root.querySelectorAll('[data-sc="monaco-editor"]:not(#demo-editor)').forEach(function (el) {
+    el.addEventListener('sc:ready', function () {
+      logTo('monaco-log', 'sc:ready', { id: el.id || '(unnamed)' });
+    });
+    el.addEventListener('sc:change', function (e) {
+      logTo('monaco-log', 'sc:change', { id: el.id || '(unnamed)', chars: e.detail.value.length });
+    });
+  });
+
+  function logTo(logId, type, detail) {
+    var el = root.querySelector('#' + logId);
+    if (!el) return;
+    var time = new Date().toLocaleTimeString('en-US', { hour12: false });
+    var d = detail ? JSON.stringify(detail) : '{}';
+    var line = document.createElement('div');
+    line.innerHTML = '<span style="color:var(--gray-500)">[' + time + ']</span> <span style="color:#34c759">' + type + '</span> ' + d;
+    el.appendChild(line);
+    el.scrollTop = el.scrollHeight;
+  }
+}
+
+// Standalone mode
+document.addEventListener('DOMContentLoaded', function() {
+  var main = document.querySelector('main.demo-page');
+  if (main) {
+    Scooter.init(main);
+    ScooterPageInit_demoMonaco(main);
+  }
+});
+</script>
+
+</body>
+</html>

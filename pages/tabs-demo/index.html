@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tabs — Scooter Pages</title>
+  <link rel="stylesheet" href="../../components.css" />
+  <style>
+    .example + .example { margin-top: 2.5rem; }
+    .example h2 { margin-bottom: 0.5rem; }
+    .example p { color: var(--muted-foreground); margin-bottom: 1rem; }
+    .panel-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      background: var(--secondary);
+    }
+    .panel-card h3 { margin: 0 0 0.5rem; }
+    .panel-card p { margin: 0; color: var(--foreground); }
+    .profile-grid {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 0.5rem 1rem;
+    }
+    .profile-grid dt { font-weight: 600; }
+    .profile-grid dd { margin: 0; }
+  </style>
+</head>
+<body>
+
+<main class="scooter-page">
+  <h1>Tabs Component</h1>
+  <p>Switch between content panels with keyboard-accessible tabs.</p>
+
+  <!-- ─── Basic Tabs ─────────────────────────────────────────── -->
+  <section class="example" id="basic">
+    <h2>Basic Tabs</h2>
+    <p>A simple tabs group with three panels.</p>
+
+    <div data-sc="tabs" data-default-value="overview">
+      <div data-slot="tabs-list" role="tablist">
+        <button data-slot="tabs-trigger" data-value="overview" role="tab">Overview</button>
+        <button data-slot="tabs-trigger" data-value="features" role="tab">Features</button>
+        <button data-slot="tabs-trigger" data-value="usage" role="tab">Usage</button>
+      </div>
+      <div data-slot="tabs-content" data-value="overview" role="tabpanel">
+        <div class="panel-card">
+          <h3>Overview</h3>
+          <p>Tabs organise content into separate views where only one view is visible at a time. Clicking a tab activates the corresponding panel.</p>
+        </div>
+      </div>
+      <div data-slot="tabs-content" data-value="features" role="tabpanel">
+        <div class="panel-card">
+          <h3>Features</h3>
+          <ul>
+            <li>Arrow-key navigation between triggers</li>
+            <li>ARIA roles and states for screen readers</li>
+            <li>CSS-only styling — no inline styles</li>
+            <li>Supports default value via <code>data-default-value</code></li>
+          </ul>
+        </div>
+      </div>
+      <div data-slot="tabs-content" data-value="usage" role="tabpanel">
+        <div class="panel-card">
+          <h3>Usage</h3>
+          <p>Add <code>data-sc="tabs"</code> to the root, <code>data-slot="tabs-list"</code> around the triggers, and <code>data-slot="tabs-content"</code> for each panel. Match trigger and panel via <code>data-value</code>.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Account Settings Tabs ──────────────────────────────── -->
+  <section class="example" id="account">
+    <h2>Account Settings</h2>
+    <p>A practical example with form-style content in each panel.</p>
+
+    <div data-sc="tabs" data-default-value="profile">
+      <div data-slot="tabs-list" role="tablist">
+        <button data-slot="tabs-trigger" data-value="profile" role="tab">Profile</button>
+        <button data-slot="tabs-trigger" data-value="security" role="tab">Security</button>
+        <button data-slot="tabs-trigger" data-value="notifications" role="tab">Notifications</button>
+      </div>
+      <div data-slot="tabs-content" data-value="profile" role="tabpanel">
+        <div class="panel-card">
+          <h3>Profile</h3>
+          <dl class="profile-grid">
+            <dt>Name</dt>        <dd>Jane Doe</dd>
+            <dt>Email</dt>       <dd>jane@example.com</dd>
+            <dt>Role</dt>        <dd>Administrator</dd>
+            <dt>Joined</dt>      <dd>12 Jan 2024</dd>
+          </dl>
+        </div>
+      </div>
+      <div data-slot="tabs-content" data-value="security" role="tabpanel">
+        <div class="panel-card">
+          <h3>Security</h3>
+          <p>Two-factor authentication is <strong>enabled</strong>. Last password change: 3 months ago.</p>
+        </div>
+      </div>
+      <div data-slot="tabs-content" data-value="notifications" role="tabpanel">
+        <div class="panel-card">
+          <h3>Notification Preferences</h3>
+          <p>Email digests: <strong>Weekly</strong><br>Push notifications: <strong>Enabled</strong><br>Marketing emails: <strong>Disabled</strong></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Code Snippet Tabs ──────────────────────────────────── -->
+  <section class="example" id="code">
+    <h2>Code Snippets</h2>
+    <p>Tabs work well for showing alternatives side-by-side.</p>
+
+    <div data-sc="tabs" data-default-value="html">
+      <div data-slot="tabs-list" role="tablist">
+        <button data-slot="tabs-trigger" data-value="html" role="tab">HTML</button>
+        <button data-slot="tabs-trigger" data-value="css" role="tab">CSS</button>
+        <button data-slot="tabs-trigger" data-value="js" role="tab">JavaScript</button>
+      </div>
+      <div data-slot="tabs-content" data-value="html" role="tabpanel">
+        <div class="panel-card">
+          <pre><code>&lt;div data-sc="tabs" data-default-value="tab1"&gt;
+  &lt;div data-slot="tabs-list" role="tablist"&gt;
+    &lt;button data-slot="tabs-trigger" data-value="tab1" role="tab"&gt;Tab 1&lt;/button&gt;
+    &lt;button data-slot="tabs-trigger" data-value="tab2" role="tab"&gt;Tab 2&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;div data-slot="tabs-content" data-value="tab1" role="tabpanel"&gt;…&lt;/div&gt;
+  &lt;div data-slot="tabs-content" data-value="tab2" role="tabpanel"&gt;…&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+        </div>
+      </div>
+      <div data-slot="tabs-content" data-value="css" role="tabpanel">
+        <div class="panel-card">
+          <pre><code>/* All tab styles come from base.css — no extra CSS needed.
+   Override with custom properties if you want a different look. */
+[data-slot="tabs-trigger"][data-state="active"] {
+  color: var(--foreground);
+  box-shadow: inset 0 -2px 0 0 var(--foreground);
+}</code></pre>
+        </div>
+      </div>
+      <div data-slot="tabs-content" data-value="js" role="tabpanel">
+        <div class="panel-card">
+          <pre><code>// No manual JS required — just include the component script:
+// &lt;script src="../../components/tabs.js"&gt;&lt;/script&gt;
+//
+// The tabs component auto-initialises via Scooter.register().</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script src="../../components/scooter-core.js"></script>
+<script src="../../components/tabs.js"></script>
+</body>
+</html>

@@ -9,6 +9,30 @@
 </head>
 <body>
 
+<!-- Page metadata for dynamic loading -->
+<script type="scooter/page-meta">
+{
+  "scripts": [
+    "components/accordion.js",
+    "components/collapsible.js",
+    "components/tabs.js",
+    "components/toggle.js",
+    "components/toggle-group.js",
+    "components/checkbox.js",
+    "components/radio-group.js",
+    "components/switch.js",
+    "components/tooltip.js",
+    "components/hover-card.js",
+    "components/avatar.js",
+    "components/image-with-fallback.js",
+    "components/progress.js",
+    "components/pagination.js",
+    "components/table.js"
+  ],
+  "init": "ScooterPageInit_demoLightJs"
+}
+</script>
+
 <!-- Navigation -->
 <nav class="demo-nav">
   <span class="demo-nav-title">Scooter Pages</span>
@@ -17,6 +41,9 @@
   <a href="demo-medium-js.html">Medium JS</a>
   <a href="demo-complex-js.html">Complex JS</a>
   <a href="demo-patterns.html">Patterns</a>
+  <a href="demo-service-registry.html">Service Registry</a>
+  <a href="demo-monaco-editor.html">Monaco Editor</a>
+  <a href="demo-div-table.html">DivTable</a>
 </nav>
 
 <!-- Toggle helper shared across all demo cards -->
@@ -1219,18 +1246,6 @@ table._table.selectAll();        // (only for multiple)</code></pre></div>
 
 </main>
 
-<script>
-// Button group single-select behavior
-document.getElementById('demo-button-group').addEventListener('click', function(e) {
-  var btn = e.target.closest('[data-slot="button"]');
-  if (!btn) return;
-  this.querySelectorAll('[data-slot="button"]').forEach(function(b) {
-    b.setAttribute('aria-pressed', 'false');
-  });
-  btn.setAttribute('aria-pressed', 'true');
-});
-</script>
-
 <!-- Scripts: core + all Tier 2 components used -->
 <script src="../components/scooter-core.js"></script>
 <script src="../components/accordion.js"></script>
@@ -1249,102 +1264,115 @@ document.getElementById('demo-button-group').addEventListener('click', function(
 <script src="../components/pagination.js"></script>
 <script src="../components/table.js"></script>
 
-<!-- Live event loggers -->
 <script>
-document.addEventListener('DOMContentLoaded', () => {
+/**
+ * Page init — wires up event loggers and interactive demos.
+ * Called by PageLoader (dynamic) or DOMContentLoaded (standalone).
+ * @param {HTMLElement} root - container holding the page content
+ */
+function ScooterPageInit_demoLightJs(root) {
 
   function logTo(logId, type, detail) {
-    const el = document.getElementById(logId);
+    var el = root.querySelector('#' + logId) || document.getElementById(logId);
     if (!el) return;
-    const time = new Date().toLocaleTimeString('en-US', { hour12: false });
-    const d = detail ? JSON.stringify(detail) : '{}';
-    const line = document.createElement('div');
+    var time = new Date().toLocaleTimeString('en-US', { hour12: false });
+    var d = detail ? JSON.stringify(detail) : '{}';
+    var line = document.createElement('div');
     line.innerHTML = '<span style="color:var(--gray-500)">[' + time + ']</span> <span style="color:#34c759">' + type + '</span> ' + d;
     el.appendChild(line);
     el.scrollTop = el.scrollHeight;
   }
 
-  // Accordion
-  const accordionEl = document.getElementById('demo-accordion');
-  if (accordionEl) {
-    accordionEl.addEventListener('sc:change', (e) => logTo('accordion-log', 'sc:change', e.detail));
-  }
-
-  // Collapsible
-  const collapsibleEl = document.getElementById('demo-collapsible');
-  if (collapsibleEl) {
-    collapsibleEl.addEventListener('sc:open',  () => logTo('collapsible-log', 'sc:open', {}));
-    collapsibleEl.addEventListener('sc:close', () => logTo('collapsible-log', 'sc:close', {}));
-  }
-
-  // Tabs
-  const tabsEl = document.getElementById('demo-tabs');
-  if (tabsEl) {
-    tabsEl.addEventListener('sc:change', (e) => logTo('tabs-log', 'sc:change', e.detail));
-  }
-
-  // Tabs (underline variant)
-  const tabsUnderlineEl = document.getElementById('demo-tabs-underline');
-  if (tabsUnderlineEl) {
-    tabsUnderlineEl.addEventListener('sc:change', (e) => logTo('tabs-underline-log', 'sc:change', e.detail));
-  }
-
-  // Toggle — capture all toggle buttons in the section
-  document.querySelectorAll('#toggle [data-sc="toggle"]').forEach(t => {
-    t.addEventListener('sc:change', (e) => logTo('toggle-log', 'sc:change', { id: t.id || t.getAttribute('aria-label'), pressed: e.detail.pressed }));
-  });
-
-  // Toggle Group — capture all toggle groups in the section
-  document.querySelectorAll('#toggle-group [data-sc="toggle-group"]').forEach(tg => {
-    tg.addEventListener('sc:change', (e) => logTo('toggle-group-log', 'sc:change', e.detail));
-  });
-
-  // Checkbox
-  ['cb1', 'cb2', 'cb3'].forEach(id => {
-    const cb = document.getElementById(id);
-    if (cb) cb.addEventListener('sc:change', (e) => logTo('checkbox-log', 'sc:change', { id, checked: e.detail.checked }));
-  });
-
-  // Radio Group
-  const radioEl = document.getElementById('demo-radio-group');
-  if (radioEl) {
-    radioEl.addEventListener('sc:change', (e) => logTo('radio-group-log', 'sc:change', e.detail));
-  }
-
-  // Switch
-  const switchEl = document.getElementById('demo-switch');
-  if (switchEl) {
-    switchEl.addEventListener('sc:change', (e) => logTo('switch-log', 'sc:change', e.detail));
-  }
-
-  // Button Group
-  const btnGroup = document.getElementById('demo-button-group');
-  if (btnGroup) {
-    btnGroup.addEventListener('click', (e) => {
-      const btn = e.target.closest('[data-slot="button"]');
-      if (btn) logTo('button-group-log', 'click', { value: btn.dataset.value });
+  // Button group single-select behavior
+  var btnGroupEl = root.querySelector('#demo-button-group');
+  if (btnGroupEl) {
+    btnGroupEl.addEventListener('click', function(e) {
+      var btn = e.target.closest('[data-slot="button"]');
+      if (!btn) return;
+      btnGroupEl.querySelectorAll('[data-slot="button"]').forEach(function(b) {
+        b.setAttribute('aria-pressed', 'false');
+      });
+      btn.setAttribute('aria-pressed', 'true');
+      logTo('button-group-log', 'click', { value: btn.dataset.value });
     });
   }
 
+  // Accordion
+  var accordionEl = root.querySelector('#demo-accordion');
+  if (accordionEl) {
+    accordionEl.addEventListener('sc:change', function(e) { logTo('accordion-log', 'sc:change', e.detail); });
+  }
+
+  // Collapsible
+  var collapsibleEl = root.querySelector('#demo-collapsible');
+  if (collapsibleEl) {
+    collapsibleEl.addEventListener('sc:open',  function() { logTo('collapsible-log', 'sc:open', {}); });
+    collapsibleEl.addEventListener('sc:close', function() { logTo('collapsible-log', 'sc:close', {}); });
+  }
+
+  // Tabs
+  var tabsEl = root.querySelector('#demo-tabs');
+  if (tabsEl) {
+    tabsEl.addEventListener('sc:change', function(e) { logTo('tabs-log', 'sc:change', e.detail); });
+  }
+
+  var tabsUnderlineEl = root.querySelector('#demo-tabs-underline');
+  if (tabsUnderlineEl) {
+    tabsUnderlineEl.addEventListener('sc:change', function(e) { logTo('tabs-underline-log', 'sc:change', e.detail); });
+  }
+
+  // Toggle
+  root.querySelectorAll('#toggle [data-sc="toggle"]').forEach(function(t) {
+    t.addEventListener('sc:change', function(e) { logTo('toggle-log', 'sc:change', { id: t.id || t.getAttribute('aria-label'), pressed: e.detail.pressed }); });
+  });
+
+  // Toggle Group
+  root.querySelectorAll('#toggle-group [data-sc="toggle-group"]').forEach(function(tg) {
+    tg.addEventListener('sc:change', function(e) { logTo('toggle-group-log', 'sc:change', e.detail); });
+  });
+
+  // Checkbox
+  ['cb1', 'cb2', 'cb3'].forEach(function(id) {
+    var cb = root.querySelector('#' + id);
+    if (cb) cb.addEventListener('sc:change', function(e) { logTo('checkbox-log', 'sc:change', { id: id, checked: e.detail.checked }); });
+  });
+
+  // Radio Group
+  var radioEl = root.querySelector('#demo-radio-group');
+  if (radioEl) {
+    radioEl.addEventListener('sc:change', function(e) { logTo('radio-group-log', 'sc:change', e.detail); });
+  }
+
+  // Switch
+  var switchEl = root.querySelector('#demo-switch');
+  if (switchEl) {
+    switchEl.addEventListener('sc:change', function(e) { logTo('switch-log', 'sc:change', e.detail); });
+  }
+
   // Progress
-  ['demo-progress-1', 'demo-progress-2', 'demo-progress-3'].forEach(id => {
-    const p = document.getElementById(id);
-    if (p) p.addEventListener('sc:change', (e) => logTo('progress-log', 'sc:change', e.detail));
+  ['demo-progress-1', 'demo-progress-2', 'demo-progress-3'].forEach(function(id) {
+    var p = root.querySelector('#' + id);
+    if (p) p.addEventListener('sc:change', function(e) { logTo('progress-log', 'sc:change', e.detail); });
   });
 
   // Pagination
-  ['demo-pagination-1', 'demo-pagination-2', 'demo-pagination-3'].forEach(id => {
-    const p = document.getElementById(id);
-    if (p) p.addEventListener('sc:change', (e) => logTo('pagination-log', 'sc:change', e.detail));
+  ['demo-pagination-1', 'demo-pagination-2', 'demo-pagination-3'].forEach(function(id) {
+    var p = root.querySelector('#' + id);
+    if (p) p.addEventListener('sc:change', function(e) { logTo('pagination-log', 'sc:change', e.detail); });
   });
 
   // Table
-  const tableEl = document.getElementById('demo-table');
+  var tableEl = root.querySelector('#demo-table');
   if (tableEl) {
-    tableEl.addEventListener('sc:select', (e) => logTo('table-log', 'sc:select', e.detail));
-    tableEl.addEventListener('sc:sort',   (e) => logTo('table-log', 'sc:sort', e.detail));
+    tableEl.addEventListener('sc:select', function(e) { logTo('table-log', 'sc:select', e.detail); });
+    tableEl.addEventListener('sc:sort',   function(e) { logTo('table-log', 'sc:sort', e.detail); });
   }
+}
 
+// Standalone mode
+document.addEventListener('DOMContentLoaded', function() {
+  var main = document.querySelector('main.demo-page');
+  if (main) ScooterPageInit_demoLightJs(main);
 });
 </script>
 </body>

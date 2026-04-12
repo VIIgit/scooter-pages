@@ -13,11 +13,24 @@
 
 <!--
   ┌─────────────────────────────────────────────────────────┐
-  │  IMPORTANT: The sidebar-dynamic page extracts content   │
-  │  via  doc.querySelector('main.scooter-page')            │
-  │  Keep the <main class="scooter-page"> wrapper intact.   │
+  │  Page Contract for Dynamic Loading                      │
+  │                                                         │
+  │  1. Wrap content in <main class="scooter-page">         │
+  │  2. Declare dependencies in <script type="scooter/page-meta"> │
+  │  3. Provide a global init function (called by PageLoader │
+  │     when loaded dynamically, and by DOMContentLoaded     │
+  │     when opened standalone)                              │
   └─────────────────────────────────────────────────────────┘
 -->
+
+<!-- Page metadata: scripts are relative to project root -->
+<script type="scooter/page-meta">
+{
+  "scripts": [],
+  "init": "ScooterPageInit_myPage"
+}
+</script>
+
 <main class="scooter-page">
   <h1>Page Title</h1>
   <p>Short description of this page.</p>
@@ -32,5 +45,25 @@
 <!-- Scripts: scooter-core FIRST, then only the component scripts this page uses -->
 <script src="../../components/scooter-core.js"></script>
 <!-- <script src="../../components/accordion.js"></script> -->
+
+<script>
+/**
+ * Page init function — wires up interactive elements.
+ * Called by PageLoader when loaded dynamically, or by DOMContentLoaded standalone.
+ * @param {HTMLElement} root - the container holding the page content
+ */
+function ScooterPageInit_myPage(root) {
+  // Page-specific wiring goes here
+}
+
+// Standalone mode: run init when page is opened directly in the browser
+document.addEventListener('DOMContentLoaded', function () {
+  var main = document.querySelector('main.scooter-page');
+  if (main) {
+    Scooter.init(main);
+    ScooterPageInit_myPage(main);
+  }
+});
+</script>
 </body>
 </html>

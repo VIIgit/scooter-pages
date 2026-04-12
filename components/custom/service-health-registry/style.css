@@ -1,0 +1,116 @@
+/* --- Service Health Registry --------------------------------------------- */
+[data-sc="service-health-registry"] { width: 100%; }
+
+[data-slot="service-registry-header"] {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 24px;
+}
+[data-slot="service-registry-title"] {
+  display: flex; flex-direction: column; gap: 4px;
+}
+[data-slot="service-registry-title"] h2 {
+  font-size: 24px; font-weight: var(--font-weight-semibold); margin: 0;
+}
+
+[data-slot="service-registry-view-toggle"] {
+  display: flex; gap: 4px; background: var(--muted); padding: 4px; border-radius: var(--radius-md);
+}
+
+[data-slot="service-registry-stats"] {
+  display: flex; gap: 24px; padding: 20px; background: var(--card);
+  border-radius: var(--radius-lg); margin-bottom: 20px; box-shadow: var(--shadow-xs);
+}
+[data-slot="service-registry-stat"] {
+  display: flex; flex-direction: column; gap: 2px;
+}
+
+[data-slot="service-registry-filters"] {
+  display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end;
+  padding: 16px; background: var(--muted); border-radius: var(--radius-lg);
+  margin-bottom: 20px;
+}
+[data-slot="service-registry-filter"] {
+  display: flex; flex-direction: column; gap: 4px;
+}
+[data-slot="service-registry-filter"] select {
+  padding: 6px 12px; border: 1px solid var(--border); border-radius: var(--radius-md);
+  background: var(--background); font-size: 14px; min-width: 140px;
+}
+[data-slot="service-registry-search"] { flex: 1; min-width: 200px; }
+[data-slot="service-registry-search"] input {
+  width: 100%; padding: 8px 12px; border: 1px solid var(--border);
+  border-radius: var(--radius-md); font-size: 14px;
+}
+
+[data-slot="service-registry-grid"] {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+[data-slot="service-card"] {
+  display: flex; flex-direction: column; gap: 8px;
+  padding: 12px 16px; background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius-md); cursor: pointer; transition: all var(--duration-fast) var(--ease-out);
+}
+[data-slot="service-card"]:hover {
+  border-color: var(--primary); box-shadow: var(--shadow-sm);
+}
+[data-slot="service-card"]:focus {
+  outline: none; box-shadow: 0 0 0 2px var(--ring);
+}
+[data-slot="service-card-header"] {
+  display: flex; align-items: center; gap: 8px;
+}
+[data-slot="service-status-dot"] {
+  width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+}
+[data-slot="service-card-name"] {
+  font-size: 14px; font-weight: var(--font-weight-medium); color: var(--foreground);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+[data-slot="service-card-meta"] {
+  display: flex; gap: 8px; color: var(--muted-foreground);
+}
+
+[data-slot="service-registry-grouped"] {
+  display: flex; flex-direction: column; gap: 24px;
+}
+[data-slot="service-registry-group"] {}
+[data-slot="service-registry-group-header"] {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px 16px; background: var(--muted); border-radius: var(--radius-md);
+  margin-bottom: 12px; font-weight: var(--font-weight-medium);
+}
+[data-slot="service-registry-group-content"] {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+[data-slot="service-registry-treemap"] { display: flex; flex-direction: column; gap: 20px; }
+[data-slot="service-treemap-summary"] {
+  display: flex; gap: 32px; padding: 24px; background: var(--card);
+  border-radius: var(--radius-lg); box-shadow: var(--shadow-xs);
+}
+[data-slot="service-treemap-stat"] {
+  display: flex; flex-direction: column; gap: 4px;
+  border-left: 3px solid var(--stat-color, var(--border)); padding-left: 12px;
+}
+[data-slot="service-treemap-visual"] {
+  display: flex; height: 60px; border-radius: var(--radius-md); overflow: hidden;
+  box-shadow: var(--shadow-xs);
+}
+[data-slot="service-treemap-block"] {
+  display: flex; align-items: center; justify-content: center;
+  color: white; font-weight: var(--font-weight-semibold); font-size: 18px;
+  transition: flex var(--duration-normal) var(--ease-out);
+}
+[data-slot="service-treemap-block"][data-status="healthy"] { background: var(--success); }
+[data-slot="service-treemap-block"][data-status="degraded"] { background: #f59e0b; }
+[data-slot="service-treemap-block"][data-status="critical"] { background: var(--destructive); }
+
+[data-slot="service-registry-list"] { margin-top: 20px; }
+[data-slot="service-registry-list"] [data-slot="service-card"] {
+  display: inline-flex; flex-direction: row; gap: 12px; margin: 4px;
+}
+
+/* Service Health Registry styles moved from global CSS */
