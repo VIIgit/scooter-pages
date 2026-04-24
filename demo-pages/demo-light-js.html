@@ -1244,6 +1244,102 @@ table._table.selectAll();        // (only for multiple)</code></pre></div>
     </div>
   </section>
 
+  <!-- ═══════════════════════ ENVIRONMENT GRID ═══════════════════════ -->
+  <section class="demo-section" id="environment-grid">
+    <h2>Environment Grid</h2>
+    <p class="demo-desc">High-density dot grid that visualises large environment fleets, grouped by system tier (PROD / TE2 / TE1 / DEV). Each 8 px dot represents one environment and is colour-coded by status. Hover to see details. Filter and search update all grids in real-time.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview demo-preview--col" style="gap:0">
+
+        <!-- Controls row -->
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px">
+          <input data-slot="input" id="env-search" placeholder="Filter by name…" style="width:200px">
+          <div style="display:flex;gap:4px" id="env-region-btns">
+            <button data-slot="button" data-size="sm" id="env-btn-all"   class="env-region-btn" data-region="all">All</button>
+            <button data-slot="button" data-size="sm" data-variant="outline" id="env-btn-CH"   class="env-region-btn" data-region="CH">CH</button>
+            <button data-slot="button" data-size="sm" data-variant="outline" id="env-btn-APAC" class="env-region-btn" data-region="APAC">APAC</button>
+            <button data-slot="button" data-size="sm" data-variant="outline" id="env-btn-US"   class="env-region-btn" data-region="US">US</button>
+          </div>
+        </div>
+
+        <!-- Stats bar -->
+        <div style="display:flex;gap:20px;margin-bottom:16px;font-size:13px;flex-wrap:wrap">
+          <span>Total: <strong id="env-stat-total">—</strong></span>
+          <span style="color:#2e7d32">Online: <strong id="env-stat-online">—</strong></span>
+          <span style="color:#ffb74d">Degraded: <strong id="env-stat-degraded">—</strong></span>
+          <span style="color:#e65100">Offline: <strong id="env-stat-offline">—</strong></span>
+        </div>
+
+        <!-- Legend -->
+        <div style="display:flex;gap:16px;align-items:center;margin-bottom:20px;font-size:12px;color:var(--muted-foreground)">
+          <span style="font-weight:600">Legend:</span>
+          <span style="display:flex;align-items:center;gap:5px">
+            <span style="width:10px;height:10px;display:inline-block;background:#2e7d32"></span>Online
+          </span>
+          <span style="display:flex;align-items:center;gap:5px">
+            <span style="width:10px;height:10px;display:inline-block;background:#ffb74d"></span>Degraded
+          </span>
+          <span style="display:flex;align-items:center;gap:5px">
+            <span style="width:10px;height:10px;display:inline-block;background:#e65100"></span>Offline
+          </span>
+          <span>&#127759; = Multi-Regional</span>
+        </div>
+
+        <!-- Region sections — built by JS -->
+        <div id="env-regions" style="display:flex;flex-direction:column;gap:16px"></div>
+
+        <p class="demo-hint" style="margin-top:12px">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          500 environments across 3 regions — type to filter, click a region to isolate it
+        </p>
+        <div class="demo-event-log" id="env-log" style="width:100%;height:60px;margin-top:8px">// environment-grid events appear here…</div>
+      </div>
+
+      <div class="demo-code-actions">
+        <button class="demo-code-toggle" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--html')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          Show HTML
+        </button>
+        <button class="demo-code-toggle demo-code-toggle--js" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--js')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          <span class="demo-code-js-badge">JS</span> Show JavaScript
+        </button>
+      </div>
+      <div class="demo-code-block demo-code-block--html"><pre><code>&lt;!-- One element per region (or a single grid for a flat list) --&gt;
+&lt;div data-sc="environment-grid" id="grid-ch"&gt;&lt;/div&gt;
+
+&lt;!-- Optional: pass a small dataset inline as JSON --&gt;
+&lt;div data-sc="environment-grid"
+     data-environments='[{"id":"e1","name":"CH-PROD-001","systemEnv":"PROD","status":"online"}]'&gt;
+&lt;/div&gt;</code></pre></div>
+      <div class="demo-code-block demo-code-block--js"><pre><code>// Environment object shape
+// { id, name, region, systemEnv, status, multiRegional }
+// status: 'online' | 'degraded' | 'offline'
+// systemEnv: 'DEV' | 'TE1' | 'TE2' | 'PROD'
+
+const grid = document.querySelector('[data-sc="environment-grid"]');
+
+// Load data (replaces current dataset)
+grid._environmentGrid.setData(environments);
+
+// Read current dataset
+const all = grid._environmentGrid.getData();
+
+// sc:render fires after every setData() call
+grid.addEventListener('sc:render', (e) =&gt; {
+  console.log('Rendered', e.detail.count, 'environments');
+});
+
+// sc:hover fires on dot mouseenter / mouseleave
+grid.addEventListener('sc:hover', (e) =&gt; {
+  if (e.detail.env) {
+    console.log('Hovered:', e.detail.env.name);
+  }
+});</code></pre></div>
+    </div>
+  </section>
+
 </main>
 
 <!-- Scripts: core + all Tier 2 components used -->
@@ -1263,6 +1359,8 @@ table._table.selectAll();        // (only for multiple)</code></pre></div>
 <script src="../components/progress.js"></script>
 <script src="../components/pagination.js"></script>
 <script src="../components/table.js"></script>
+<!-- Custom: environment-grid -->
+<script src="../components/custom/environment-grid/environment-grid.js"></script>
 
 <script>
 /**
@@ -1367,6 +1465,142 @@ function ScooterPageInit_demoLightJs(root) {
     tableEl.addEventListener('sc:select', function(e) { logTo('table-log', 'sc:select', e.detail); });
     tableEl.addEventListener('sc:sort',   function(e) { logTo('table-log', 'sc:sort', e.detail); });
   }
+
+  // ─── Environment Grid ───────────────────────────────────────────────────
+
+  function generateEnvironments() {
+    var regions    = ['CH', 'APAC', 'US'];
+    var systemEnvs = ['DEV', 'TE1', 'TE2', 'PROD'];
+    var counts     = { CH: 170, APAC: 165, US: 165 };
+    var envs       = [];
+    var counter    = 1;
+    for (var ri = 0; ri < regions.length; ri++) {
+      var region = regions[ri];
+      for (var i = 0; i < counts[region]; i++) {
+        var r      = Math.random();
+        var status = r > 0.97 ? 'offline' : r > 0.90 ? 'degraded' : 'online';
+        envs.push({
+          id:            'env-' + counter++,
+          name:          region + '-' + systemEnvs[i % 4] + '-' + String(i + 1).padStart(3, '0'),
+          region:        region,
+          systemEnv:     systemEnvs[i % 4],
+          multiRegional: Math.random() < 0.05,
+          status:        status
+        });
+      }
+    }
+    return envs;
+  }
+
+  var allEnvs         = generateEnvironments();
+  var regionGridEls   = {};
+  var regionSections  = {};
+  var envRegionFilter = 'all';
+  var envSearchQuery  = '';
+  var regionLabels    = { CH: 'Switzerland', APAC: 'Asia-Pacific', US: 'United States' };
+
+  var regionsContainer = root.querySelector('#env-regions');
+  if (regionsContainer) {
+    ['CH', 'APAC', 'US'].forEach(function(region) {
+      var section = document.createElement('div');
+      section.style.cssText = 'border:1px solid var(--border);border-radius:var(--radius);padding:16px';
+
+      var header = document.createElement('div');
+      header.style.cssText = 'display:flex;align-items:baseline;gap:8px;margin-bottom:12px';
+
+      var title = document.createElement('span');
+      title.style.cssText = 'font-size:14px;font-weight:var(--font-weight-semibold)';
+      title.textContent   = regionLabels[region];
+
+      var countBadge = document.createElement('span');
+      countBadge.style.cssText = 'font-size:12px;color:var(--muted-foreground)';
+      countBadge.dataset.regionCount = region;
+
+      header.appendChild(title);
+      header.appendChild(countBadge);
+      section.appendChild(header);
+
+      var gridEl = document.createElement('div');
+      gridEl.setAttribute('data-sc', 'environment-grid');
+      section.appendChild(gridEl);
+
+      regionsContainer.appendChild(section);
+      regionGridEls[region]  = gridEl;
+      regionSections[region] = section;
+
+      Scooter.init(section, { include: 'all' });
+
+      (function(r, g) {
+        g.addEventListener('sc:render', function(e) {
+          logTo('env-log', 'sc:render', { region: r, count: e.detail.count });
+        });
+      }(region, gridEl));
+    });
+  }
+
+  function updateEnvStats(filtered) {
+    var online   = filtered.filter(function(e) { return e.status === 'online'; }).length;
+    var degraded = filtered.filter(function(e) { return e.status === 'degraded'; }).length;
+    var offline  = filtered.filter(function(e) { return e.status === 'offline'; }).length;
+    var statEl   = function(id) { return root.querySelector('#' + id); };
+    if (statEl('env-stat-total'))    statEl('env-stat-total').textContent    = filtered.length;
+    if (statEl('env-stat-online'))   statEl('env-stat-online').textContent   = online;
+    if (statEl('env-stat-degraded')) statEl('env-stat-degraded').textContent = degraded;
+    if (statEl('env-stat-offline'))  statEl('env-stat-offline').textContent  = offline;
+  }
+
+  function applyEnvFilters() {
+    var q = envSearchQuery.toLowerCase();
+    var filtered = allEnvs.filter(function(env) {
+      var matchesSearch = !q || env.name.toLowerCase().indexOf(q) !== -1;
+      var matchesRegion = envRegionFilter === 'all' || env.region === envRegionFilter;
+      return matchesSearch && matchesRegion;
+    });
+
+    updateEnvStats(filtered);
+
+    var grouped = { CH: [], APAC: [], US: [] };
+    filtered.forEach(function(env) { grouped[env.region].push(env); });
+
+    ['CH', 'APAC', 'US'].forEach(function(region) {
+      var gridEl  = regionGridEls[region];
+      var section = regionSections[region];
+      if (!gridEl || !section) return;
+
+      if (gridEl._environmentGrid) {
+        gridEl._environmentGrid.setData(grouped[region]);
+      }
+
+      var badge = regionsContainer.querySelector('[data-region-count="' + region + '"]');
+      if (badge) badge.textContent = grouped[region].length + ' environments';
+
+      section.style.display =
+        (envRegionFilter === 'all' || envRegionFilter === region) ? '' : 'none';
+    });
+  }
+
+  var envSearch = root.querySelector('#env-search');
+  if (envSearch) {
+    envSearch.addEventListener('input', function() {
+      envSearchQuery = this.value;
+      applyEnvFilters();
+    });
+  }
+
+  root.querySelectorAll('.env-region-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      envRegionFilter = this.getAttribute('data-region');
+      root.querySelectorAll('.env-region-btn').forEach(function(b) {
+        b.setAttribute('data-variant', 'outline');
+        b.removeAttribute('data-active');
+      });
+      this.removeAttribute('data-variant');
+      this.setAttribute('data-active', 'true');
+      applyEnvFilters();
+    });
+  });
+
+  applyEnvFilters();
 }
 
 // Standalone mode
