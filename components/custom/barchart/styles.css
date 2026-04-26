@@ -1,0 +1,331 @@
+/* Barchart Library v2 - Core Styles */
+
+/* ============================================================================
+   CONTAINER LAYOUT - Horizontal Scrolling with Sticky Y-Axis
+   ============================================================================ */
+
+.barchart-container {
+  font-family: inherit;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-xs);
+  overflow: hidden;
+}
+
+.barchart-row {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+
+/* Y-Axis Container - Sticky with drop shadow */
+.barchart-yaxis-container {
+  flex-shrink: 0;
+  position: sticky;
+  left: 0;
+  z-index: 10;
+  background: var(--card);
+  box-shadow: 2px 0 6px rgba(0, 0, 0, 0.08);
+}
+
+/* Hide shadow when at start or nothing to scroll */
+.barchart-yaxis-container.no-shadow {
+  box-shadow: none;
+}
+
+.barchart-yaxis {
+  display: block;
+}
+
+/* Opt out of global img, svg { max-width: 100% } rules so chart SVGs can
+   retain their computed pixel width and overflow horizontally when needed. */
+.barchart-yaxis,
+.barchart-chart,
+.barchart-xaxis {
+  max-width: none;
+  flex: none;
+}
+
+/* Scroll Container - Horizontal scrolling for chart content */
+.barchart-scroll-container {
+  overflow-x: auto;
+  overflow-y: hidden;
+  flex-grow: 1;
+  scroll-behavior: auto; /* Must be auto for synchronized scrolling across multiple charts */
+  will-change: scroll-position;
+  overscroll-behavior-x: contain; /* Prevent scroll chaining and bounce at edges */
+  scrollbar-gutter: stable both-edges;
+}
+
+/* Chart area wrapper for title + scroll container */
+.barchart-chart-area {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  position: relative;
+}
+
+/* Right shadow on chart area when more content to the right */
+.barchart-chart-area.shadow-right::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 8px;
+  background: linear-gradient(to left, rgba(0, 0, 0, 0.08), transparent);
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Sticky Centered Chart Title Overlay */
+.barchart-title-overlay {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 8px;
+  font-size: 14px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--foreground);
+  background: rgba(255, 255, 255, 0.92);
+  padding: 4px 12px;
+  border-radius: var(--radius-sm);
+  pointer-events: none;
+  z-index: 5;
+  white-space: nowrap;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-xs);
+}
+
+/* Hover zones for vertical tooltip activation */
+.hover-zone {
+  cursor: crosshair;
+}
+
+/* Hover indicator - vertical line from top to x-axis */
+.hover-line {
+  stroke: var(--muted-foreground);
+  opacity: 0.55;
+  stroke-width: 1;
+  stroke-dasharray: 4, 3;
+  pointer-events: none;
+}
+
+/* Hover indicator - circle at top of bar */
+.hover-circle {
+  fill: var(--chart-1);
+  stroke: var(--background);
+  stroke-width: 2;
+  pointer-events: none;
+}
+
+.hover-indicator {
+  pointer-events: none;
+}
+
+/* Hide scrollbar on all but the last (x-axis) scroll container */
+.barchart-row:not(.barchart-xaxis-row) .barchart-scroll-container {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+.barchart-row:not(.barchart-xaxis-row) .barchart-scroll-container::-webkit-scrollbar {
+  display: none; /* Chrome/Safari/Opera */
+}
+
+/* X-axis scroll container shows the scrollbar */
+.barchart-xaxis-scroll {
+  overflow-x: scroll;
+  scrollbar-width: auto;
+  scrollbar-color: var(--gray-500) var(--gray-200);
+}
+
+/* Hide scrollbar when content fits (no scrolling needed) */
+.barchart-scroll-container.no-scroll {
+  overflow-x: hidden;
+}
+
+.barchart-xaxis-scroll::-webkit-scrollbar {
+  height: 12px;
+}
+
+.barchart-xaxis-scroll::-webkit-scrollbar-track {
+  background: var(--gray-200);
+  border-radius: 8px;
+}
+
+.barchart-xaxis-scroll::-webkit-scrollbar-thumb {
+  background: var(--gray-500);
+  border-radius: 8px;
+  border: 2px solid var(--gray-200);
+}
+
+.barchart-xaxis-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--gray-600);
+}
+
+/* ============================================================================
+   SVG BASE STYLES
+   ============================================================================ */
+
+.barchart-chart,
+.barchart-yaxis,
+.barchart-xaxis {
+  display: block;
+}
+
+/* ============================================================================
+   GRID
+   ============================================================================ */
+
+.grid-line {
+  stroke: var(--border);
+  stroke-width: 1;
+  stroke-dasharray: 4, 4;
+}
+
+/* Minor grid lines for log scale - lighter and thinner */
+.grid-line.grid-line-minor {
+  stroke: var(--gray-200);
+  stroke-width: 0.5;
+  stroke-dasharray: 2, 3;
+}
+
+/* ============================================================================
+   AXES
+   ============================================================================ */
+
+.axis-line {
+  stroke: var(--border);
+  stroke-width: 1;
+}
+
+.axis-tick {
+  stroke: var(--border);
+  stroke-width: 1;
+}
+
+.axis-tick-minor {
+  stroke: var(--gray-400);
+  stroke-width: 1;
+}
+
+.axis-label {
+  font-size: 11px;
+  fill: var(--muted-foreground);
+}
+
+.axis-title {
+  font-size: 12px;
+  font-weight: var(--font-weight-semibold);
+  fill: var(--foreground);
+}
+
+.year-label {
+  font-size: 11px;
+  font-weight: var(--font-weight-semibold);
+  fill: var(--foreground);
+}
+
+.week-label {
+  font-size: 10px;
+  fill: var(--muted-foreground);
+}
+
+.quarter-label {
+  font-size: 10px;
+  font-weight: var(--font-weight-medium);
+  fill: var(--muted-foreground);
+}
+
+/* ============================================================================
+   BARS
+   ============================================================================ */
+
+.bar {
+  transition: opacity 0.15s ease;
+  cursor: pointer;
+}
+
+.bar:hover {
+  opacity: 0.75;
+}
+
+.high-low-bar {
+  cursor: pointer;
+}
+
+.high-low-bar:hover .bar {
+  opacity: 0.75;
+}
+
+.avg-marker {
+  stroke-linecap: round;
+  pointer-events: none;
+}
+
+/* ============================================================================
+   TITLE
+   ============================================================================ */
+
+.chart-title {
+  font-size: 14px;
+  font-weight: var(--font-weight-semibold);
+  fill: var(--foreground);
+}
+
+/* ============================================================================
+   TOOLTIP
+   ============================================================================ */
+
+.chart-tooltip {
+  position: fixed;
+  background: var(--popover, var(--background));
+  color: var(--popover-foreground, var(--foreground));
+  border: 1px solid var(--border);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-family: inherit;
+  pointer-events: none;
+  z-index: 10000;
+  box-shadow: var(--shadow-sm);
+  line-height: 1.5;
+  max-width: 260px;
+}
+
+.chart-tooltip td{
+  background: transparent;
+}
+
+.chart-tooltip strong {
+  color: var(--foreground);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* ============================================================================
+   RESPONSIVE
+   ============================================================================ */
+
+@media (max-width: 768px) {
+  .axis-label {
+    font-size: 9px;
+  }
+  
+  .axis-title {
+    font-size: 10px;
+  }
+  
+  .chart-title {
+    font-size: 12px;
+  }
+  
+  .year-label {
+    font-size: 9px;
+  }
+
+  .barchart-yaxis-container {
+    box-shadow: 1px 0 3px rgba(0, 0, 0, 0.08);
+  }
+}

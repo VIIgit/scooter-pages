@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scooter Pages — Bar Chart Variants</title>
+  <link rel="stylesheet" href="../components.css">
+  <link rel="stylesheet" href="demo.css">
+  <link rel="stylesheet" href="../components/custom/barchart/styles.css">
+  <style>
+    .barchart-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 14px;
+      width: 100%;
+    }
+
+    .barchart-item {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--card);
+      padding: 14px;
+    }
+
+    .barchart-item h4 {
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+
+    .barchart-item p {
+      font-size: 12px;
+      color: var(--muted-foreground);
+      margin-bottom: 10px;
+    }
+
+    .chart-container {
+      overflow: hidden;
+      border-radius: 4px;
+    }
+
+    /* demo-card uses overflow:hidden for border-radius clipping, but that
+       clips the barchart scrollbar. Override for this page only. */
+    .demo-card {
+      overflow: visible;
+    }
+
+    .barchart-host {
+      width: 100%;
+      min-height: 230px;
+    }
+
+    .barchart-host--short {
+      min-height: 190px;
+    }
+
+    .barchart-note {
+      display: inline-flex;
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--muted-foreground);
+      background: var(--secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-full);
+      padding: 4px 10px;
+    }
+
+    .barchart-output {
+      margin-top: 10px;
+      background: var(--secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 10px;
+      font-family: 'SF Mono', 'Fira Code', Consolas, monospace;
+      font-size: 12px;
+      line-height: 1.5;
+      color: var(--foreground);
+      overflow-x: auto;
+      white-space: pre;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Page metadata for dynamic loading -->
+<script type="scooter/page-meta">
+{
+  "scripts": [
+    "components/custom/barchart/barchart.js"
+  ],
+  "init": "ScooterPageInit_demoBarchart"
+}
+</script>
+
+<!-- Navigation -->
+<nav class="demo-nav">
+  <span class="demo-nav-title">Scooter Pages</span>
+  <a href="demo-css-only.html">CSS-Only</a>
+  <a href="demo-light-js.html">Light JS</a>
+  <a href="demo-medium-js.html">Medium JS</a>
+  <a href="demo-complex-js.html">Complex JS</a>
+  <a href="demo-patterns.html">Patterns</a>
+  <a href="demo-dashboard.html">Dashboard</a>
+  <a href="demo-barchart.html" aria-current="page">Bar Chart</a>
+</nav>
+
+<script>
+function toggleCode(btn, cls) {
+  var card = btn.closest('.demo-card');
+  var block = card.querySelector(cls);
+  if (!block) return;
+  var expanded = btn.getAttribute('aria-expanded') === 'true' ? 'false' : 'true';
+  btn.setAttribute('aria-expanded', expanded);
+  block.dataset.visible = expanded;
+}
+</script>
+
+<main class="demo-page">
+  <h1>Bar Chart Variants</h1>
+  <p class="demo-subtitle">Live demos of the variants from index.html and per-chart-data.html. Includes JavaScript code examples and token-based Scooter styles.</p>
+
+  <!-- ═══════════════════════ BASE & AGGREGATION ═══════════════════════ -->
+  <section class="demo-section" id="barchart-base">
+    <h2>Base & Aggregation Modes</h2>
+    <p class="demo-desc">byDay, byMonth, byWeek, byWeekday, and byYear in the same look as existing Scooter charts.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview demo-preview--col" style="width:100%">
+        <div class="barchart-grid">
+          <div class="barchart-item">
+            <h4>byDay</h4>
+            <p>Individual daily values as bars</p>
+            <div class="chart-container barchart-host barchart-host--short" id="chart-byday"></div>
+          </div>
+          <div class="barchart-item">
+            <h4>byMonth</h4>
+            <p>Monthly aggregation</p>
+            <div class="chart-container barchart-host barchart-host--short" id="chart-bymonth"></div>
+          </div>
+          <div class="barchart-item">
+            <h4>byWeek</h4>
+            <p>Weeks plus quarter/year labels</p>
+            <div class="chart-container barchart-host barchart-host--short" id="chart-byweek"></div>
+          </div>
+          <div class="barchart-item">
+            <h4>byWeekday</h4>
+            <p>Average by weekday</p>
+            <div class="chart-container barchart-host barchart-host--short" id="chart-byweekday"></div>
+          </div>
+          <div class="barchart-item">
+            <h4>byYear</h4>
+            <p>Multi-year aggregation</p>
+            <div class="chart-container barchart-host barchart-host--short" id="chart-byyear"></div>
+          </div>
+        </div>
+        <span class="barchart-note">Colors come from tokens --chart-1 to --chart-5</span>
+      </div>
+
+      <div class="demo-code-actions">
+        <button class="demo-code-toggle" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--html')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          Show HTML
+        </button>
+        <button class="demo-code-toggle demo-code-toggle--js" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--js')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          <span class="demo-code-js-badge">JS</span> Show JavaScript
+        </button>
+      </div>
+      <div class="demo-code-block demo-code-block--html"><pre><code>&lt;div class="barchart-grid"&gt;
+  &lt;div class="barchart-item"&gt;
+    &lt;h4&gt;byDay&lt;/h4&gt;
+    &lt;div class="chart-container barchart-host barchart-host--short" id="chart-byday"&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="barchart-item"&gt;
+    &lt;h4&gt;byMonth&lt;/h4&gt;
+    &lt;div class="chart-container barchart-host barchart-host--short" id="chart-bymonth"&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;!-- byWeek, byWeekday, byYear similarly --&gt;
+&lt;/div&gt;</code></pre></div>
+      <div class="demo-code-block demo-code-block--js"><pre><code>var yearData = generateYearData(2024);
+    var quarterData = generateQuarterData(2025, 1);
+    var multiYearData = generateMultiYearData(2021, 2025);
+    var dailyData = generateDailyData(100);
+
+    Barchart.createChart({
+      container: '#chart-byday',
+      chartType: 'byDay',
+      visibleWidth: 900,
+      chartHeight: 170,
+      barMinWidth: 10,
+      scrollToEnd: true,
+      timeSeries: [{
+        data: dailyData,
+        renderType: 'bar',
+        title: 'Daily Values',
+        yAxisLabel: 'Value'
+      }]
+    });
+
+Barchart.createChart({
+  container: '#chart-bymonth',
+  chartType: 'byMonth',
+  visibleWidth: 520,
+  chartHeight: 170,
+  timeSeries: [{ data: yearData, renderType: 'bar', title: 'Monthly', yAxisLabel: 'Avg' }]
+});
+
+Barchart.createChart({
+  container: '#chart-byweek',
+  chartType: 'byWeek',
+  visibleWidth: 520,
+  chartHeight: 170,
+  timeSeries: [{ data: yearData, renderType: 'bar', title: 'Weekly', yAxisLabel: 'Avg' }]
+});
+
+Barchart.createChart({
+  container: '#chart-byweekday',
+  chartType: 'byWeekday',
+  visibleWidth: 520,
+  chartHeight: 170,
+  timeSeries: [{ data: quarterData, renderType: 'bar', title: 'Weekday', yAxisLabel: 'Avg' }]
+});
+
+Barchart.createChart({
+  container: '#chart-byyear',
+  chartType: 'byYear',
+  visibleWidth: 520,
+  chartHeight: 170,
+  timeSeries: [{ data: multiYearData, renderType: 'bar', title: 'Yearly', yAxisLabel: 'Avg' }]
+});
+
+console.log('[demo-barchart] Base aggregation charts initialized');</code></pre></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ HIGH-LOW ═══════════════════════ -->
+  <section class="demo-section" id="barchart-highlow">
+    <h2>High-Low Variants</h2>
+    <p class="demo-desc">Range visualization with high/low bars and average markers.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview demo-preview--col" style="width:100%">
+        <div class="barchart-grid">
+          <div class="barchart-item">
+            <h4>byMonth + high-low</h4>
+            <p>Aggregated monthly range</p>
+            <div class="chart-container barchart-host" id="chart-highlow-month"></div>
+          </div>
+          <div class="barchart-item">
+            <h4>byDay + high-low</h4>
+            <p>Daily temperature range</p>
+            <div class="chart-container barchart-host" id="chart-highlow-day"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-code-actions">
+        <button class="demo-code-toggle" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--html')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          Show HTML
+        </button>
+        <button class="demo-code-toggle demo-code-toggle--js" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--js')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          <span class="demo-code-js-badge">JS</span> Show JavaScript
+        </button>
+      </div>
+      <div class="demo-code-block demo-code-block--html"><pre><code>&lt;div class="barchart-grid"&gt;
+  &lt;div class="barchart-item"&gt;
+    &lt;h4&gt;byMonth + high-low&lt;/h4&gt;
+    &lt;div class="chart-container barchart-host" id="chart-highlow-month"&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="barchart-item"&gt;
+    &lt;h4&gt;byDay + high-low&lt;/h4&gt;
+    &lt;div class="chart-container barchart-host" id="chart-highlow-day"&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre></div>
+      <div class="demo-code-block demo-code-block--js"><pre><code>var temperatureData = generateTemperatureData(45);
+
+Barchart.createChart({
+  container: '#chart-highlow-month',
+  chartType: 'byMonth',
+  visibleWidth: 620,
+  chartHeight: 250,
+  timeSeries: [{
+    data: yearData,
+    renderType: 'high-low',
+    title: 'Monthly Range',
+    yAxisLabel: 'Value'
+  }]
+});
+
+Barchart.createChart({
+  container: '#chart-highlow-day',
+  chartType: 'byDay',
+  visibleWidth: 620,
+  chartHeight: 250,
+  timeSeries: [{
+    data: temperatureData,
+    renderType: 'high-low',
+    title: 'Daily Temperature',
+    yAxisLabel: '°C',
+    yAxisStartAtZero: false
+  }]
+});
+
+console.log('[demo-barchart] High-low charts initialized');</code></pre></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ STAGGERED / STACKED ═══════════════════════ -->
+  <section class="demo-section" id="barchart-multi-series">
+    <h2>Staggered & Stacked</h2>
+    <p class="demo-desc">Multiple series per x-position: side by side or stacked.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview demo-preview--col" style="width:100%">
+        <div class="barchart-grid">
+          <div class="barchart-item">
+            <h4>renderType: staggered</h4>
+            <p>Series side by side</p>
+            <div class="chart-container barchart-host" id="chart-staggered"></div>
+          </div>
+          <div class="barchart-item">
+            <h4>renderType: stacked</h4>
+            <p>Series stacked</p>
+            <div class="chart-container barchart-host" id="chart-stacked"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-code-actions">
+        <button class="demo-code-toggle" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--html')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          Show HTML
+        </button>
+        <button class="demo-code-toggle demo-code-toggle--js" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--js')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          <span class="demo-code-js-badge">JS</span> Show JavaScript
+        </button>
+      </div>
+      <div class="demo-code-block demo-code-block--html"><pre><code>&lt;div class="barchart-grid"&gt;
+  &lt;div class="barchart-item"&gt;
+    &lt;h4&gt;renderType: staggered&lt;/h4&gt;
+    &lt;div class="chart-container barchart-host" id="chart-staggered"&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="barchart-item"&gt;
+    &lt;h4&gt;renderType: stacked&lt;/h4&gt;
+    &lt;div class="chart-container barchart-host" id="chart-stacked"&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre></div>
+      <div class="demo-code-block demo-code-block--js"><pre><code>Barchart.createChart({
+  container: '#chart-staggered',
+  chartType: 'byDay',
+  renderType: 'staggered',
+  title: 'Price Breakdown by Day',
+  yAxisLabel: 'Amount',
+  visibleWidth: 640,
+  chartHeight: 260,
+  timeSeries: [
+    { data: priceData, label: 'Price' },
+    { data: feeData, label: 'Fee' },
+    { data: taxData, label: 'Tax' },
+    { data: extraData, label: 'Extra' }
+  ]
+});
+
+Barchart.createChart({
+  container: '#chart-stacked',
+  chartType: 'byDay',
+  renderType: 'stacked',
+  title: 'Total Breakdown (Stacked)',
+  yAxisLabel: 'Amount',
+  visibleWidth: 640,
+  chartHeight: 260,
+  timeSeries: [
+    { data: priceData, label: 'Price' },
+    { data: feeData, label: 'Fee' },
+    { data: taxData, label: 'Tax' },
+    { data: extraData, label: 'Extra' }
+  ]
+});
+
+console.log('[demo-barchart] Staggered and stacked charts initialized');</code></pre></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ PER-CHART DATA ═══════════════════════ -->
+  <section class="demo-section" id="barchart-per-chart-data">
+    <h2>Per-Chart Data Sets</h2>
+    <p class="demo-desc">From per-chart-data.html: each chart-panel definition has its own data array, but the x-axis stays synchronized.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview demo-preview--col" style="width:100%">
+        <div class="barchart-grid">
+          <div class="barchart-item">
+            <h4>Revenue vs Orders vs Error Rate</h4>
+            <p>Three panels with different data sources</p>
+            <div class="chart-container barchart-host" id="chart-per-series-ops"></div>
+          </div>
+          <div class="barchart-item">
+            <h4>Price / Volume / RSI</h4>
+            <p>Mixed render types per panel</p>
+            <div class="chart-container barchart-host" id="chart-per-series-finance"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-code-actions">
+        <button class="demo-code-toggle" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--html')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          Show HTML
+        </button>
+        <button class="demo-code-toggle demo-code-toggle--js" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--js')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          <span class="demo-code-js-badge">JS</span> Show JavaScript
+        </button>
+      </div>
+      <div class="demo-code-block demo-code-block--html"><pre><code>&lt;div class="barchart-grid"&gt;
+  &lt;div class="barchart-item"&gt;
+    &lt;div class="chart-container barchart-host" id="chart-per-series-ops"&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="barchart-item"&gt;
+    &lt;div class="chart-container barchart-host" id="chart-per-series-finance"&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre></div>
+      <div class="demo-code-block demo-code-block--js"><pre><code>Barchart.createChart({
+  container: '#chart-per-series-ops',
+  chartType: 'byDay',
+  visibleWidth: 900,
+  chartHeight: 140,
+  barMinWidth: 6,
+  scrollToEnd: true,
+  timeSeries: [
+    { data: revenueData, renderType: 'bar', title: 'Daily Calls', yAxisLabel: 'Calls', yAxisFormat: 'K' },
+    { data: ordersData, renderType: 'bar', title: 'Daily Errors', yAxisLabel: 'Errors' },
+    { data: errorRateData, renderType: 'bar', title: 'Error Rate', yAxisLabel: '%', yAxisFormat: '0.0 %' }
+  ]
+});
+
+Barchart.createChart({
+  container: '#chart-per-series-finance',
+  chartType: 'byDay',
+  visibleWidth: 900,
+  chartHeight: 140,
+  barMinWidth: 6,
+  scrollToEnd: true,
+  timeSeries: [
+    { data: stockPriceData, renderType: 'high-low', title: 'Stock Price', yAxisLabel: 'Price', yAxisStartAtZero: false },
+    { data: volumeData, renderType: 'bar', title: 'Volume', yAxisLabel: 'Vol', yAxisFormat: 'M' },
+    { data: rsiData, renderType: 'bar', title: 'RSI', yAxisLabel: 'RSI' }
+  ]
+});
+
+console.log('[demo-barchart] Per-series charts initialized with scroll profile', {
+  visibleWidth: 900,
+  chartHeight: 140,
+  barMinWidth: 6,
+  scrollToEnd: true
+});</code></pre></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ AGGREGATES HELPER ═══════════════════════ -->
+  <section class="demo-section" id="barchart-aggregates-helper">
+    <h2>aggregates(data, mode)</h2>
+    <p class="demo-desc">Helper function from index.html: plain data is transformed into grouped high/low/average structures.</p>
+
+    <div class="demo-card">
+      <div class="demo-preview demo-preview--col" style="width:100%">
+        <div class="barchart-item">
+          <h4>Aggregated by month</h4>
+          <p>Simple date/value records become a high-low compatible structure</p>
+          <div class="chart-container barchart-host" id="chart-aggregates"></div>
+          <div class="barchart-output" id="aggregates-output"></div>
+        </div>
+      </div>
+
+      <div class="demo-code-actions">
+        <button class="demo-code-toggle" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--html')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          Show HTML
+        </button>
+        <button class="demo-code-toggle demo-code-toggle--js" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--js')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          <span class="demo-code-js-badge">JS</span> Show JavaScript
+        </button>
+      </div>
+      <div class="demo-code-block demo-code-block--html"><pre><code>&lt;div class="barchart-item"&gt;
+  &lt;div class="chart-container barchart-host" id="chart-aggregates"&gt;&lt;/div&gt;
+  &lt;div class="barchart-output" id="aggregates-output"&gt;&lt;/div&gt;
+&lt;/div&gt;</code></pre></div>
+      <div class="demo-code-block demo-code-block--js"><pre><code>var plainData = [
+  { date: '2025-01-01', value: 42 },
+  { date: '2025-01-02', value: 58 },
+  { date: '2025-01-15', value: 35 },
+  { date: '2025-02-03', value: 71 },
+  { date: '2025-02-20', value: 49 },
+  { date: '2025-03-10', value: 62 }
+];
+
+var aggregatedByMonth = Barchart.aggregates(plainData, 'byMonth');
+
+Barchart.createChart({
+  container: '#chart-aggregates',
+  chartType: 'byMonth',
+  visibleWidth: 640,
+  chartHeight: 220,
+  timeSeries: [{
+    data: plainData,
+    renderType: 'high-low',
+    title: 'Aggregated from Plain Data',
+    yAxisLabel: 'Value'
+  }]
+});
+
+var outputEl = document.querySelector('#aggregates-output');
+if (outputEl) {
+  outputEl.textContent = JSON.stringify(aggregatedByMonth, null, 2);
+}
+
+console.log('[demo-barchart] Aggregates helper result', aggregatedByMonth);</code></pre></div>
+    </div>
+  </section>
+</main>
+
+<script src="../components/scooter-core.js"></script>
+<script src="../components/custom/barchart/barchart.js"></script>
+<script>
+function ScooterPageInit_demoBarchart(root) {
+  if (!window.Barchart) return;
+
+  root.querySelectorAll('.barchart-host').forEach(function (el) {
+    el.innerHTML = '';
+  });
+
+  document.querySelectorAll('.chart-tooltip').forEach(function (tip) {
+    if (tip && tip.parentNode) {
+      tip.parentNode.removeChild(tip);
+    }
+  });
+
+  function pad2(num) {
+    return num < 10 ? '0' + num : String(num);
+  }
+
+  function toIsoDate(d) {
+    return d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate());
+  }
+
+  function generateDates(days, startDate) {
+    var dates = [];
+    var start = new Date(startDate);
+    for (var i = 0; i < days; i++) {
+      var d = new Date(start);
+      d.setDate(start.getDate() + i);
+      dates.push(toIsoDate(d));
+    }
+    return dates;
+  }
+
+  function generateYearData(year) {
+    var data = [];
+    var startDate = new Date(year, 0, 1);
+    var endDate = new Date(year, 11, 31);
+    for (var d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+      data.push({
+        date: toIsoDate(d),
+        value: Math.round(45 + Math.random() * 55 + Math.sin(d.getMonth() / 2) * 20)
+      });
+    }
+    return data;
+  }
+
+  function generateQuarterData(year, quarter) {
+    var data = [];
+    var startMonth = (quarter - 1) * 3;
+    var startDate = new Date(year, startMonth, 1);
+    var endDate = new Date(year, startMonth + 3, 0);
+    for (var d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+      data.push({
+        date: toIsoDate(d),
+        value: Math.round(30 + Math.random() * 70)
+      });
+    }
+    return data;
+  }
+
+  function generateMultiYearData(startYear, endYear) {
+    var data = [];
+    for (var year = startYear; year <= endYear; year++) {
+      for (var month = 0; month < 12; month++) {
+        var daysInMonth = new Date(year, month + 1, 0).getDate();
+        for (var day = 1; day <= daysInMonth; day += 3) {
+          data.push({
+            date: year + '-' + pad2(month + 1) + '-' + pad2(day),
+            value: Math.round(85 + (year - startYear) * 15 + Math.random() * 55)
+          });
+        }
+      }
+    }
+    return data;
+  }
+
+  function generateRevenueData(days) {
+    var dates = generateDates(days, '2024-01-01');
+    var revenue = 6000;
+    return dates.map(function (date, i) {
+      var seasonality = Math.sin((i / 365) * Math.PI * 2) * 1200;
+      var weekendDip = (new Date(date).getDay() === 0 || new Date(date).getDay() === 6) ? -900 : 0;
+      var noise = (Math.random() - 0.5) * 1800;
+      revenue = Math.max(1200, Math.min(16000, revenue + noise * 0.25));
+      return { date: date, value: Math.round(revenue + seasonality + weekendDip) };
+    });
+  }
+
+  function generateOrdersData(days) {
+    var dates = generateDates(days, '2024-01-01');
+    var orders = 180;
+    return dates.map(function (date, i) {
+      var seasonality = Math.sin((i / 365) * Math.PI * 2) * 25;
+      var weekendDip = (new Date(date).getDay() === 0 || new Date(date).getDay() === 6) ? -35 : 0;
+      var noise = (Math.random() - 0.5) * 45;
+      orders = Math.max(60, Math.min(320, orders + noise * 0.25));
+      return { date: date, value: Math.round(orders + seasonality + weekendDip) };
+    });
+  }
+
+  function generateErrorRateData(days) {
+    var dates = generateDates(days, '2024-01-01');
+    var rate = 2.4;
+    return dates.map(function (date) {
+      var noise = (Math.random() - 0.5) * 0.9;
+      rate = Math.max(0.4, Math.min(6.8, rate + noise * 0.2));
+      return { date: date, value: Math.round(rate * 100) / 100 };
+    });
+  }
+
+  function generateTemperatureData(days) {
+    var dates = generateDates(days, '2025-01-01');
+    return dates.map(function (date, i) {
+      var base = 15 + Math.sin(i / 7) * 5;
+      var spread = 5 + Math.random() * 4;
+      var avg = base + (Math.random() - 0.5) * 2;
+      return {
+        date: date,
+        value: Math.round(avg),
+        highValue: Math.round(avg + spread),
+        lowValue: Math.round(avg - spread)
+      };
+    });
+  }
+
+  function generateStockPriceData(days) {
+    var dates = generateDates(days, '2024-04-01');
+    var price = 120;
+    return dates.map(function (date, i) {
+      var trend = i * 0.08;
+      var noise = (Math.random() - 0.5) * 4;
+      price = Math.max(80, price + noise);
+      var spread = 1.8 + Math.random() * 2.2;
+      return {
+        date: date,
+        value: Math.round((price + trend) * 100) / 100,
+        highValue: Math.round((price + trend + spread) * 100) / 100,
+        lowValue: Math.round((price + trend - spread) * 100) / 100
+      };
+    });
+  }
+
+  function generateVolumeData(days) {
+    var dates = generateDates(days, '2024-04-01');
+    return dates.map(function (date) {
+      var base = 4200000;
+      var variation = (Math.random() - 0.35) * 5500000;
+      return {
+        date: date,
+        value: Math.max(450000, Math.round(base + variation))
+      };
+    });
+  }
+
+  function generateRSIData(days) {
+    var dates = generateDates(days, '2024-04-01');
+    var rsi = 52;
+    return dates.map(function (date) {
+      var noise = (Math.random() - 0.5) * 14;
+      rsi = Math.max(18, Math.min(86, rsi + noise));
+      return {
+        date: date,
+        value: Math.round(rsi)
+      };
+    });
+  }
+
+  function generateCustomData(days) {
+    var dates = generateDates(days, '2025-01-01');
+    return dates.map(function (date, i) {
+      var wave = Math.sin(i / 10) * 30 + 50;
+      var noise = (Math.random() - 0.5) * 10;
+      return {
+        date: date,
+        value: Math.round(wave + noise)
+      };
+    });
+  }
+
+  function generateDailyData(days) {
+    var dates = generateDates(days, '2025-01-01');
+    var value = 55;
+    return dates.map(function (date) {
+      var noise = (Math.random() - 0.5) * 22;
+      value = Math.max(8, Math.min(170, value + noise * 0.4));
+      return {
+        date: date,
+        value: Math.round(value)
+      };
+    });
+  }
+
+  function getHostWidth(selector, fallback) {
+    var host = root.querySelector(selector);
+    if (!host) return fallback;
+    var width = Math.floor(host.getBoundingClientRect().width || host.clientWidth || 0);
+    return width > 0 ? width : fallback;
+  }
+
+  var dailyData = generateDailyData(100);
+
+  var priceData = [
+    { date: '2025-01-01', value: 42 },
+    { date: '2025-01-02', value: 48 },
+    { date: '2025-01-03', value: 35 },
+    { date: '2025-01-04', value: 55 },
+    { date: '2025-01-05', value: 62 },
+    { date: '2025-01-06', value: 58 },
+    { date: '2025-01-07', value: 45 },
+    { date: '2025-01-08', value: 70 },
+    { date: '2025-01-09', value: 52 },
+    { date: '2025-01-10', value: 65 }
+  ];
+  var feeData = [
+    { date: '2025-01-01', value: 3 },
+    { date: '2025-01-02', value: 3 },
+    { date: '2025-01-03', value: 2 },
+    { date: '2025-01-04', value: 4 },
+    { date: '2025-01-05', value: 5 },
+    { date: '2025-01-06', value: 4 },
+    { date: '2025-01-07', value: 3 },
+    { date: '2025-01-08', value: 6 },
+    { date: '2025-01-09', value: 4 },
+    { date: '2025-01-10', value: 5 }
+  ];
+  var taxData = [
+    { date: '2025-01-01', value: 1 },
+    { date: '2025-01-02', value: 2 },
+    { date: '2025-01-04', value: 3 },
+    { date: '2025-01-05', value: 2 },
+    { date: '2025-01-06', value: 1 },
+    { date: '2025-01-07', value: 2 },
+    { date: '2025-01-08', value: 4 },
+    { date: '2025-01-09', value: 2 },
+    { date: '2025-01-10', value: 3 }
+  ];
+  var extraData = [
+    { date: '2025-01-01', value: 2 },
+    { date: '2025-01-02', value: 0 },
+    { date: '2025-01-03', value: 1 },
+    { date: '2025-01-04', value: 2 },
+    { date: '2025-01-05', value: 3 },
+    { date: '2025-01-06', value: 2 },
+    { date: '2025-01-07', value: 1 },
+    { date: '2025-01-08', value: 3 },
+    { date: '2025-01-09', value: 2 },
+    { date: '2025-01-10', value: 2 }
+  ];
+
+  var yearData = generateYearData(2024);
+  var quarterData = generateQuarterData(2025, 1);
+  var multiYearData = generateMultiYearData(2021, 2025);
+  var temperatureData = generateTemperatureData(45);
+
+  Barchart.createChart({
+    container: root.querySelector('#chart-byday'),
+    chartType: 'byDay',
+    visibleWidth: getHostWidth('#chart-byday', 900),
+    chartHeight: 170,
+    barMinWidth: 10,
+    scrollToEnd: true,
+    timeSeries: [{ data: dailyData, renderType: 'bar', title: 'Daily Values', yAxisLabel: 'Value' }]
+  });
+
+  Barchart.createChart({
+    container: root.querySelector('#chart-bymonth'),
+    chartType: 'byMonth',
+    visibleWidth: getHostWidth('#chart-bymonth', 520),
+    chartHeight: 170,
+    timeSeries: [{ data: yearData, renderType: 'bar', title: 'Monthly', yAxisLabel: 'Avg' }]
+  });
+
+  Barchart.createChart({
+    container: root.querySelector('#chart-byweek'),
+    chartType: 'byWeek',
+    visibleWidth: getHostWidth('#chart-byweek', 520),
+    chartHeight: 170,
+    timeSeries: [{ data: yearData, renderType: 'bar', title: 'Weekly', yAxisLabel: 'Avg' }]
+  });
+
+  Barchart.createChart({
+    container: root.querySelector('#chart-byweekday'),
+    chartType: 'byWeekday',
+    visibleWidth: getHostWidth('#chart-byweekday', 520),
+    chartHeight: 170,
+    timeSeries: [{ data: quarterData, renderType: 'bar', title: 'Weekday', yAxisLabel: 'Avg' }]
+  });
+
+  Barchart.createChart({
+    container: root.querySelector('#chart-byyear'),
+    chartType: 'byYear',
+    visibleWidth: getHostWidth('#chart-byyear', 520),
+    chartHeight: 170,
+    timeSeries: [{ data: multiYearData, renderType: 'bar', title: 'Yearly', yAxisLabel: 'Avg' }]
+  });
+  console.log('[demo-barchart] Base aggregation charts rendered');
+
+  Barchart.createChart({
+    container: root.querySelector('#chart-highlow-month'),
+    chartType: 'byMonth',
+    visibleWidth: getHostWidth('#chart-highlow-month', 620),
+    chartHeight: 250,
+    timeSeries: [{ data: yearData, renderType: 'high-low', title: 'Monthly Range', yAxisLabel: 'Value' }]
+  });
+
+  Barchart.createChart({
+    container: root.querySelector('#chart-highlow-day'),
+    chartType: 'byDay',
+    visibleWidth: getHostWidth('#chart-highlow-day', 620),
+    chartHeight: 250,
+    timeSeries: [{ data: temperatureData, renderType: 'high-low', title: 'Daily Temperature', yAxisLabel: '°C', yAxisStartAtZero: false }]
+  });
+  console.log('[demo-barchart] High-low charts rendered');
+
+  Barchart.createChart({
+    container: root.querySelector('#chart-staggered'),
+    chartType: 'byDay',
+    renderType: 'staggered',
+    title: 'Price Breakdown',
+    yAxisLabel: 'Amount',
+    visibleWidth: getHostWidth('#chart-staggered', 640),
+    chartHeight: 260,
+    timeSeries: [
+      { data: priceData, label: 'Price' },
+      { data: feeData, label: 'Fee' },
+      { data: taxData, label: 'Tax' },
+      { data: extraData, label: 'Extra' }
+    ]
+  });
+
+  Barchart.createChart({
+    container: root.querySelector('#chart-stacked'),
+    chartType: 'byDay',
+    renderType: 'stacked',
+    title: 'Total Breakdown',
+    yAxisLabel: 'Amount',
+    visibleWidth: getHostWidth('#chart-stacked', 640),
+    chartHeight: 260,
+    timeSeries: [
+      { data: priceData, label: 'Price' },
+      { data: feeData, label: 'Fee' },
+      { data: taxData, label: 'Tax' },
+      { data: extraData, label: 'Extra' }
+    ]
+  });
+  console.log('[demo-barchart] Staggered and stacked charts rendered');
+
+  var revenueData = generateRevenueData(210);
+  var ordersData = generateOrdersData(210);
+  var errorRateData = generateErrorRateData(210);
+
+  Barchart.createChart({
+    container: root.querySelector('#chart-per-series-ops'),
+    chartType: 'byDay',
+    visibleWidth: getHostWidth('#chart-per-series-ops', 900),
+    chartHeight: 140,
+    barMinWidth: 6,
+    scrollToEnd: true,
+    timeSeries: [
+      { data: revenueData, renderType: 'bar', title: 'Daily Calls', yAxisLabel: 'Calls', yAxisFormat: 'K' },
+      { data: ordersData, renderType: 'bar', title: 'Daily Errors', yAxisLabel: 'Errors' },
+      { data: errorRateData, renderType: 'bar', title: 'Error Rate', yAxisLabel: '%', yAxisFormat: '0.0 %' }
+    ]
+  });
+
+  var stockPriceData = generateStockPriceData(180);
+  var volumeData = generateVolumeData(180);
+  var rsiData = generateRSIData(180);
+
+  Barchart.createChart({
+    container: root.querySelector('#chart-per-series-finance'),
+    chartType: 'byDay',
+    visibleWidth: getHostWidth('#chart-per-series-finance', 900),
+    chartHeight: 140,
+    barMinWidth: 6,
+    scrollToEnd: true,
+    timeSeries: [
+      { data: stockPriceData, renderType: 'high-low', title: 'Stock Price', yAxisLabel: 'Price', yAxisStartAtZero: false },
+      { data: volumeData, renderType: 'bar', title: 'Volume', yAxisLabel: 'Vol', yAxisFormat: 'M' },
+      { data: rsiData, renderType: 'bar', title: 'RSI', yAxisLabel: 'RSI' }
+    ]
+  });
+  console.log('[demo-barchart] Per-series charts rendered with scroll profile', {
+    visibleWidth: 900,
+    chartHeight: 140,
+    barMinWidth: 6,
+    scrollToEnd: true
+  });
+
+  var plainData = [
+    { date: '2025-01-01', value: 42 },
+    { date: '2025-01-02', value: 58 },
+    { date: '2025-01-15', value: 35 },
+    { date: '2025-02-03', value: 71 },
+    { date: '2025-02-20', value: 49 },
+    { date: '2025-03-10', value: 62 }
+  ];
+
+  Barchart.createChart({
+    container: root.querySelector('#chart-aggregates'),
+    chartType: 'byMonth',
+    visibleWidth: getHostWidth('#chart-aggregates', 640),
+    chartHeight: 220,
+    timeSeries: [{ data: plainData, renderType: 'high-low', title: 'Aggregated from Plain Data', yAxisLabel: 'Value' }]
+  });
+
+
+  var aggregatedByMonth = Barchart.aggregates(plainData, 'byMonth');
+  console.log('[demo-barchart] Aggregates helper result', aggregatedByMonth);
+
+  var outputEl = root.querySelector('#aggregates-output');
+  if (outputEl) {
+    outputEl.textContent = JSON.stringify(aggregatedByMonth, null, 2);
+  }
+}
+
+// Standalone mode
+document.addEventListener('DOMContentLoaded', function () {
+  var main = document.querySelector('main.demo-page');
+  if (main) {
+    if (window.Scooter && window.Scooter.init) {
+      Scooter.init(main);
+    }
+    ScooterPageInit_demoBarchart(main);
+  }
+});
+</script>
+</body>
+</html>
