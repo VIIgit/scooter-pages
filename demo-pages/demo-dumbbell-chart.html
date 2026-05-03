@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scooter Pages — Weekly Movers (Dumbbell Chart)</title>
+  <link rel="stylesheet" href="../components.css">
+  <link rel="stylesheet" href="demo.css">
+  <link rel="stylesheet" href="../components/custom/dumbbell-chart/styles.css">
+  <style>
+    .movers-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      width: 100%;
+    }
+    @media (max-width: 900px) {
+      .movers-grid { grid-template-columns: 1fr; }
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+
+    .section-header h3 {
+      font-size: 14px;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .badge-up   { color: #22c55e; font-size: 12px; font-weight: 600; }
+    .badge-down { color: #ef4444; font-size: 12px; font-weight: 600; }
+
+    .stats-row {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .stat-chip {
+      display: flex;
+      flex-direction: column;
+      padding: 8px 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--card);
+      min-width: 100px;
+    }
+
+    .stat-chip .stat-label {
+      font-size: 10px;
+      color: var(--muted-foreground);
+      margin-bottom: 2px;
+    }
+
+    .stat-chip .stat-value {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--foreground);
+    }
+
+    .weight-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .weight-group {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+    }
+
+    .weight-group label {
+      color: var(--muted-foreground);
+      white-space: nowrap;
+    }
+
+    .weight-group input[type="range"] {
+      width: 90px;
+    }
+
+    .weight-group .weight-val {
+      font-weight: 700;
+      min-width: 36px;
+      color: var(--foreground);
+    }
+
+    .weight-sum {
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: var(--radius-full, var(--radius));
+      background: var(--secondary);
+      border: 1px solid var(--border);
+    }
+
+    .weight-sum.ok   { color: #22c55e; }
+    .weight-sum.warn { color: #f59e0b; }
+
+    .demo-card {
+      overflow: visible;
+    }
+
+    /* Tooltip icon + instant tooltip bubble */
+    .tip-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      background: var(--muted-foreground);
+      color: var(--card);
+      font-size: 9px;
+      font-weight: 700;
+      font-style: normal;
+      cursor: help;
+      margin-left: 4px;
+      vertical-align: middle;
+      text-decoration: none;
+      flex-shrink: 0;
+      position: relative;
+      border: 0;
+      line-height: 1;
+      user-select: none;
+      outline: none;
+    }
+
+    .tip-icon::before,
+    .tip-icon::after {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 120ms ease;
+      position: absolute;
+      z-index: 20;
+    }
+
+    .tip-icon::before {
+      content: '';
+      left: 50%;
+      bottom: calc(100% + 4px);
+      transform: translateX(-50%);
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-top: 6px solid var(--foreground);
+    }
+
+    .tip-icon::after {
+      content: attr(data-tip);
+      left: 50%;
+      bottom: calc(100% + 10px);
+      transform: translateX(-50%);
+      min-width: 220px;
+      max-width: min(320px, 80vw);
+      padding: 8px 10px;
+      border-radius: 8px;
+      background: var(--foreground);
+      color: var(--background);
+      font-size: 11px;
+      font-weight: 500;
+      line-height: 1.35;
+      text-align: left;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+      white-space: normal;
+    }
+
+    .tip-icon:hover::before,
+    .tip-icon:hover::after,
+    .tip-icon:focus-visible::before,
+    .tip-icon:focus-visible::after {
+      opacity: 1;
+    }
+
+    .dumbbell-btn .tip-icon {
+      margin-left: 6px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Page metadata for dynamic loading -->
+<script type="scooter/page-meta">
+{
+  "scripts": [
+    "components/custom/dumbbell-chart/dumbbell-chart.js"
+  ],
+  "init": "ScooterPageInit_dumbbellDemo"
+}
+</script>
+
+<!-- Toggle helper shared across all demo cards -->
+<script>
+function toggleCode(btn, cls) {
+  var card = btn.closest('.demo-card');
+  var block = card.querySelector(cls);
+  if (!block) return;
+  var expanded = btn.getAttribute('aria-expanded') === 'true' ? 'false' : 'true';
+  btn.setAttribute('aria-expanded', expanded);
+  block.dataset.visible = expanded;
+}
+</script>
+
+<!-- Navigation -->
+<nav class="demo-nav">
+  <span class="demo-nav-title">Scooter Pages</span>
+  <a href="demo-css-only.html">CSS-Only</a>
+  <a href="demo-light-js.html">Light JS</a>
+  <a href="demo-medium-js.html">Medium JS</a>
+  <a href="demo-complex-js.html">Complex JS</a>
+  <a href="demo-patterns.html">Patterns</a>
+  <a href="demo-dashboard.html">Dashboard</a>
+  <a href="demo-barchart.html">Bar Chart</a>
+  <a href="demo-dumbbell-chart.html" aria-current="page">Weekly Movers</a>
+</nav>
+
+<main class="demo-page">
+  <h1 id="pageTitle">Weekly Movers — Dumbbell Chart</h1>
+  <p class="demo-subtitle" id="pageSubtitle">
+    Top users ranked by a configurable weighted score combining absolute traffic delta, log-ratio signal, and a 2-period trend.
+    Grey dots = previous period · Coloured dots = current period.
+  </p>
+
+  <!-- ═══════════════════════ STATS ROW ════════════════════════════════════ -->
+  <div class="stats-row" id="statsRow">
+    <div class="stat-chip"><span class="stat-label">Total users</span><span class="stat-value" id="statTotal">—</span></div>
+    <div class="stat-chip"><span class="stat-label">Active (≥ min calls)</span><span class="stat-value" id="statActive">—</span></div>
+    <div class="stat-chip"><span class="stat-label">Increases</span><span class="stat-value" id="statUp" style="color:#22c55e">—</span></div>
+    <div class="stat-chip"><span class="stat-label">Decreases</span><span class="stat-value" id="statDown" style="color:#ef4444">—</span></div>
+  </div>
+
+  <!-- ═══════════════════════ CONTROLS ═════════════════════════════════════ -->
+  <section class="demo-section" id="controls-section">
+    <h2>Scoring Configuration</h2>
+    <p class="demo-desc">
+      Adjust the weights and filters below. The chart updates immediately.
+      Weights should sum to 1.0 — a warning appears if they don't.
+    </p>
+
+    <div class="demo-card">
+      <div class="demo-preview demo-preview--col">
+
+        <!-- Weight sliders -->
+        <div style="margin-bottom:12px">
+          <div style="font-size:12px;font-weight:600;margin-bottom:8px;color:var(--foreground)">
+            Signal Weights
+            <span class="weight-sum ok" id="weightSumBadge">∑ = 1.00</span>
+          </div>
+          <div class="weight-row">
+            <div class="weight-group">
+              <label>Absolute delta (w<sub>A</sub>)</label>
+              <input type="range" id="wAbsolute" min="0" max="1" step="0.05" value="0.70">
+              <span class="weight-val" id="wAbsoluteVal">0.70</span>
+            </div>
+            <div class="weight-group">
+              <label>Log-ratio (w<sub>R</sub>)</label>
+              <input type="range" id="wRatio" min="0" max="1" step="0.05" value="0.25">
+              <span class="weight-val" id="wRatioVal">0.25</span>
+            </div>
+            <div class="weight-group">
+              <label id="trendWeightLabel">2-wk trend (w<sub>T</sub>) <abbr class="tip-icon" tabindex="0" data-tip="Trend signal compares current period to two periods ago via log10((W0+s)/(W2+s)). Positive means net growth across two steps; negative means net decline.">?</abbr></label>
+              <input type="range" id="wTrend" min="0" max="1" step="0.05" value="0.05">
+              <span class="weight-val" id="wTrendVal">0.05</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Thresholds & options -->
+        <div class="dumbbell-controls">
+          <div class="dumbbell-control-group">
+            <label>Comparison period</label>
+            <select id="periodUnit" style="padding:4px 6px;font-size:12px;border:1px solid var(--border);border-radius:var(--radius);background:var(--background);color:var(--foreground)">
+              <option value="week" selected>Weekly</option>
+              <option value="day">Daily</option>
+              <option value="hour">Hourly</option>
+            </select>
+          </div>
+          <div class="dumbbell-control-group">
+            <label>Min calls filter</label>
+            <select id="minCalls" style="padding:4px 6px;font-size:12px;border:1px solid var(--border);border-radius:var(--radius);background:var(--background);color:var(--foreground)">
+              <!-- options populated by JS -->
+            </select>
+          </div>
+          <div class="dumbbell-control-group">
+            <label>Smoothing (s) <abbr class="tip-icon" tabindex="0" data-tip="Additive constant added to both weeks before taking the log-ratio. Prevents division by zero and dampens noise for very low-volume users. Higher = less sensitive to small absolute differences.">?</abbr></label>
+            <input type="number" id="smooth" min="1" step="10" value="100">
+          </div>
+          <div class="dumbbell-control-group">
+            <label>Reliability baseline (B) <abbr class="tip-icon" tabindex="0" data-tip="Users whose W−1 traffic is well above B get a reliability factor q = 1 (full weight). Users far below B are discounted, because their scores are multiplied by log10(W1+1)/log10(B+1). Raise B to be more skeptical of medium-sized users.">?</abbr></label>
+            <input type="number" id="reliabilityBase" min="100" step="1000" value="10000">
+          </div>
+          <div class="dumbbell-control-group">
+            <label>Top N</label>
+            <input type="number" id="topN" min="3" max="20" step="1" value="10">
+          </div>
+          <div class="dumbbell-control-group">
+            <label>Winsorise <abbr class="tip-icon" tabindex="0" data-tip="Before computing z-scores, values below the low percentile are clipped up, and values above the high percentile are clipped down. This prevents a single extreme outlier from distorting the median and MAD for everyone else. Default p5-p95.">?</abbr></label>
+            <div style="display:flex;gap:6px;align-items:center">
+              <input type="number" id="winsorLow"  min="0" max="30" step="1" value="5"  style="width:52px">
+              <span style="font-size:11px;color:var(--muted-foreground)">–</span>
+              <input type="number" id="winsorHigh" min="70" max="100" step="1" value="95" style="width:52px">
+              <span style="font-size:11px;color:var(--muted-foreground)">pct</span>
+            </div>
+          </div>
+          <div class="dumbbell-control-group" style="justify-content:flex-end">
+            <label>Options</label>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="dumbbell-btn active" id="btnReliability" data-active="true">Reliability damping <abbr class="tip-icon" tabindex="0" data-tip="Multiplies each user's score by q = min(1, log10(W1+1) / log10(B+1)). Users with very low historical traffic (W1 much smaller than B) receive a fractional score, reducing false positives from small-to-small spikes.">?</abbr></button>
+              <button class="dumbbell-btn" id="btnLogScale" data-active="false">Log10 axis <abbr class="tip-icon" tabindex="0" data-tip="Switches the x-axis from linear to a base-10 logarithmic scale. Equal pixel distances then represent equal percentage changes, making it easy to compare a 1K to 2K user alongside a 1M to 2M user on the same chart.">?</abbr></button>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- demo-preview -->
+    </div><!-- demo-card -->
+  </section>
+
+  <!-- ═══════════════════════ INTEGRATION EXAMPLES ═════════════════════════ -->
+  <section class="demo-section" id="integration-section">
+    <h2>HTML &amp; JavaScript Example</h2>
+    <p class="demo-desc">
+      Minimal setup to embed the Top Movers chart in your own page.
+      Provide three buckets of data per user (<code>w0</code> = current, <code>w1</code> = previous, <code>w2</code> = two periods ago)
+      and the scoring engine handles the rest.
+    </p>
+
+    <div class="demo-card">
+      <div class="demo-preview demo-preview--col">
+        <p style="margin:0;font-size:13px;color:var(--muted-foreground)">
+          Include the script, point it at two container elements, and call three functions.
+        </p>
+      </div>
+
+      <div class="demo-code-actions">
+        <button class="demo-code-toggle" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--html')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          Show HTML
+        </button>
+        <button class="demo-code-toggle demo-code-toggle--js" aria-expanded="false" onclick="toggleCode(this,'.demo-code-block--js')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          <span class="demo-code-js-badge">JS</span> Show JavaScript
+        </button>
+      </div>
+
+      <div class="demo-code-block demo-code-block--html"><pre><code>&lt;!-- 1. Styles + script --&gt;
+&lt;link rel="stylesheet" href="components/custom/dumbbell-chart/styles.css"&gt;
+&lt;script src="components/custom/dumbbell-chart/dumbbell-chart.js"&gt;&lt;/script&gt;
+
+&lt;!-- 2. Chart containers --&gt;
+&lt;div id="chartIncrease" class="dumbbell-panel"&gt;&lt;/div&gt;
+&lt;div id="chartDecrease" class="dumbbell-panel"&gt;&lt;/div&gt;</code></pre></div>
+
+      <div class="demo-code-block demo-code-block--js"><pre><code>const DC = window.DumbbellChart;
+
+// Supply your own data: each record needs { name, w0, w1, w2 }
+// w0 = current period  ·  w1 = previous period  ·  w2 = two periods ago
+const data = DC.generateSampleData(); // ← replace with real data
+
+const cfg = {
+  minCalls:    1000,   // filter out users below this threshold
+  smooth:       100,   // additive smoothing for log-ratios
+  winsorLow:      5,   // clip z-score inputs below this percentile
+  winsorHigh:    95,   // clip z-score inputs above this percentile
+  weights: { absolute: 0.70, ratio: 0.25, trend: 0.05 },
+  reliability: { enabled: true, baselineRef: 10000 },
+  topN: 10
+};
+
+const scored = DC.computeScores(data, cfg);
+const movers = DC.getTopMovers(scored, cfg.topN);
+
+DC.createChart(document.getElementById('chartIncrease'), {
+  rows:      movers.increases,
+  direction: 'increase',
+  logScale:  false,
+  xAxisMin:  cfg.minCalls,
+  title:     'Top Increases'
+});
+
+DC.createChart(document.getElementById('chartDecrease'), {
+  rows:      movers.decreases,
+  direction: 'decrease',
+  logScale:  false,
+  xAxisMin:  cfg.minCalls,
+  title:     'Top Decreases'
+});</code></pre></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ CHARTS ════════════════════════════════════════ -->
+  <section class="demo-section" id="charts-section">
+    <h2 id="moversSectionTitle">Top Movers This Week</h2>
+    <p class="demo-desc">
+      <span class="dumbbell-legend">
+        <span id="legendPrev"><span class="dumbbell-legend-dot" style="background:#94a3b8"></span>Last week (W-1)</span>
+        <span id="legendCurrUp"><span class="dumbbell-legend-dot" style="background:#22c55e"></span>This week (W0) — increase</span>
+        <span id="legendCurrDown"><span class="dumbbell-legend-dot" style="background:#ef4444"></span>This week (W0) — decrease</span>
+      </span>
+    </p>
+
+    <div class="demo-card">
+      <div class="demo-preview demo-preview--col" style="width:100%">
+        <div class="movers-grid">
+          <div>
+            <div class="section-header">
+              <h3>Top Increases <span class="badge-up" id="labelUp"></span></h3>
+            </div>
+            <div class="dumbbell-panel" id="chartIncrease"></div>
+          </div>
+          <div>
+            <div class="section-header">
+              <h3>Top Decreases <span class="badge-down" id="labelDown"></span></h3>
+            </div>
+            <div class="dumbbell-panel" id="chartDecrease"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ EXPLAIN TABLE — INCREASES ════════════════════ -->
+  <section class="demo-section" id="explain-up-section">
+    <h2>Score Breakdown — Top Increases</h2>
+    <p class="demo-desc">Per-user explain fields for the scoring engine. Z-scores are robust (MAD-based) after winsorisation.</p>
+    <div class="demo-card">
+      <div class="demo-preview demo-preview--col" style="overflow-x:auto">
+        <table class="dumbbell-explain" id="explainUp">
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>T-2</th><th>T-1</th><th>T0</th>
+              <th>Δ abs</th><th>% chg</th>
+              <th>z<sub>A</sub></th><th>z<sub>R</sub></th><th>z<sub>T</sub></th>
+              <th>raw S</th><th>q</th><th>final S</th>
+            </tr>
+          </thead>
+          <tbody id="explainUpBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ EXPLAIN TABLE — DECREASES ═══════════════════ -->
+  <section class="demo-section" id="explain-down-section">
+    <h2>Score Breakdown — Top Decreases</h2>
+    <p class="demo-desc">Decreases are ranked by magnitude of their (negative) final score.</p>
+    <div class="demo-card">
+      <div class="demo-preview demo-preview--col" style="overflow-x:auto">
+        <table class="dumbbell-explain" id="explainDown">
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>T-2</th><th>T-1</th><th>T0</th>
+              <th>Δ abs</th><th>% chg</th>
+              <th>z<sub>A</sub></th><th>z<sub>R</sub></th><th>z<sub>T</sub></th>
+              <th>raw S</th><th>q</th><th>final S</th>
+            </tr>
+          </thead>
+          <tbody id="explainDownBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+</main><!-- demo-page -->
+
+<script src="../components/scooter-core.js"></script>
+<script src="../components/custom/dumbbell-chart/dumbbell-chart.js"></script>
+<script>
+function ScooterPageInit_dumbbellDemo(root) {
+  if (!window.DumbbellChart) return;
+
+  var DC   = window.DumbbellChart;
+  var data = DC.generateSampleData();
+
+  function getPeriodMeta(unit) {
+    if (unit === 'day') {
+      return {
+        adjective: 'Daily',
+        current: 'today',
+        previous: 'yesterday',
+        short: 'D',
+        trendLabel: '2-day trend'
+      };
+    }
+    if (unit === 'hour') {
+      return {
+        adjective: 'Hourly',
+        current: 'this hour',
+        previous: 'previous hour',
+        short: 'H',
+        trendLabel: '2-hour trend'
+      };
+    }
+    return {
+      adjective: 'Weekly',
+      current: 'this week',
+      previous: 'last week',
+      short: 'W',
+      trendLabel: '2-wk trend'
+    };
+  }
+
+  function applyPeriodLabels() {
+    var unit = document.getElementById('periodUnit').value;
+    var meta = getPeriodMeta(unit);
+    document.getElementById('pageTitle').textContent = meta.adjective + ' Movers — Dumbbell Chart';
+    document.getElementById('pageSubtitle').textContent =
+      'Top users ranked by a configurable weighted score combining absolute traffic delta, log-ratio signal, and a 2-period trend. Grey dots = ' +
+      meta.previous + ' · Coloured dots = ' + meta.current + '.';
+    document.getElementById('moversSectionTitle').textContent = 'Top Movers ' + meta.current.replace(/^./, function(c) { return c.toUpperCase(); });
+    document.getElementById('legendPrev').innerHTML = '<span class="dumbbell-legend-dot" style="background:#94a3b8"></span>' +
+      meta.previous.replace(/^./, function(c) { return c.toUpperCase(); }) + ' (' + meta.short + '-1)';
+    document.getElementById('legendCurrUp').innerHTML = '<span class="dumbbell-legend-dot" style="background:#22c55e"></span>' +
+      meta.current.replace(/^./, function(c) { return c.toUpperCase(); }) + ' (' + meta.short + '0) — increase';
+    document.getElementById('legendCurrDown').innerHTML = '<span class="dumbbell-legend-dot" style="background:#ef4444"></span>' +
+      meta.current.replace(/^./, function(c) { return c.toUpperCase(); }) + ' (' + meta.short + '0) — decrease';
+    document.getElementById('trendWeightLabel').innerHTML = meta.trendLabel +
+      ' (w<sub>T</sub>) <abbr class="tip-icon" tabindex="0" data-tip="Trend signal compares current period to two periods ago via log10((W0+s)/(W2+s)). Positive means net growth across two steps; negative means net decline.">?</abbr>';
+  }
+
+  // ── Helper: read current config from controls ─────────────────────────────
+  function readConfig() {
+    var wA = parseFloat(document.getElementById('wAbsolute').value);
+    var wR = parseFloat(document.getElementById('wRatio').value);
+    var wT = parseFloat(document.getElementById('wTrend').value);
+    var minCalls = parseInt(document.getElementById('minCalls').value, 10) || 0;
+    var periodUnit = document.getElementById('periodUnit').value;
+    return {
+      periodUnit: periodUnit,
+      minCalls:   minCalls,
+      smooth:     parseInt(document.getElementById('smooth').value,      10) || 1,
+      winsorLow:  parseInt(document.getElementById('winsorLow').value,   10) || 5,
+      winsorHigh: parseInt(document.getElementById('winsorHigh').value,  10) || 95,
+      weights:    { absolute: wA, ratio: wR, trend: wT },
+      reliability: {
+        enabled:     document.getElementById('btnReliability').dataset.active === 'true',
+        baselineRef: parseInt(document.getElementById('reliabilityBase').value, 10) || 10000
+      },
+      logScale: document.getElementById('btnLogScale').dataset.active === 'true',
+      topN:     parseInt(document.getElementById('topN').value, 10) || 10,
+      xAxisMin: minCalls
+    };
+  }
+
+  // ── Render ────────────────────────────────────────────────────────────────
+  function render() {
+    var cfg    = readConfig();
+    var meta   = getPeriodMeta(cfg.periodUnit);
+    var scored = DC.computeScores(data, cfg);
+    var movers = DC.getTopMovers(scored, cfg.topN);
+
+    // Stats chips
+    var active = scored.filter(function(r) { return !r.filtered; });
+    document.getElementById('statTotal').textContent  = scored.length;
+    document.getElementById('statActive').textContent = active.length;
+    document.getElementById('statUp').textContent     = active.filter(function(r) { return r.direction === 'increase'; }).length;
+    document.getElementById('statDown').textContent   = active.filter(function(r) { return r.direction === 'decrease'; }).length;
+
+    // Badge labels
+    document.getElementById('labelUp').textContent   = '↑ top ' + movers.increases.length;
+    document.getElementById('labelDown').textContent = '↓ top ' + movers.decreases.length;
+
+    // Charts
+    DC.createChart(document.getElementById('chartIncrease'), {
+      rows:      movers.increases,
+      direction: 'increase',
+      logScale:  cfg.logScale,
+      xAxisMin:  cfg.xAxisMin,
+      title:     'Top ' + movers.increases.length + ' Increases (' + meta.adjective + ')'
+    });
+    DC.createChart(document.getElementById('chartDecrease'), {
+      rows:      movers.decreases,
+      direction: 'decrease',
+      logScale:  cfg.logScale,
+      xAxisMin:  cfg.xAxisMin,
+      title:     'Top ' + movers.decreases.length + ' Decreases (' + meta.adjective + ')'
+    });
+
+    // Explain tables
+    renderExplainTable('explainUpBody',   movers.increases);
+    renderExplainTable('explainDownBody', movers.decreases);
+  }
+
+  function renderExplainTable(tbodyId, rows) {
+    var tbody = document.getElementById(tbodyId);
+    if (!tbody) return;
+    var isUp = tbodyId.indexOf('Up') !== -1;
+
+    tbody.innerHTML = rows.map(function(r, rank) {
+      var deltaClass = r.absoluteDelta >= 0 ? 'cell-up' : 'cell-down';
+      return '<tr>' +
+        '<td><strong>' + (rank + 1) + '.</strong> ' + esc(r.name) + '</td>' +
+        '<td>' + DC.formatNum(r.w2) + '</td>' +
+        '<td>' + DC.formatNum(r.w1) + '</td>' +
+        '<td>' + DC.formatNum(r.w0) + '</td>' +
+        '<td class="' + deltaClass + '">' + (r.absoluteDelta >= 0 ? '+' : '') + DC.formatNum(r.absoluteDelta) + '</td>' +
+        '<td class="' + deltaClass + '">' + DC.formatPct(r.pctChange) + '</td>' +
+        '<td>' + DC.formatScore(r.zAbsolute) + '</td>' +
+        '<td>' + DC.formatScore(r.zRatio)    + '</td>' +
+        '<td>' + DC.formatScore(r.zTrend)    + '</td>' +
+        '<td>' + DC.formatScore(r.rawScore)  + '</td>' +
+        '<td>' + r.reliabilityQ.toFixed(2)   + '</td>' +
+        '<td class="' + deltaClass + '">' + DC.formatScore(r.finalScore) + '</td>' +
+        '</tr>';
+    }).join('');
+  }
+
+  function esc(str) {
+    return String(str)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  // ── Weight sum indicator ──────────────────────────────────────────────────
+  function updateWeightSum() {
+    var wA  = parseFloat(document.getElementById('wAbsolute').value);
+    var wR  = parseFloat(document.getElementById('wRatio').value);
+    var wT  = parseFloat(document.getElementById('wTrend').value);
+    var sum = (wA + wR + wT);
+
+    document.getElementById('wAbsoluteVal').textContent = wA.toFixed(2);
+    document.getElementById('wRatioVal').textContent    = wR.toFixed(2);
+    document.getElementById('wTrendVal').textContent    = wT.toFixed(2);
+
+    var badge = document.getElementById('weightSumBadge');
+    badge.textContent = '∑ = ' + sum.toFixed(2);
+    badge.className   = 'weight-sum ' + (Math.abs(sum - 1) < 0.011 ? 'ok' : 'warn');
+  }
+
+  // ── Populate minCalls select ──────────────────────────────────────────────
+  function populateMinCallsSelect() {
+    var maxVal = Math.max.apply(null, data.map(function(u) {
+      return Math.max(u.w0, u.w1, u.w2);
+    }));
+    var candidates = [0, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000];
+    var options = candidates.filter(function(v) { return v < maxVal; });
+    var select = document.getElementById('minCalls');
+    select.innerHTML = options.map(function(v) {
+      var label = v === 0 ? '0 (no filter)' : DC.formatNum(v);
+      return '<option value="' + v + '"' + (v === 1000 ? ' selected' : '') + '>' + label + '</option>';
+    }).join('');
+  }
+
+  // ── Wire controls ─────────────────────────────────────────────────────────
+  ['wAbsolute','wRatio','wTrend'].forEach(function(id) {
+    document.getElementById(id).addEventListener('input', function() {
+      updateWeightSum();
+      render();
+    });
+  });
+
+  ['minCalls','smooth','reliabilityBase','topN','winsorLow','winsorHigh'].forEach(function(id) {
+    document.getElementById(id).addEventListener('change', render);
+  });
+
+  document.getElementById('periodUnit').addEventListener('change', function() {
+    applyPeriodLabels();
+    render();
+  });
+
+  function wireToggle(btnId) {
+    document.getElementById(btnId).addEventListener('click', function() {
+      var active = this.dataset.active === 'true';
+      this.dataset.active = active ? 'false' : 'true';
+      this.classList.toggle('active', !active);
+      render();
+    });
+  }
+  wireToggle('btnReliability');
+  wireToggle('btnLogScale');
+
+  // Keep tooltip icon interaction from toggling option buttons.
+  function wireButtonTooltipGuards() {
+    document.querySelectorAll('.dumbbell-btn .tip-icon').forEach(function(el) {
+      el.addEventListener('click', function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+      });
+      el.addEventListener('mousedown', function(e) {
+        e.stopPropagation();
+      });
+    });
+  }
+
+  // ── Initial render ────────────────────────────────────────────────────────
+  applyPeriodLabels();
+  wireButtonTooltipGuards();
+  populateMinCallsSelect();
+  updateWeightSum();
+  render();
+}
+
+// Fallback: run directly if not loaded via dynamic loader
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', function() {
+    var main = document.querySelector('main.demo-page') || document.body;
+    ScooterPageInit_dumbbellDemo(main);
+  });
+} else {
+  var main = document.querySelector('main.demo-page') || document.body;
+  ScooterPageInit_dumbbellDemo(main);
+}
+</script>
+
+</body>
+</html>

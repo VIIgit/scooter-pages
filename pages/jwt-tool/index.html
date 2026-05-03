@@ -1,0 +1,1345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JWT Tool - Scooter Pages</title>
+  <link rel="stylesheet" href="../../components.css" />
+  <style>
+    .jwt-page {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 32px 20px 56px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .jwt-subtitle {
+      margin: 0;
+      color: var(--muted-foreground);
+      max-width: 85ch;
+    }
+
+    .jwt-tabs {
+      width: 100%;
+    }
+
+    .jwt-panels {
+      display: grid;
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .jwt-grid-2 {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .jwt-grid-3 {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .jwt-field {
+      display: grid;
+      gap: 6px;
+    }
+
+    .jwt-label {
+      font-size: 13px;
+      font-weight: var(--font-weight-medium);
+      color: var(--foreground);
+    }
+
+    .jwt-mono {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .jwt-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .jwt-select {
+      width: 100%;
+      height: 36px;
+      padding: 0 36px 0 12px;
+      font-size: 14px;
+      color: var(--foreground);
+      background-color: var(--input-background);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      outline: none;
+      transition: all var(--duration-normal) var(--ease-out);
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      background-size: 16px 16px;
+      cursor: pointer;
+    }
+
+    .jwt-select:focus {
+      outline: none;
+      border-color: var(--ring);
+      box-shadow: 0 0 0 3px rgba(0,122,255,0.15);
+    }
+
+    .jwt-token-editor {
+      min-height: 140px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      background: var(--input-background);
+      padding: 10px 12px;
+      overflow: auto;
+      white-space: pre-wrap;
+      word-break: break-all;
+      outline: none;
+    }
+
+    .jwt-token-editor:focus {
+      border-color: var(--ring);
+      box-shadow: 0 0 0 3px rgba(0,122,255,0.15);
+      background: var(--background);
+    }
+
+    .jwt-token-editor[data-empty="true"]::before {
+      content: attr(data-placeholder);
+      color: var(--muted-foreground);
+      pointer-events: none;
+    }
+
+    .jwt-segments {
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      background: var(--muted);
+      overflow-x: auto;
+    }
+
+    .jwt-segments code {
+      white-space: nowrap;
+      display: inline-block;
+      min-width: 100%;
+    }
+
+    .jwt-seg-header { color: #c0262d; }
+    .jwt-seg-payload { color: #6d28d9; }
+    .jwt-seg-signature { color: #1d4ed8; }
+
+    #encoderSegments {
+      overflow: auto;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    #encoderSegments code {
+      white-space: pre-wrap;
+      min-width: 0;
+      word-break: break-all;
+    }
+
+    #decodedHeader { color: #c0262d; }
+    #decodedPayload { color: #6d28d9; }
+    #encoderHeader { color: #c0262d; }
+    #encoderPayload { color: #6d28d9; }
+
+    .jwt-status {
+      display: grid;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .jwt-status li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 10px 12px;
+      background: var(--background);
+      font-size: 13px;
+    }
+
+    .jwt-badge {
+      display: inline-flex;
+      align-items: center;
+      border-radius: var(--radius-full);
+      padding: 2px 8px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    .jwt-badge-neutral { background: var(--secondary); color: var(--secondary-foreground); }
+    .jwt-badge-ok { background: #dcfce7; color: #166534; }
+    .jwt-badge-warn { background: #fef3c7; color: #92400e; }
+    .jwt-badge-bad { background: #fee2e2; color: #991b1b; }
+
+    .jwt-errors {
+      margin: 0;
+      padding: 10px 14px;
+      border: 1px solid #fecaca;
+      border-radius: var(--radius-md);
+      background: #fef2f2;
+      color: #991b1b;
+      font-size: 13px;
+      display: grid;
+      gap: 6px;
+    }
+
+    .jwt-claim-value {
+      margin-top: 8px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--muted);
+      padding: 8px;
+    }
+
+    .jwt-results-layout {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+
+    .jwt-stack {
+      display: grid;
+      gap: 12px;
+    }
+
+    .jwt-claim-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .jwt-claim-title {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .jwt-claim-code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 1px 6px;
+      background: var(--muted);
+      flex-shrink: 0;
+    }
+
+    .jwt-claim-name {
+      font-size: 13px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .jwt-claim-meta {
+      display: grid;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .jwt-note {
+      border: 1px solid #fcd34d;
+      background: #fffbeb;
+      color: #92400e;
+      border-radius: var(--radius-md);
+      padding: 10px 12px;
+      font-size: 13px;
+    }
+
+    .jwt-inline-note {
+      margin: 0;
+      font-size: 12px;
+      color: var(--muted-foreground);
+    }
+
+    @media (max-width: 960px) {
+      .jwt-grid-2,
+      .jwt-grid-3 {
+        grid-template-columns: 1fr;
+      }
+
+      .jwt-results-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<script type="scooter/page-meta">
+{
+  "scripts": [
+    "components/tabs.js",
+    "components/accordion.js"
+  ],
+  "init": "ScooterPageInit_jwtTool"
+}
+</script>
+
+<main class="scooter-page jwt-page">
+  <h1>JWT Decoder and Encoder</h1>
+  <p class="jwt-subtitle">
+    Plain JavaScript tool for decoding, validating, and creating unsigned JWT tokens.
+    This page uses Scooter UI components only (tabs, accordion, cards, buttons, inputs).
+  </p>
+
+  <div data-sc="tabs" data-slot="tabs" data-default-value="decoder" class="jwt-tabs" data-variant="underline">
+    <div data-slot="tabs-list" role="tablist" aria-label="JWT mode">
+      <button type="button" data-slot="tabs-trigger" data-value="decoder" role="tab">Decoder and Validator</button>
+      <button type="button" data-slot="tabs-trigger" data-value="encoder" role="tab">Encoder (Unsigned)</button>
+    </div>
+
+    <section data-slot="tabs-content" data-value="decoder" role="tabpanel" aria-label="JWT decoder" class="jwt-panels">
+      <div data-slot="card">
+        <p class="jwt-inline-note">Paste a token or load an example. Decoding and validation run automatically as you type.</p>
+        <div style="margin-top:10px">
+          <div class="jwt-field">
+            <label for="exampleTokenSelect" class="jwt-label">Load example token</label>
+            <select id="exampleTokenSelect" class="jwt-select">
+              <option value="">Select example…</option>
+              <option value="valid">Valid token</option>
+              <option value="expired">Expired token</option>
+              <option value="roles">Token with roles and permissions</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div data-slot="card" class="jwt-grid-2">
+        <div class="jwt-field" style="grid-column: 1 / -1">
+          <label for="decoderTokenEditor" class="jwt-label">JWT Token</label>
+          <div id="decoderTokenEditor" class="jwt-token-editor jwt-mono" contenteditable="true" role="textbox" aria-multiline="true" data-placeholder="Paste JWT: header.payload.signature" data-empty="true"></div>
+        </div>
+
+        <div id="expectedFieldsContainer" class="jwt-field"></div>
+
+        <div class="jwt-field">
+          <label for="decoderJwksSelect" class="jwt-label">JWKS source (optional)</label>
+          <select id="decoderJwksSelect" class="jwt-select">
+            <option value="__auto__">Auto-match from iss hostname</option>
+            <option value="https://auth.example.com/.well-known/jwks.json">Example Auth (auth.example.com)</option>
+            <option value="https://login.microsoftonline.com/common/discovery/v2.0/keys">Microsoft Entra (login.microsoftonline.com)</option>
+            <option value="https://www.googleapis.com/oauth2/v3/certs">Google Accounts (accounts.google.com)</option>
+            <option value="">No JWKS verification</option>
+          </select>
+          <p id="jwksAutoHint" class="jwt-inline-note">Auto mode selected.</p>
+        </div>
+      </div>
+
+      <div class="jwt-results-layout">
+        <div class="jwt-stack">
+          <div data-slot="card">
+          <h3 style="margin-top:0">Decoded Header</h3>
+          <pre id="decodedHeader" class="jwt-mono">-</pre>
+          </div>
+          <div data-slot="card">
+          <h3 style="margin-top:0">Decoded Payload</h3>
+          <pre id="decodedPayload" class="jwt-mono">-</pre>
+          </div>
+        </div>
+
+        <div data-slot="card">
+          <h3 style="margin-top:0">Payload Claims and Validation</h3>
+          <p id="jwksValidationUrl" class="jwt-inline-note" style="display:none; margin-bottom:10px"></p>
+          <div id="claimsAccordion" data-sc="accordion" data-type="multiple" data-collapsible>
+            <div data-slot="accordion-item" data-value="empty">
+              <button type="button" data-slot="accordion-trigger" aria-expanded="false">
+                <div class="jwt-claim-row">
+                  <span class="jwt-claim-title">
+                    <span class="jwt-claim-code">N/A</span>
+                    <span class="jwt-claim-name">No claims available</span>
+                  </span>
+                  <span class="jwt-badge jwt-badge-neutral">N/A</span>
+                </div>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div data-slot="accordion-content" data-state="closed">
+                <div data-slot="accordion-content-inner">Decode a token to inspect claims and claim-level validation details.</div>
+              </div>
+            </div>
+          </div>
+          <div id="decoderErrors" class="jwt-errors" style="display:none; margin-top:10px"></div>
+        </div>
+      </div>
+    </section>
+
+    <section data-slot="tabs-content" data-value="encoder" role="tabpanel" aria-label="JWT encoder" class="jwt-panels">
+      <div class="jwt-note">
+        This encoder intentionally creates unsigned tokens only (alg = none). Use these example tokens for testing and development only.
+      </div>
+
+      <div data-slot="card">
+        <div class="jwt-field">
+          <label for="templateSelect" class="jwt-label">Load template</label>
+          <select id="templateSelect" class="jwt-select">
+            <option value="">Select template…</option>
+            <option value="minimal">Minimal</option>
+            <option value="standard">Standard</option>
+            <option value="roles">With Roles</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="jwt-grid-2">
+        <div data-slot="card" class="jwt-field">
+          <h3 style="margin:0">Header JSON</h3>
+          <textarea id="encoderHeader" data-slot="textarea" class="jwt-mono" rows="12"></textarea>
+          <p class="jwt-inline-note">Header alg must remain "none" for this demo encoder.</p>
+        </div>
+
+        <div data-slot="card" class="jwt-field">
+          <h3 style="margin:0">Payload JSON</h3>
+          <textarea id="encoderPayload" data-slot="textarea" class="jwt-mono" rows="12"></textarea>
+          <div class="jwt-actions">
+            <button type="button" data-slot="button" data-size="sm" data-variant="ghost" id="exp1hBtn">+1h exp</button>
+            <button type="button" data-slot="button" data-size="sm" data-variant="ghost" id="exp24hBtn">+24h exp</button>
+          </div>
+        </div>
+      </div>
+
+      <div data-slot="card">
+        <div class="jwt-actions">
+          <button type="button" data-slot="button" id="generateBtn">Generate Unsigned JWT</button>
+          <button type="button" data-slot="button" data-variant="secondary" id="copyBtn">Copy Token</button>
+          <span id="copyStatus" class="jwt-inline-note"></span>
+        </div>
+        <p id="encoderError" class="jwt-errors" style="display:none"></p>
+        <div id="encoderSegments" class="jwt-segments" style="display:none; margin-top:10px"></div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<script src="../../components/scooter-core.js"></script>
+<script src="../../components/tabs.js"></script>
+<script src="../../components/accordion.js"></script>
+
+<script>
+function ScooterPageInit_jwtTool(root) {
+  var claimDescriptions = {
+    iss: 'Issuer: identifies who issued the token.',
+    sub: 'Subject: identifies the principal/user.',
+    aud: 'Audience: intended recipient(s) of this token.',
+    exp: 'Expiration time (Unix seconds) after which token is invalid.',
+    nbf: 'Not before (Unix seconds) before which token is invalid.',
+    iat: 'Issued at timestamp (Unix seconds).',
+    jti: 'JWT ID: unique identifier for this token.',
+    alg: 'Header algorithm used to sign this token.',
+    typ: 'Token type, commonly JWT.',
+    kid: 'Key identifier used to select a verification key.',
+    scope: 'Space-delimited list of granted scopes.',
+    azp: 'Authorized party to which token was issued.',
+    name: 'User display name claim.',
+    email: 'User email address claim.',
+    email_verified: 'Whether the email was verified by issuer.',
+    roles: 'List of role names associated with the user.',
+    permissions: 'List of permission identifiers.'
+  };
+
+  var decoderTokenEditorEl = root.querySelector('#decoderTokenEditor');
+  var expectedFieldsContainerEl = root.querySelector('#expectedFieldsContainer');
+  var decoderJwksSelectEl = root.querySelector('#decoderJwksSelect');
+  var exampleTokenSelectEl = root.querySelector('#exampleTokenSelect');
+  var jwksAutoHintEl = root.querySelector('#jwksAutoHint');
+  var decoderErrorsEl = root.querySelector('#decoderErrors');
+  var decodedHeaderEl = root.querySelector('#decodedHeader');
+  var decodedPayloadEl = root.querySelector('#decodedPayload');
+  var jwksValidationUrlEl = root.querySelector('#jwksValidationUrl');
+  var claimsAccordionEl = root.querySelector('#claimsAccordion');
+
+  var encoderHeaderEl = root.querySelector('#encoderHeader');
+  var encoderPayloadEl = root.querySelector('#encoderPayload');
+  var encoderSegmentsEl = root.querySelector('#encoderSegments');
+  var encoderErrorEl = root.querySelector('#encoderError');
+  var copyStatusEl = root.querySelector('#copyStatus');
+  var encoderGeneratedToken = '';
+
+  var claimTitles = {
+    signature: 'Signature verification',
+    exp: 'Expiration time',
+    nbf: 'Not before',
+    aud: 'Audience',
+    iss: 'Token issuer'
+  };
+
+  // Add or remove checks here to dynamically change the "Expected" inputs.
+  // Example for client_id:
+  // {
+  //   key: 'clientid',
+  //   claimKey: 'client_id',
+  //   title: 'Expected client id (optional)',
+  //   prompt: 'my-spa-client',
+  //   description: 'Optional check against client_id claim.',
+  //   statusKey: 'client_id',
+  //   matchMode: 'exact'
+  // }
+  var expectedFieldConfigs = [
+    {
+      key: 'audience',
+      claimKey: 'aud',
+      title: 'Expected audience (optional)',
+      prompt: 'https://api.example.com',
+      description: 'Optional check against aud claim.',
+      statusKey: 'aud',
+      matchMode: 'audience'
+    }
+  ];
+  var expectedFieldInputEls = {};
+
+  var decoderTokenRawValue = '';
+  var jwksManualOverride = false;
+  var lastClaimMeta = {};
+
+  var jwksByHost = {
+    'auth.example.com': 'https://auth.example.com/.well-known/jwks.json',
+    'login.microsoftonline.com': 'https://login.microsoftonline.com/common/discovery/v2.0/keys',
+    'accounts.google.com': 'https://www.googleapis.com/oauth2/v3/certs'
+  };
+
+  function initExpectedFields() {
+    if (!expectedFieldsContainerEl) return;
+
+    expectedFieldsContainerEl.innerHTML = expectedFieldConfigs.map(function (cfg) {
+      var inputId = 'decoderExpected_' + cfg.key;
+      var description = cfg.description ? '<p class="jwt-inline-note">' + escapeHtml(cfg.description) + '</p>' : '';
+      return (
+        '<div class="jwt-field" data-expected-field="' + escapeHtml(cfg.key) + '">' +
+          '<label for="' + escapeHtml(inputId) + '" class="jwt-label">' + escapeHtml(cfg.title) + '</label>' +
+          '<input id="' + escapeHtml(inputId) + '" data-slot="input" type="text" placeholder="' + escapeHtml(cfg.prompt || '') + '" />' +
+          description +
+        '</div>'
+      );
+    }).join('');
+
+    expectedFieldConfigs.forEach(function (cfg) {
+      var inputId = 'decoderExpected_' + cfg.key;
+      var inputEl = expectedFieldsContainerEl.querySelector('#' + inputId);
+      if (!inputEl) return;
+      expectedFieldInputEls[cfg.key] = inputEl;
+      inputEl.addEventListener('input', function () {
+        if (readTokenEditorRaw().trim()) scheduleDecode(false);
+      });
+    });
+  }
+
+  function getExpectedFieldValue(key) {
+    var el = expectedFieldInputEls[key];
+    return el ? el.value.trim() : '';
+  }
+
+  function setExpectedFieldValue(key, value) {
+    var el = expectedFieldInputEls[key];
+    if (!el) return;
+    el.value = value || '';
+  }
+
+  function evaluateExpectedField(cfg, payload, errors) {
+    var expectedValue = getExpectedFieldValue(cfg.key);
+    var statusKey = cfg.statusKey || cfg.claimKey;
+
+    if (!expectedValue) {
+      lastClaimMeta[statusKey] = { status: null, summary: 'N/A', errors: [] };
+      return;
+    }
+
+    var actualValue = payload[cfg.claimKey];
+    var ok;
+    if (cfg.matchMode === 'audience') {
+      var actualList = Array.isArray(actualValue) ? actualValue : (actualValue ? [actualValue] : []);
+      ok = actualList.indexOf(expectedValue) !== -1;
+    } else {
+      ok = String(actualValue || '') === expectedValue;
+    }
+
+    lastClaimMeta[statusKey] = { status: ok, summary: ok ? 'Match' : 'Mismatch', errors: [] };
+    if (!ok) {
+      errors.push(cfg.title.replace(' (optional)', '') + ' mismatch. Expected "' + expectedValue + '".');
+    }
+  }
+
+  function resetValidation() {
+    lastClaimMeta = {
+      signature: { status: null, summary: 'N/A', errors: [] },
+      exp: { status: null, summary: 'N/A', errors: [] },
+      nbf: { status: null, summary: 'N/A', errors: [] },
+      aud: { status: null, summary: 'N/A', errors: [] },
+      iss: { status: null, summary: 'N/A', errors: [] }
+    };
+    expectedFieldConfigs.forEach(function (cfg) {
+      var statusKey = cfg.statusKey || cfg.claimKey;
+      if (!lastClaimMeta[statusKey]) {
+        lastClaimMeta[statusKey] = { status: null, summary: 'N/A', errors: [] };
+      }
+      if (!claimTitles[statusKey]) {
+        claimTitles[statusKey] = cfg.title.replace('Expected ', '').replace(' (optional)', '');
+      }
+    });
+    decoderErrorsEl.style.display = 'none';
+    decoderErrorsEl.innerHTML = '';
+  }
+
+  function toUtf8Bytes(str) {
+    return new TextEncoder().encode(str);
+  }
+
+  function bytesToUtf8(bytes) {
+    return new TextDecoder().decode(bytes);
+  }
+
+  function base64ToBytes(base64) {
+    var normalized = base64.replace(/-/g, '+').replace(/_/g, '/');
+    while (normalized.length % 4) normalized += '=';
+    var binary = atob(normalized);
+    var bytes = new Uint8Array(binary.length);
+    for (var i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+    return bytes;
+  }
+
+  function base64UrlEncodeUtf8(str) {
+    var bytes = toUtf8Bytes(str);
+    var binary = '';
+    for (var i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
+    return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
+  }
+
+  function base64UrlDecodeUtf8(value) {
+    return bytesToUtf8(base64ToBytes(value));
+  }
+
+  function safeJsonParse(value, label) {
+    try {
+      return { ok: true, value: JSON.parse(value) };
+    } catch (err) {
+      return { ok: false, error: label + ' is not valid JSON: ' + err.message };
+    }
+  }
+
+  function parseToken(token) {
+    var trimmed = String(token || '').trim();
+    var parts = trimmed.split('.');
+    if (parts.length !== 3) throw new Error('Invalid JWT format. Expected 3 dot-separated segments.');
+    var headerJson = base64UrlDecodeUtf8(parts[0]);
+    var payloadJson = base64UrlDecodeUtf8(parts[1]);
+    var header = JSON.parse(headerJson);
+    var payload = JSON.parse(payloadJson);
+    return {
+      token: trimmed,
+      parts: parts,
+      header: header,
+      payload: payload,
+      headerJson: headerJson,
+      payloadJson: payloadJson
+    };
+  }
+
+  function getCaretOffset(element) {
+    var selection = window.getSelection();
+    if (!selection || !selection.rangeCount) return 0;
+    var range = selection.getRangeAt(0);
+    var pre = range.cloneRange();
+    pre.selectNodeContents(element);
+    pre.setEnd(range.endContainer, range.endOffset);
+    return pre.toString().length;
+  }
+
+  function setCaretOffset(element, offset) {
+    var selection = window.getSelection();
+    if (!selection) return;
+    var range = document.createRange();
+    var current = 0;
+    var found = false;
+
+    function walk(node) {
+      if (found) return;
+      if (node.nodeType === Node.TEXT_NODE) {
+        var next = current + node.textContent.length;
+        if (offset <= next) {
+          range.setStart(node, Math.max(0, offset - current));
+          range.collapse(true);
+          found = true;
+        }
+        current = next;
+        return;
+      }
+      for (var i = 0; i < node.childNodes.length; i++) {
+        walk(node.childNodes[i]);
+      }
+    }
+
+    walk(element);
+    if (!found) {
+      range.selectNodeContents(element);
+      range.collapse(false);
+    }
+    selection.removeAllRanges();
+    selection.addRange(range);
+  }
+
+  function escapeHtml(value) {
+    return String(value)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function formatDateFromUnix(seconds) {
+    if (typeof seconds !== 'number') return 'n/a';
+    return new Date(seconds * 1000).toLocaleString('en-US');
+  }
+
+  function renderSegments(container, parts) {
+    if (!container) return;
+    if (!parts || parts.length !== 3) {
+      container.style.display = 'none';
+      container.innerHTML = '';
+      return;
+    }
+    container.style.display = 'block';
+    container.innerHTML =
+      '<code class="jwt-mono">' +
+      '<span class="jwt-seg-header">' + escapeHtml(parts[0]) + '</span>.' +
+      '<span class="jwt-seg-payload">' + escapeHtml(parts[1]) + '</span>.' +
+      '<span class="jwt-seg-signature">' + escapeHtml(parts[2]) + '</span>' +
+      '</code>';
+  }
+
+  function bindAccordionInteractions(el) {
+    if (!el) return;
+    var type = el.getAttribute('data-type') || 'single';
+
+    function closeItem(item) {
+      var trigger = item.querySelector('[data-slot="accordion-trigger"]');
+      var content = item.querySelector('[data-slot="accordion-content"]');
+      if (!trigger || !content) return;
+
+      trigger.setAttribute('aria-expanded', 'false');
+      content.style.height = content.scrollHeight + 'px';
+      requestAnimationFrame(function () {
+        content.style.height = '0';
+        var onEnd = function () {
+          content.setAttribute('data-state', 'closed');
+          content.removeEventListener('transitionend', onEnd);
+        };
+        content.addEventListener('transitionend', onEnd);
+      });
+    }
+
+    function openItem(item) {
+      var trigger = item.querySelector('[data-slot="accordion-trigger"]');
+      var content = item.querySelector('[data-slot="accordion-content"]');
+      if (!trigger || !content) return;
+      var inner = content.querySelector('[data-slot="accordion-content-inner"]') || content.firstElementChild;
+      if (!inner) return;
+
+      if (type === 'single') {
+        el.querySelectorAll('[data-slot="accordion-item"]').forEach(function (other) {
+          if (other === item) return;
+          closeItem(other);
+        });
+      }
+
+      trigger.setAttribute('aria-expanded', 'true');
+      content.setAttribute('data-state', 'open');
+      content.style.height = '0';
+      requestAnimationFrame(function () {
+        content.style.height = inner.scrollHeight + 'px';
+        var onEnd = function () {
+          content.style.height = 'auto';
+          content.removeEventListener('transitionend', onEnd);
+        };
+        content.addEventListener('transitionend', onEnd);
+      });
+    }
+
+    el.querySelectorAll('[data-slot="accordion-item"]').forEach(function (item) {
+      var trigger = item.querySelector('[data-slot="accordion-trigger"]');
+      var content = item.querySelector('[data-slot="accordion-content"]');
+      if (!trigger || !content) return;
+
+      trigger.onclick = null;
+      var startOpen = item.hasAttribute('data-default-open');
+      content.setAttribute('data-state', startOpen ? 'open' : 'closed');
+      content.style.height = startOpen ? 'auto' : '0';
+      trigger.setAttribute('aria-expanded', String(startOpen));
+
+      trigger.addEventListener('click', function () {
+        var isOpen = content.getAttribute('data-state') === 'open';
+        if (isOpen) closeItem(item);
+        else openItem(item);
+      });
+    });
+  }
+
+  function renderTokenEditorFromRaw(rawValue, keepCaret) {
+    var value = String(rawValue || '');
+    var caret = keepCaret ? getCaretOffset(decoderTokenEditorEl) : null;
+    var escaped = escapeHtml(value);
+    var parts = value.split('.');
+    if (parts.length === 3) {
+      decoderTokenEditorEl.innerHTML =
+        '<span class="jwt-seg-header">' + escapeHtml(parts[0]) + '</span>.' +
+        '<span class="jwt-seg-payload">' + escapeHtml(parts[1]) + '</span>.' +
+        '<span class="jwt-seg-signature">' + escapeHtml(parts[2]) + '</span>';
+    } else {
+      decoderTokenEditorEl.innerHTML = escaped;
+    }
+    decoderTokenEditorEl.setAttribute('data-empty', value.trim() ? 'false' : 'true');
+    if (keepCaret) setCaretOffset(decoderTokenEditorEl, Math.min(caret, value.length));
+  }
+
+  function setTokenEditorValue(rawValue) {
+    decoderTokenRawValue = String(rawValue || '');
+    renderTokenEditorFromRaw(decoderTokenRawValue, false);
+  }
+
+  function readTokenEditorRaw() {
+    return decoderTokenEditorEl.textContent || '';
+  }
+
+  function getBadgeClassForState(state) {
+    if (state === true) return 'jwt-badge jwt-badge-ok';
+    if (state === false) return 'jwt-badge jwt-badge-bad';
+    if (state === 'warn') return 'jwt-badge jwt-badge-warn';
+    return 'jwt-badge jwt-badge-neutral';
+  }
+
+  function getIssuerHost(payload) {
+    if (!payload || typeof payload.iss !== 'string') return '';
+    try {
+      return new URL(payload.iss).hostname;
+    } catch (err) {
+      return '';
+    }
+  }
+
+  function applyJwksAutoSelection(payload) {
+    if (jwksManualOverride) return;
+    if (decoderJwksSelectEl.value && decoderJwksSelectEl.value !== '__auto__') return;
+    var host = getIssuerHost(payload);
+    if (host && jwksByHost[host]) {
+      decoderJwksSelectEl.value = jwksByHost[host];
+      jwksAutoHintEl.textContent = 'Auto-selected by issuer host: ' + host;
+    } else {
+      decoderJwksSelectEl.value = '__auto__';
+      jwksAutoHintEl.textContent = host ? ('No JWKS preset matches issuer host: ' + host) : 'Auto mode selected.';
+    }
+  }
+
+  function getActiveJwksUrl() {
+    var selected = decoderJwksSelectEl.value;
+    if (!selected || selected === '__auto__') return '';
+    return selected;
+  }
+
+  function renderJwksValidationUrl(jwksUrl) {
+    if (!jwksValidationUrlEl) return;
+    if (!jwksUrl) {
+      jwksValidationUrlEl.style.display = 'none';
+      jwksValidationUrlEl.textContent = '';
+      return;
+    }
+    jwksValidationUrlEl.style.display = '';
+    jwksValidationUrlEl.textContent = 'Signature validation URL: ' + jwksUrl;
+  }
+
+  function renderClaims(payload) {
+    var entries = Object.entries(payload || {});
+    var claimList = entries.slice();
+
+    Object.keys(lastClaimMeta).forEach(function (key) {
+      var exists = claimList.some(function (entry) { return entry[0] === key; });
+      if (!exists && lastClaimMeta[key] && (lastClaimMeta[key].status !== null || (lastClaimMeta[key].errors && lastClaimMeta[key].errors.length))) {
+        claimList.push([key, undefined]);
+      }
+    });
+
+    claimList.sort(function (a, b) {
+      if (a[0] === 'iss') return -1;
+      if (b[0] === 'iss') return 1;
+      return a[0].localeCompare(b[0]);
+    });
+
+    if (!claimList.length) {
+      claimsAccordionEl.innerHTML =
+        '<div data-slot="accordion-item" data-value="empty">' +
+          '<button type="button" data-slot="accordion-trigger" aria-expanded="false">' +
+            '<div class="jwt-claim-row"><span class="jwt-claim-title"><span class="jwt-claim-code">N/A</span><span class="jwt-claim-name">No claims available</span></span><span class="jwt-badge jwt-badge-neutral">N/A</span></div>' +
+            '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>' +
+          '</button>' +
+          '<div data-slot="accordion-content" data-state="closed"><div data-slot="accordion-content-inner">Decode a token to inspect claims and claim-level validation details.</div></div>' +
+        '</div>';
+      bindAccordionInteractions(claimsAccordionEl);
+      return;
+    }
+
+    claimsAccordionEl.innerHTML = claimList.map(function (entry, index) {
+      var key = entry[0];
+      var value = entry[1];
+      var meta = lastClaimMeta[key] || { status: null, summary: 'N/A', errors: [] };
+      var valueDisplay;
+      if (value === undefined) {
+        valueDisplay = '<div class="jwt-inline-note">Claim not present in payload.</div>';
+      } else if (key === 'exp' || key === 'nbf' || key === 'iat') {
+        valueDisplay = '<div><div class="jwt-mono">' + escapeHtml(String(value)) + '</div><div class="jwt-inline-note">' +
+          escapeHtml(formatDateFromUnix(Number(value))) + '</div></div>';
+      } else if (typeof value === 'object') {
+        valueDisplay = '<pre class="jwt-mono">' + escapeHtml(JSON.stringify(value, null, 2)) + '</pre>';
+      } else {
+        valueDisplay = '<div class="jwt-mono">' + escapeHtml(String(value)) + '</div>';
+      }
+
+      var errorBlock = '';
+      if (meta.errors && meta.errors.length) {
+        errorBlock = '<div class="jwt-errors">' + meta.errors.map(function (msg) { return '<div>' + escapeHtml(msg) + '</div>'; }).join('') + '</div>';
+      }
+
+      var labelName = claimTitles[key] || claimDescriptions[key] || 'Custom claim';
+
+      return (
+        '<div data-slot="accordion-item" data-value="claim-' + index + '">' +
+          '<button type="button" data-slot="accordion-trigger" aria-expanded="false">' +
+            '<div class="jwt-claim-row">' +
+              '<span class="jwt-claim-title"><span class="jwt-claim-code">' + escapeHtml(key) + '</span><span class="jwt-claim-name">' + escapeHtml(labelName) + '</span></span>' +
+              '<span class="' + getBadgeClassForState(meta.status) + '">' + escapeHtml(meta.summary || 'N/A') + '</span>' +
+            '</div>' +
+            '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>' +
+          '</button>' +
+          '<div data-slot="accordion-content" data-state="closed">' +
+            '<div data-slot="accordion-content-inner">' +
+              '<div class="jwt-claim-meta">' +
+                '<p class="jwt-inline-note">' + escapeHtml(claimDescriptions[key] || 'Custom claim.') + '</p>' +
+                '<div class="jwt-claim-value">' + valueDisplay + '</div>' +
+                errorBlock +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+        '</div>'
+      );
+    }).join('');
+
+    bindAccordionInteractions(claimsAccordionEl);
+  }
+
+  function showErrors(errors) {
+    if (!errors.length) {
+      decoderErrorsEl.style.display = 'none';
+      decoderErrorsEl.innerHTML = '';
+      return;
+    }
+    decoderErrorsEl.style.display = 'grid';
+    decoderErrorsEl.innerHTML = errors.map(function (e) { return '<div>' + escapeHtml(e) + '</div>'; }).join('');
+  }
+
+  function algorithmSettings(alg) {
+    if (alg === 'RS256') return { importAlg: { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' }, verifyAlg: { name: 'RSASSA-PKCS1-v1_5' } };
+    if (alg === 'RS384') return { importAlg: { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-384' }, verifyAlg: { name: 'RSASSA-PKCS1-v1_5' } };
+    if (alg === 'RS512') return { importAlg: { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-512' }, verifyAlg: { name: 'RSASSA-PKCS1-v1_5' } };
+    if (alg === 'PS256') return { importAlg: { name: 'RSA-PSS', hash: 'SHA-256' }, verifyAlg: { name: 'RSA-PSS', saltLength: 32 } };
+    if (alg === 'PS384') return { importAlg: { name: 'RSA-PSS', hash: 'SHA-384' }, verifyAlg: { name: 'RSA-PSS', saltLength: 48 } };
+    if (alg === 'PS512') return { importAlg: { name: 'RSA-PSS', hash: 'SHA-512' }, verifyAlg: { name: 'RSA-PSS', saltLength: 64 } };
+    return null;
+  }
+
+  function selectJwk(jwks, header) {
+    if (!jwks || !Array.isArray(jwks.keys) || !jwks.keys.length) return null;
+    if (header.kid) {
+      var withKid = jwks.keys.find(function (k) { return k.kid === header.kid; });
+      if (withKid) return withKid;
+    }
+    return jwks.keys[0];
+  }
+
+  async function verifySignatureWithJwks(parts, header, jwksUrl) {
+    if (!window.crypto || !window.crypto.subtle) {
+      throw new Error('WebCrypto is not available in this browser.');
+    }
+
+    if (!header.alg || header.alg === 'none') {
+      throw new Error('Token algorithm is none; signature verification is not applicable.');
+    }
+
+    var algConfig = algorithmSettings(header.alg);
+    if (!algConfig) {
+      throw new Error('Algorithm ' + header.alg + ' is not supported by this page verifier.');
+    }
+
+    var response = await fetch(jwksUrl, { method: 'GET' });
+    if (!response.ok) {
+      throw new Error('Failed to fetch JWKS: HTTP ' + response.status + '.');
+    }
+
+    var jwks = await response.json();
+    var jwk = selectJwk(jwks, header);
+    if (!jwk) {
+      throw new Error('No verification key found in JWKS.');
+    }
+
+    var key = await crypto.subtle.importKey('jwk', jwk, algConfig.importAlg, false, ['verify']);
+    var signingInput = toUtf8Bytes(parts[0] + '.' + parts[1]);
+    var signature = base64ToBytes(parts[2] || '');
+    var ok = await crypto.subtle.verify(algConfig.verifyAlg, key, signature, signingInput);
+    if (!ok) {
+      throw new Error('Signature verification failed.');
+    }
+  }
+
+  async function decodeAndValidate(options) {
+    options = options || {};
+    var preserveCaret = options.preserveCaret === true;
+    var tokenValue = readTokenEditorRaw().trim();
+    decoderTokenRawValue = tokenValue;
+    renderTokenEditorFromRaw(decoderTokenRawValue, preserveCaret);
+
+    if (!tokenValue) {
+      decodedHeaderEl.textContent = '-';
+      decodedPayloadEl.textContent = '-';
+      renderJwksValidationUrl('');
+      renderClaims({});
+      resetValidation();
+      jwksAutoHintEl.textContent = jwksManualOverride ? 'Manual JWKS override active.' : 'Auto mode selected.';
+      return;
+    }
+
+    var errors = [];
+    resetValidation();
+
+    try {
+      var parsed = parseToken(tokenValue);
+      decodedHeaderEl.textContent = JSON.stringify(parsed.header, null, 2);
+      decodedPayloadEl.textContent = JSON.stringify(parsed.payload, null, 2);
+      applyJwksAutoSelection(parsed.payload);
+
+      var nowSeconds = Math.floor(Date.now() / 1000);
+      var exp = parsed.payload.exp;
+      var nbf = parsed.payload.nbf;
+      var jwksUrl = getActiveJwksUrl();
+      renderJwksValidationUrl(jwksUrl);
+      var iss = parsed.payload.iss;
+
+      if (typeof exp === 'number') {
+        var expOk = exp > nowSeconds;
+        lastClaimMeta.exp = { status: expOk, summary: expOk ? 'Valid' : 'Expired', errors: [] };
+        if (!expOk) errors.push('Token expired at ' + formatDateFromUnix(exp) + '.');
+      } else {
+        lastClaimMeta.exp = { status: 'warn', summary: 'Missing', errors: [] };
+      }
+
+      if (typeof nbf === 'number') {
+        var nbfOk = nbf <= nowSeconds;
+        lastClaimMeta.nbf = { status: nbfOk, summary: nbfOk ? 'Valid' : 'Too early', errors: [] };
+        if (!nbfOk) errors.push('Token cannot be used before ' + formatDateFromUnix(nbf) + '.');
+      } else {
+        lastClaimMeta.nbf = { status: 'warn', summary: 'Missing', errors: [] };
+      }
+
+      expectedFieldConfigs.forEach(function (cfg) {
+        evaluateExpectedField(cfg, parsed.payload, errors);
+      });
+
+      if (typeof iss === 'string' && iss.trim()) {
+        lastClaimMeta.iss = { status: true, summary: 'Present', errors: [] };
+      } else {
+        lastClaimMeta.iss = { status: 'warn', summary: 'Missing', errors: [] };
+        errors.push('Issuer claim (iss) is missing.');
+      }
+
+      if (jwksUrl) {
+        try {
+          await verifySignatureWithJwks(parsed.parts, parsed.header, jwksUrl);
+          lastClaimMeta.signature = { status: true, summary: 'Valid', errors: [] };
+        } catch (verifyErr) {
+          lastClaimMeta.signature = { status: false, summary: 'Invalid', errors: [verifyErr.message] };
+          errors.push(verifyErr.message);
+        }
+      } else {
+        lastClaimMeta.signature = { status: null, summary: 'N/A', errors: [] };
+      }
+
+      if (errors.length) {
+        if (!lastClaimMeta.exp.errors) lastClaimMeta.exp.errors = [];
+        if (!lastClaimMeta.nbf.errors) lastClaimMeta.nbf.errors = [];
+        if (!lastClaimMeta.aud.errors) lastClaimMeta.aud.errors = [];
+        if (!lastClaimMeta.iss.errors) lastClaimMeta.iss.errors = [];
+        if (!lastClaimMeta.signature.errors) lastClaimMeta.signature.errors = [];
+      }
+
+      renderClaims(parsed.payload);
+    } catch (err) {
+      decodedHeaderEl.textContent = '-';
+      decodedPayloadEl.textContent = '-';
+      renderJwksValidationUrl('');
+      lastClaimMeta.signature = { status: false, summary: 'Error', errors: [err.message || 'Decode failed.'] };
+      lastClaimMeta.exp = { status: false, summary: 'Error', errors: [] };
+      lastClaimMeta.nbf = { status: false, summary: 'Error', errors: [] };
+      lastClaimMeta.aud = { status: false, summary: 'Error', errors: [] };
+      lastClaimMeta.iss = { status: false, summary: 'Error', errors: [] };
+      renderClaims({});
+      errors.push(err.message || 'Failed to decode JWT.');
+    }
+
+    showErrors(errors);
+  }
+
+  function getNowSeconds() {
+    return Math.floor(Date.now() / 1000);
+  }
+
+  function generateUnsignedToken(headerObj, payloadObj) {
+    var headerEncoded = base64UrlEncodeUtf8(JSON.stringify(headerObj));
+    var payloadEncoded = base64UrlEncodeUtf8(JSON.stringify(payloadObj));
+    return headerEncoded + '.' + payloadEncoded + '.';
+  }
+
+  function setEncoderError(message) {
+    if (!message) {
+      encoderErrorEl.style.display = 'none';
+      encoderErrorEl.textContent = '';
+      return;
+    }
+    encoderErrorEl.style.display = 'block';
+    encoderErrorEl.textContent = message;
+  }
+
+  function renderEncoderOutput(token) {
+    encoderGeneratedToken = token || '';
+    if (!token) {
+      renderSegments(encoderSegmentsEl, null);
+      return;
+    }
+
+    try {
+      var parsed = parseToken(token);
+      renderSegments(encoderSegmentsEl, parsed.parts);
+    } catch (err) {
+      renderSegments(encoderSegmentsEl, null);
+      encoderGeneratedToken = '';
+    }
+  }
+
+  function fillEncoderTemplate(type) {
+    var now = getNowSeconds();
+    var header = { alg: 'none', typ: 'JWT' };
+    var payload;
+
+    if (type === 'minimal') {
+      payload = {
+        sub: '1234567890',
+        name: 'Test User',
+        iat: now
+      };
+    } else if (type === 'standard') {
+      payload = {
+        sub: 'user-123',
+        name: 'John Doe',
+        email: 'john@example.com',
+        iss: 'https://auth.example.com',
+        aud: 'https://api.example.com',
+        iat: now,
+        exp: now + 3600
+      };
+    } else {
+      payload = {
+        sub: 'admin-7',
+        name: 'A. Operator',
+        email: 'admin@example.com',
+        email_verified: true,
+        roles: ['admin', 'support'],
+        permissions: ['users:read', 'users:write', 'audit:read'],
+        iss: 'https://auth.example.com',
+        aud: ['https://api.example.com', 'https://portal.example.com'],
+        iat: now,
+        nbf: now - 60,
+        exp: now + 7200
+      };
+    }
+
+    encoderHeaderEl.value = JSON.stringify(header, null, 2);
+    encoderPayloadEl.value = JSON.stringify(payload, null, 2);
+    setEncoderError('');
+  }
+
+  function updateExpiration(hours) {
+    var parsed = safeJsonParse(encoderPayloadEl.value, 'Payload');
+    if (!parsed.ok) {
+      setEncoderError(parsed.error);
+      return;
+    }
+
+    var now = getNowSeconds();
+    parsed.value.iat = now;
+    parsed.value.exp = now + (hours * 3600);
+    encoderPayloadEl.value = JSON.stringify(parsed.value, null, 2);
+    setEncoderError('');
+  }
+
+  function generateFromEditor() {
+    setEncoderError('');
+    copyStatusEl.textContent = '';
+
+    var headerParsed = safeJsonParse(encoderHeaderEl.value, 'Header');
+    if (!headerParsed.ok) {
+      setEncoderError(headerParsed.error);
+      return;
+    }
+
+    var payloadParsed = safeJsonParse(encoderPayloadEl.value, 'Payload');
+    if (!payloadParsed.ok) {
+      setEncoderError(payloadParsed.error);
+      return;
+    }
+
+    if (headerParsed.value.alg !== 'none') {
+      setEncoderError('Header alg must be "none" for unsigned tokens in this demo.');
+      return;
+    }
+
+    var token = generateUnsignedToken(headerParsed.value, payloadParsed.value);
+    renderEncoderOutput(token);
+  }
+
+  function loadSampleToken(type) {
+    var now = getNowSeconds();
+    var header = { alg: 'none', typ: 'JWT' };
+    var payload;
+
+    if (type === 'valid') {
+      payload = {
+        sub: '1234567890',
+        name: 'Valid User',
+        email: 'valid@example.com',
+        iss: 'https://auth.example.com',
+        aud: 'https://api.example.com',
+        iat: now,
+        exp: now + 3600
+      };
+      setExpectedFieldValue('audience', 'https://api.example.com');
+    } else if (type === 'expired') {
+      payload = {
+        sub: 'old-token',
+        name: 'Expired User',
+        iss: 'https://auth.example.com',
+        aud: 'https://api.example.com',
+        iat: now - 10800,
+        exp: now - 7200
+      };
+      setExpectedFieldValue('audience', 'https://api.example.com');
+    } else {
+      payload = {
+        sub: 'ops-user',
+        name: 'Ops User',
+        email: 'ops@example.com',
+        roles: ['ops', 'admin'],
+        permissions: ['deploy', 'read:alerts'],
+        iss: 'https://auth.example.com',
+        aud: ['https://api.example.com', 'https://portal.example.com'],
+        iat: now,
+        nbf: now - 60,
+        exp: now + 7200
+      };
+      setExpectedFieldValue('audience', 'https://api.example.com');
+    }
+
+    setTokenEditorValue(generateUnsignedToken(header, payload));
+    decodeAndValidate();
+  }
+
+  var decodeDebounceTimer = null;
+
+  function scheduleDecode(preserveCaret) {
+    if (decodeDebounceTimer) clearTimeout(decodeDebounceTimer);
+    decodeDebounceTimer = setTimeout(function () {
+      decodeAndValidate({ preserveCaret: preserveCaret === true });
+    }, 180);
+  }
+
+  exampleTokenSelectEl.addEventListener('change', function () {
+    if (!exampleTokenSelectEl.value) return;
+    loadSampleToken(exampleTokenSelectEl.value);
+    exampleTokenSelectEl.value = '';
+  });
+
+  root.querySelector('#templateSelect').addEventListener('change', function () {
+    var sel = root.querySelector('#templateSelect');
+    if (!sel.value) return;
+    fillEncoderTemplate(sel.value);
+    sel.value = '';
+  });
+
+  decoderJwksSelectEl.addEventListener('change', function () {
+    jwksManualOverride = decoderJwksSelectEl.value !== '__auto__';
+    if (jwksManualOverride) {
+      jwksAutoHintEl.textContent = decoderJwksSelectEl.value ? 'Manual JWKS override active.' : 'JWKS verification disabled manually.';
+    } else {
+      jwksAutoHintEl.textContent = 'Auto mode selected.';
+    }
+    if (readTokenEditorRaw().trim()) decodeAndValidate({ preserveCaret: false });
+  });
+
+  root.querySelector('#exp1hBtn').addEventListener('click', function () { updateExpiration(1); });
+  root.querySelector('#exp24hBtn').addEventListener('click', function () { updateExpiration(24); });
+
+  root.querySelector('#generateBtn').addEventListener('click', generateFromEditor);
+  root.querySelector('#copyBtn').addEventListener('click', async function () {
+    var token = encoderGeneratedToken.trim();
+    if (!token) {
+      copyStatusEl.textContent = 'Generate a token first.';
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(token);
+      copyStatusEl.textContent = 'Copied.';
+    } catch (err) {
+      copyStatusEl.textContent = 'Clipboard API unavailable.';
+    }
+  });
+
+  decoderTokenEditorEl.addEventListener('input', function () {
+    decoderTokenRawValue = readTokenEditorRaw();
+    renderTokenEditorFromRaw(decoderTokenRawValue, true);
+    scheduleDecode(true);
+  });
+
+  decoderTokenEditorEl.addEventListener('blur', function () {
+    decodeAndValidate({ preserveCaret: false });
+  });
+
+  initExpectedFields();
+
+  fillEncoderTemplate('standard');
+  renderEncoderOutput('');
+  setTokenEditorValue('');
+  decodeAndValidate();
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  var main = document.querySelector('main.scooter-page');
+  if (main) {
+    Scooter.init(main);
+    ScooterPageInit_jwtTool(main);
+  }
+});
+</script>
+
+</body>
+</html>

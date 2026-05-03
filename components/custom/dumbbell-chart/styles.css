@@ -1,0 +1,229 @@
+/* ─── DumbbellChart Component Styles ─────────────────────────────────────── */
+
+/* SVG must not be shrunk by the global img,svg { max-width:100% } rule */
+.dumbbell-svg {
+  display: block;
+  max-width: none;
+  flex: none;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  font-family: inherit;
+}
+
+/* Panel wrapper */
+.dumbbell-panel {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md, var(--radius));
+  background: var(--card);
+  padding: 16px;
+  overflow-x: auto;
+  overflow-y: visible;
+}
+
+.dumbbell-panel + .dumbbell-panel {
+  margin-top: 16px;
+}
+
+/* Title inside SVG */
+.dumbbell-title {
+  font-size: 13px;
+  font-weight: 600;
+  fill: var(--foreground);
+}
+
+/* Grid lines */
+.dumbbell-gridline {
+  stroke: var(--border);
+  stroke-width: 1;
+  stroke-dasharray: 4 3;
+}
+
+/* Axis baseline */
+.dumbbell-axis {
+  stroke: var(--border);
+  stroke-width: 1;
+}
+
+/* X-axis tick labels */
+.dumbbell-xlab {
+  font-size: 10px;
+  fill: var(--muted-foreground);
+  text-anchor: middle;
+  dominant-baseline: hanging;
+}
+
+/* Row (user) name labels */
+.dumbbell-rowlabel {
+  font-size: 11px;
+  fill: var(--foreground);
+  text-anchor: end;
+  dominant-baseline: middle;
+}
+
+/* Connector line between dots */
+.dumbbell-connector {
+  stroke-width: 2;
+}
+
+/* Dots */
+.dumbbell-dot {
+  stroke: var(--card);
+  stroke-width: 1.5;
+}
+
+/* Delta label on right edge */
+.dumbbell-delta {
+  font-size: 11px;
+  font-weight: 600;
+  dominant-baseline: middle;
+  text-anchor: start;
+}
+
+.dumbbell-delta--up   { fill: #22c55e; }
+.dumbbell-delta--down { fill: #ef4444; }
+
+/* Empty state */
+.dumbbell-empty {
+  padding: 24px;
+  text-align: center;
+  color: var(--muted-foreground);
+  font-size: 13px;
+}
+
+/* ─── Explain / detail table ─────────────────────────────────────────────── */
+
+.dumbbell-explain {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  margin-top: 8px;
+}
+
+.dumbbell-explain th,
+.dumbbell-explain td {
+  padding: 5px 10px;
+  text-align: right;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.dumbbell-explain th {
+  background: var(--secondary);
+  color: var(--muted-foreground);
+  font-weight: 500;
+  text-align: right;
+}
+
+.dumbbell-explain th:first-child,
+.dumbbell-explain td:first-child {
+  text-align: left;
+}
+
+.dumbbell-explain tr:hover td {
+  background: var(--secondary);
+}
+
+.dumbbell-explain .cell-up   { color: #22c55e; font-weight: 600; }
+.dumbbell-explain .cell-down { color: #ef4444; font-weight: 600; }
+
+/* ─── Controls bar ────────────────────────────────────────────────────────── */
+
+.dumbbell-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  align-items: flex-end;
+  padding: 12px 16px;
+  background: var(--secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md, var(--radius));
+  margin-bottom: 16px;
+  font-size: 12px;
+}
+
+.dumbbell-control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dumbbell-control-group label {
+  font-size: 11px;
+  color: var(--muted-foreground);
+  font-weight: 500;
+}
+
+.dumbbell-control-group input[type="number"],
+.dumbbell-control-group input[type="range"] {
+  width: 80px;
+  padding: 4px 6px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--background);
+  color: var(--foreground);
+}
+
+.dumbbell-control-group input[type="range"] {
+  padding: 0;
+  width: 100px;
+}
+
+.dumbbell-control-group .value-display {
+  font-size: 11px;
+  color: var(--foreground);
+  font-weight: 600;
+  min-width: 32px;
+  display: inline-block;
+  text-align: right;
+}
+
+.dumbbell-btn {
+  padding: 6px 14px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--background);
+  color: var(--foreground);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.dumbbell-btn:hover {
+  background: var(--accent);
+}
+
+.dumbbell-btn.active {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border-color: var(--primary);
+}
+
+/* ─── Legend ─────────────────────────────────────────────────────────────── */
+
+.dumbbell-legend {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  font-size: 11px;
+  color: var(--muted-foreground);
+  margin-bottom: 10px;
+}
+
+.dumbbell-legend-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 4px;
+  vertical-align: middle;
+}
+
+.dumbbell-legend-line {
+  display: inline-block;
+  width: 20px;
+  height: 2px;
+  vertical-align: middle;
+  margin-right: 4px;
+}
